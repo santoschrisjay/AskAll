@@ -1,6 +1,5 @@
-NPM i
+1. npm i
+2. nodemon app.js
 
-nodemon app.js
-
-If naur nodemon, install nodemon for better development. 
+Note: If naur nodemon, install nodemon for better development. 
 
