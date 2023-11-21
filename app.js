@@ -4,11 +4,13 @@ import bodyParser from "body-parser";
 import mysql from "mysql2";
 import session from "express-session";
 import OpenAI from 'openai';
+import dotenv from 'dotenv';
+dotenv.config();
 const app = express();
 
 
 const openai = new OpenAI({
-    apiKey:"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"
+    apiKey: process.env.OPEN_AI_API_KEY,
 
 });
 
