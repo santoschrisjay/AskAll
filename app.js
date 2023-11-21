@@ -8,7 +8,7 @@ const app = express();
 
 
 const openai = new OpenAI({
-    apiKey:"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"
+    apiKey:"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"
 
 });
 
@@ -39,7 +39,8 @@ app.get("/reference", (req, res) => res.render("reference.ejs"));
 //FEATURES
 app.get("/todo", (req, res) => res.render("todo.ejs"));
 app.get("/weather", (req, res) => res.render("weather.ejs"));
-app.get("/chatAI", (req, res) => res.render("chatAI.ejs"));
+app.get("/chatConversation", (req, res) => res.render("chatConversation.ejs"));
+app.get("/chatCode", (req, res) => res.render("chatCodeAi.ejs"));
 app.get("/calculator", (req, res) => res.render("calculator.ejs"));
 app.get("/wordToPdf", (req, res) => res.render("wordToPdf.ejs"));
 app.get("/pdfToWord", (req, res) => res.render("pdfToWord.ejs"));
@@ -73,6 +74,25 @@ const userMessage = req.body
 		console.log(response.choices[0])
 		res.json(response.choices[0].message);
 })
+
+
+
+app.post('/code', async (req, res) => {
+	const userMessage = req.body
+
+		const codeMessage = {
+			role: "system",
+			content:"You are a code generator and you supposedly answer in programming terms and markdown code snippets. Use comments to assist and for explanation."
+		}
+		const response = await openai.chat.completions.create({
+			model:"gpt-3.5-turbo",
+			messages:[codeMessage, userMessage]
+		   
+		});
+			console.log(response.choices[0])
+			res.json(response.choices[0].message);
+	})
+	
 
 
 

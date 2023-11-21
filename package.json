@@ -20,7 +20,8 @@
     "mysql2": "^3.6.3",
     "node": "^21.1.0",
     "openai": "^4.19.0",
-    "sql": "^0.78.0"
+    "sql": "^0.78.0",
+    "turndown": "^7.1.2"
   },
   "description": "",
   "devDependencies": {

@@ -10,7 +10,7 @@
       style="max-width: 600px"
     >
       <h5 class="fw-bold text-primary text-uppercase">Title</h5>
-      <h1 class="mb-0">SOME CHENA</h1>
+      <h1 class="mb-0">CODE GENERATOR </h1>
     </div>
   </div>
   <!-- CONVO BOX HERE -->
@@ -32,22 +32,22 @@
               <h3>Ai Generator</h3>
             </div>
             <ul class="list-unstyled chat-list mt-2 mb-0">
-              <li class="clearfix">
-                <img
-                  src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                  alt="avatar"
-                />
-                <div class="about">
-                  <div class="name">Conversation</div>
-                </div>
-              </li>
               <li class="clearfix active">
                 <img
-                  src="https://bootdey.com/img/Content/avatar/avatar2.png"
+                  src="img/bot-icon.png"
                   alt="avatar"
                 />
                 <div class="about">
                   <div class="name">Code Generator</div>
+                </div>
+              </li>
+              <li class="clearfix" onclick="handleConversationPage()">
+                <img
+                src="img/conversation-icon.png"
+                alt="avatar"
+              />
+                <div class="about">
+                  <div class="name">Conversation</div>
                 </div>
               </li>
               <li class="clearfix">
@@ -75,13 +75,13 @@
                     data-target="#view_info"
                   >
                     <img
-                      src="https://bootdey.com/img/Content/avatar/avatar2.png"
+                      src="img/bot-icon.png"
                       alt="avatar"
                     />
                   </a>
                   <div class="chat-about">
-                    <h6 class="m-b-0">Aiden Chavez</h6>
-                    <small>Last seen: 2 hours ago</small>
+                    <h6 class="m-b-0">Code Generator</h6>
+                    <small>Let me help you with your code</small>
                   </div>
                 </div>
                 <div class="col-lg-6 hidden-sm text-right">
@@ -147,26 +147,28 @@
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/openai"></script>
+<script src="https://unpkg.com/turndown/dist/turndown.js"></script>
 <script>
+  const handleConversatopmPage =() => window.location.href="/chatConversation";
 function handleSubmit(event) {
     event.preventDefault();
+ 
    let botChat = document.querySelector('#botChat');
    botChat.innerText=""
     const inputValue = document.getElementById('textInput').value
     document.querySelector('#userChat').innerText = inputValue;
       console.log(inputValue)
-      const userMessage =[{
+      const userMessage ={
         role:"user",
         content:inputValue,
-      },
-   ]
-  fetch('/conversation', {
+      }
+   
+  fetch('/code', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer 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'
   },
-  body:JSON.stringify(userMessage)
+  body: JSON.stringify(userMessage)
 })
   .then(response => {
     if (!response.ok) {
@@ -175,7 +177,7 @@ function handleSubmit(event) {
    return response.json()
   })
   .then(data => {
-   return botChat.innerText = JSON.stringify(data.content);
+   return botChat.innerText =  data.content;
     console.log('Received data:', data.content);
   
   })
