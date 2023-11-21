@@ -3,8 +3,14 @@ import express from "express";
 import bodyParser from "body-parser";
 import mysql from "mysql2";
 import session from "express-session";
-
+import OpenAI from 'openai';
 const app = express();
+
+
+const openai = new OpenAI({
+    apiKey:"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"
+
+});
 
 app.use(
 	session({
@@ -14,11 +20,11 @@ app.use(
 	})
 );
 
-const port = 3000;
+const port = 3001;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
-
+app.use(express.json());
 app.set("view engine", "ejs");
 
 //PAGES
@@ -54,6 +60,21 @@ app.get("/resumeVital", (req, res) => res.render("resumes/resumeVital.ejs"));
 app.get("/resumeZapanta", (req, res) =>
 	res.render("resumes/resumeZapanta.ejs")
 );
+
+// API ROUTE
+app.post('/conversation', async (req, res) => {
+const userMessage = req.body
+	console.log(userMessage)
+	const response = await openai.chat.completions.create({
+        model:"gpt-3.5-turbo",
+		messages: userMessage,
+	   
+    });
+		console.log(response.choices[0])
+		res.json(response.choices[0].message);
+})
+
+
 
 //SERVER PORT
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
