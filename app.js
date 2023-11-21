@@ -24,7 +24,8 @@ app.use(express.static("public"));
 
 app.set("view engine", "ejs");
 
-//PAGES
+//**ALL PAGES START */
+//**Pages */
 app.get("/", (req, res) => res.render("index.ejs"));
 app.get("/about", (req, res) => res.render("about.ejs"));
 app.get("/contact", (req, res) => res.render("contact.ejs"));
@@ -33,12 +34,12 @@ app.get("/team", (req, res) => res.render("team.ejs"));
 app.get("/profile", (req, res) => res.render("profile.ejs"));
 app.get("/reference", (req, res) => res.render("reference.ejs"));
 
-//PROFILE
+//**Profile */
 app.get("/history", (req, res) => res.render("profileHistory.ejs"));
 app.get("/notification", (req, res) => res.render("profileNotification.ejs"));
 app.get("/security", (req, res) => res.render("profileSecurity.ejs"));
 
-//ADMIN
+//**Admin */
 app.get("/admin", (req, res) => res.render("admin.ejs"));
 app.get("/admin-history", (req, res) => res.render("adminHistory.ejs"));
 app.get("/admin-notification", (req, res) =>
@@ -46,7 +47,7 @@ app.get("/admin-notification", (req, res) =>
 );
 app.get("/admin-security", (req, res) => res.render("adminSecurity.ejs"));
 
-//FEATURES
+//**Features */
 app.get("/todo", (req, res) => res.render("todo.ejs"));
 app.get("/weather", (req, res) => res.render("weather.ejs"));
 app.get("/chatAI", (req, res) => res.render("chatAI.ejs"));
@@ -55,7 +56,7 @@ app.get("/wordToPdf", (req, res) => res.render("wordToPdf.ejs"));
 app.get("/pdfToWord", (req, res) => res.render("pdfToWord.ejs"));
 app.get("/converter", (req, res) => res.render("converter.ejs"));
 
-//RESUMES
+//**Resumes */
 app.get("/resumeChris", (req, res) => res.render("resumes/resumeChris.ejs"));
 app.get("/resumeGracezen", (req, res) =>
 	res.render("resumes/resumeGracezen.ejs")
@@ -70,8 +71,11 @@ app.get("/resumeVital", (req, res) => res.render("resumes/resumeVital.ejs"));
 app.get("/resumeZapanta", (req, res) =>
 	res.render("resumes/resumeZapanta.ejs")
 );
+//**ALL PAGES END */
 
-//WEATHER
+//*TODO: FEATURES START */
+
+//**WEATHER START */
 app.post("/weather", function (req, res) {
 	const query = req.body.cityName;
 	const apiKey = "5acdcc6fb7aabb8e9d762027922eaf96";
@@ -107,6 +111,8 @@ app.post("/weather", function (req, res) {
 		});
 	});
 });
+//**WEATHER START */
+//*TODO: FEATURES END */
 
-//SERVER PORT
+//**WEATHER START */
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
