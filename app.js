@@ -3,6 +3,9 @@ import express from "express";
 import bodyParser from "body-parser";
 import mysql from "mysql2";
 import session from "express-session";
+import https from "https";
+import connected from "process";
+import get from "http";
 
 const app = express();
 
@@ -38,7 +41,9 @@ app.get("/security", (req, res) => res.render("profileSecurity.ejs"));
 //ADMIN
 app.get("/admin", (req, res) => res.render("admin.ejs"));
 app.get("/admin-history", (req, res) => res.render("adminHistory.ejs"));
-app.get("/admin-notification", (req, res) => res.render("adminNotification.ejs"));
+app.get("/admin-notification", (req, res) =>
+	res.render("adminNotification.ejs")
+);
 app.get("/admin-security", (req, res) => res.render("adminSecurity.ejs"));
 
 //FEATURES
@@ -65,6 +70,43 @@ app.get("/resumeVital", (req, res) => res.render("resumes/resumeVital.ejs"));
 app.get("/resumeZapanta", (req, res) =>
 	res.render("resumes/resumeZapanta.ejs")
 );
+
+//WEATHER
+app.post("/weather", function (req, res) {
+	const query = req.body.cityName;
+	const apiKey = "5acdcc6fb7aabb8e9d762027922eaf96";
+	const unit = "metric";
+	const url =
+		"https://api.openweathermap.org/data/2.5/weather?q=" +
+		query +
+		"&appid=" +
+		apiKey +
+		"&units=" +
+		unit;
+
+	https.get(url, function (response) {
+		console.log(response.statusCode);
+
+		response.on("data", function (data) {
+			const weatherData = JSON.parse(data);
+			const temp = weatherData.main.temp;
+			const weatherDescription = weatherData.weather[0].description;
+			const icon = weatherData.weather[0].icon;
+			const imgURL = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
+
+			res.write("<p>The weather is currently " + weatherDescription + "</p>");
+			res.write(
+				"<h1>The temperature in " +
+					query +
+					" is " +
+					temp +
+					" degree celsius.</h1>"
+			);
+			res.write("<img src=" + imgURL + ">");
+			res.send();
+		});
+	});
+});
 
 //SERVER PORT
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
