@@ -1,0 +1,110 @@
+<%- include('partials/pages/headerLogin') %>
+
+    <!-- Navbar Continuation -->
+    <div id="header-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class="w-100 py-2" src="img/dhvsu-background.png" alt="Image">
+                <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+
+                    <!--LOGIN START-->
+                    <div class="container pb-5 mb-sm-4">
+                        <div class="row pt-5">
+                            <div class="col-md-6 pt-sm-3 mx-auto mb-5">
+                                <div class="card">
+                                    <div class="card-body p-5">
+                                        <h1 class="section-title text-center position-relative pb-3 mb-2">No
+                                            account? Sign up</h1>
+                                        <div class="d-sm-flex align-items-center py-3">
+                                            <h3 class="h4 font-weight-semibold opacity-70 mb-3 mb-sm-2 mr-sm-3">Sign up
+                                                with:
+                                            </h3>
+                                            <div>
+                                                <a class="btn btn-md btn-outline-dark rounded-circle me-2 mx-2 mb-1"
+                                                    href=""><i class="fab fa-facebook-f fw-normal fa-lg"></i></a>
+                                                <a class="btn btn-md btn-outline-dark rounded-circle me-2 mx-1 mb-1"
+                                                    href=""><i class="fab fa-google fw-normal fa-md"></i></a>
+                                            </div>
+                                        </div>
+                                        <hr class="text-dark">
+                                        <h3 class="h6 font-weight-semibold opacity-70 pt-4 pb-2">Or using form below
+                                        </h3>
+                                        <form class="needs-validation" novalidate="">
+                                            <div class="row">
+                                                <div class="col-sm-6 my-2">
+                                                    <div class="form-group text-left">
+                                                        <label class="text-dark text-left" for="reg-fn">First
+                                                            Name</label>
+                                                        <input class="form-control" type="text" placeholder="First Name" required="" id="reg-fn">
+                                                        <div class="invalid-feedback">Please enter your first name!
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6 my-2">
+                                                    <div class="form-group">
+                                                        <label class="text-dark" for="reg-ln">Last Name</label>
+                                                        <input class="form-control" type="text" required="" id="reg-ln">
+                                                        <div class="invalid-feedback">Please enter your last name!</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6 my-2">
+                                                    <div class="form-group">
+                                                        <label class="text-dark" for="reg-email">E-mail Address</label>
+                                                        <input class="form-control" type="email" required=""
+                                                            id="reg-email">
+                                                        <div class="invalid-feedback">Please enter valid email address!
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6 my-2">
+                                                    <div class="form-group">
+                                                        <label class="text-dark" for="reg-phone">Phone Number</label>
+                                                        <input class="form-control" type="text" required=""
+                                                            id="reg-phone">
+                                                        <div class="invalid-feedback">Please enter your phone number!
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6 my-2">
+                                                    <div class="form-group">
+                                                        <label class="text-dark" for="reg-password">Password</label>
+                                                        <input class="form-control" type="password" required=""
+                                                            id="reg-password">
+                                                        <div class="invalid-feedback">Please enter password!</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6 my-2">
+                                                    <div class="form-group">
+                                                        <label class="text-dark" for="reg-password-confirm">Confirm
+                                                            Password</label>
+                                                        <input class="form-control" type="password" required=""
+                                                            id="reg-password-confirm">
+                                                        <div class="invalid-feedback">Passwords do not match!</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex flex-wrap justify-content-between">
+                                                <p class="text-dark">Already have an Account?
+                                                    <a class="nav-link-inline font-size-sm" href="login">
+                                                        Sign in</a>
+                                                </p>
+                                                <a class="nav-link-inline font-size-sm" href="forgotPass">Forgot
+                                                    password?</a>
+                                            </div>
+                                            <hr class="text-dark">
+                                            <div class="text-right pt-4">
+                                                <button class="btn btn-primary py-3 px-5 wow zoomIn"
+                                                    data-wow-delay="0.9s" type="submit">Sign Up</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/pages/footerLogin') %>

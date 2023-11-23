@@ -505,6 +505,19 @@ h6,
     }
 }
 
+.text-dark {
+    color: var(--dark);
+}
+
+.text-dark-input {
+    color: var(--dark);
+    text-align: left;
+}
+
+.input-icon {
+    font-size: 24px;
+}
+
 .back-to-top {
     position: fixed;
     display: none;

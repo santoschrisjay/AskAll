@@ -34,6 +34,19 @@ app.get("/team", (req, res) => res.render("team.ejs"));
 app.get("/profile", (req, res) => res.render("profile.ejs"));
 app.get("/reference", (req, res) => res.render("reference.ejs"));
 
+//**Login - Register */
+app.get("/login", (req, res) => res.render("login.ejs"));
+app.get("/register", (req, res) => res.render("register.ejs"));
+app.get("/forgotPassGetCode", (req, res) =>
+	res.render("forgotPassGetCode.ejs")
+);
+app.get("/forgotPasswordGetCode", (req, res) =>
+	res.render("forgotPasswordGetCode.ejs")
+);
+app.get("/forgotPasswordLastStep", (req, res) =>
+	res.render("forgotPasswordLastStep.ejs")
+);
+
 //**Profile */
 app.get("/history", (req, res) => res.render("profileHistory.ejs"));
 app.get("/notification", (req, res) => res.render("profileNotification.ejs"));
