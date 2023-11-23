@@ -10,7 +10,7 @@
       style="max-width: 600px"
     >
       <h5 class="fw-bold text-primary text-uppercase">Title</h5>
-      <h1 class="mb-0">SOME CHENA</h1>
+      <h1 class="mb-0">IMAGE GENERATOR </h1>
     </div>
   </div>
   <!-- CONVO BOX HERE -->
@@ -34,30 +34,31 @@
             <ul class="list-unstyled chat-list mt-2 mb-0">
               <li class="clearfix" onclick="handleCodePage()">
                 <img
-                src="img/bot-icon.png"
-                alt="avatar"
-              />
+                  src="img/bot-icon.png"
+                  alt="avatar"
+                />
                 <div class="about">
                   <div class="name">Code Generator</div>
                 </div>
               </li>
-              <li class="clearfix active">
+              <li class="clearfix" onclick="handleConversationPage()">
                 <img
-                  src="img/conversation-icon.png"
-                  alt="avatar"
-                />
+                src="img/conversation-icon.png"
+                alt="avatar"
+              />
                 <div class="about">
                   <div class="name">Conversation</div>
                 </div>
               </li>
-              <li class="clearfix"  onclick="handleImagePage()">
+              <li class="clearfix active">
                 <img
-                src="img/image-bot-icon.png"
+                  src="img/image-bot-icon.png"
                   alt="avatar"
                 />
                 <div class="about">
                   <div class="name">Image Generator</div>
-                 
+                  <div class="status">
+                  </div>
                 </div>
               </li>
 
@@ -72,7 +73,7 @@
                 </div>
               </li>
 
-              <li class="clearfix"  onclick="handleRantBuddyPage()">
+              <li class="clearfix "  onclick="handleRantBuddyPage()">
                 <img
                 src="img/rant.png"
                   alt="avatar"
@@ -90,16 +91,16 @@
             <div class="chat-header clearfix">
               <div class="row">
                 <div class="col-lg-6"  style="display: flex;">
-                 
+               
                     <img
-                      src="img/conversation-icon.png"
+                    src="img/image-bot-icon.png"
                       alt="avatar"
                       style="width:50px;"
                     />
-                  </a>
-                  <div class="chat-about" style="display: flex; flex-direction: column;">
-                    <h6>Conversation Bot</h6>
-                    <small style="white-space: nowrap;">Ask me anything and your secrets is safe with me</small>
+                 
+                  <div class="chat-about"  style="display: flex; flex-direction: column;">
+                    <h6 class="m-b-0">Image Generator</h6>
+                    <small>I can make your words into image</small>
                   </div>
                 </div>
            
@@ -119,10 +120,11 @@
                   </div>
                 </li>
                 <li class="clearfix">
-                
-                  <div class="message my-message" id="botChat" >
-
+                  <div class="message my-message" style="display:flex; width:fit-content">
+                    <span id="botChatLoading"></span>
+                    <img src="" alt="" id="botChat" style="width:250px; display:none;">
                   </div>
+
                 </li>
               </ul>
             </div>
@@ -152,24 +154,30 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/openai"></script>
 <script>
+
 function handleSubmit(event) {
     event.preventDefault();
-   let botChat = document.querySelector('#botChat');
-   botChat.innerText="Loading...";
+    let isLoading = false;
+    
+    let botChat = document.querySelector('#botChat');
+    let botChatLoading = document.querySelector('#botChatLoading');
+    botChatLoading.innerText="Loading..."
+    botChat.style.display="none";
+
     const inputValue = document.getElementById('textInput').value
     document.querySelector('#userChat').innerText = inputValue;
       console.log(inputValue)
-      const userMessage =[{
+      const userMessage ={
         role:"user",
         content:inputValue,
-      },
-   ]
-  fetch('/conversation', {
+      }
+   
+  fetch('/image', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
   },
-  body:JSON.stringify(userMessage)
+  body: JSON.stringify({inputValue}), 
 })
   .then(response => {
     if (!response.ok) {
@@ -178,8 +186,10 @@ function handleSubmit(event) {
    return response.json()
   })
   .then(data => {
-   return botChat.innerText = JSON.stringify(data.content);
+  
+   return botChat.src = data, botChat.style.display="block", botChatLoading.innerText="";
 
+      
   
   })
   .catch(error => {
@@ -189,11 +199,10 @@ function handleSubmit(event) {
 
 
   }
-   const handleCodePage =() => window.location.href="/chatCode";
-   const handleImagePage =() => window.location.href="/chatImage";
-   const handleMusicPage =() => window.location.href="/chatMusic";
-   const handleRantBuddyPage =() => window.location.href="/chatRantBuddy";
-
+  const handleConversationPage =() => window.location.href="/chatConversation";
+  const handleCodePage =() => window.location.href="/chatCode";
+  const handleMusicPage =() => window.location.href="/chatMusic";
+  const handleRantBuddyPage =() => window.location.href="/chatRantBuddy";
 </script>
 <!-- Team End -->
 

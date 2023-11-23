@@ -10,7 +10,7 @@
       style="max-width: 600px"
     >
       <h5 class="fw-bold text-primary text-uppercase">Title</h5>
-      <h1 class="mb-0">SOME CHENA</h1>
+      <h1 class="mb-0">MUSIC GENERATOR</h1>
     </div>
   </div>
   <!-- CONVO BOX HERE -->
@@ -41,7 +41,7 @@
                   <div class="name">Code Generator</div>
                 </div>
               </li>
-              <li class="clearfix active">
+              <li class="clearfix" onclick="handleConversationPage()">
                 <img
                   src="img/conversation-icon.png"
                   alt="avatar"
@@ -61,7 +61,7 @@
                 </div>
               </li>
 
-              <li class="clearfix"  onclick="handleMusicPage()">
+              <li class="clearfix active">
                 <img
                 src="img/music-bot-icon.png"
                   alt="avatar"
@@ -71,8 +71,8 @@
                  
                 </div>
               </li>
-
-              <li class="clearfix"  onclick="handleRantBuddyPage()">
+          
+              <li class="clearfix "  onclick="handleRantBuddyPage()">
                 <img
                 src="img/rant.png"
                   alt="avatar"
@@ -83,26 +83,26 @@
                  
                 </div>
               </li>
-          
+
             </ul>
           </div>
           <div class="chat">
             <div class="chat-header clearfix">
               <div class="row">
-                <div class="col-lg-6"  style="display: flex;">
-                 
-                    <img
-                      src="img/conversation-icon.png"
-                      alt="avatar"
-                      style="width:50px;"
-                    />
-                  </a>
+                <div class="col-lg-6">
+                
+                  <img
+                  src="img/music-bot-icon.png"
+                    alt="avatar"
+                    style="width:50px;"
+                  />
+          
                   <div class="chat-about" style="display: flex; flex-direction: column;">
-                    <h6>Conversation Bot</h6>
-                    <small style="white-space: nowrap;">Ask me anything and your secrets is safe with me</small>
+                    <h6 >Music Generator</h6>
+                    <small  style="white-space: nowrap;">I make music</small>
                   </div>
                 </div>
-           
+             
               </div>
             </div>
             <div class="chat-history" style="margin-top:40px; padding-bottom:50px">
@@ -119,10 +119,12 @@
                   </div>
                 </li>
                 <li class="clearfix">
-                
-                  <div class="message my-message" id="botChat" >
-
-                  </div>
+                  <div class="message my-message" style="display:flex; width:fit-content">
+                    <span id="botChatLoading"></span>
+                    <audio controls id="botAudioSource" style="display: none;">
+                      <source id="botChat" src="" style="display: none;"/>
+                    </audio>
+                    </div>
                 </li>
               </ul>
             </div>
@@ -155,7 +157,12 @@
 function handleSubmit(event) {
     event.preventDefault();
    let botChat = document.querySelector('#botChat');
-   botChat.innerText="Loading...";
+   let source = document.getElementsByTagName("source")
+  let botChatLoading = document.querySelector('#botChatLoading');
+  let botAudioSource = document.querySelector('#botAudioSource');
+  botChatLoading.innerText="Loading...";
+   botChat.style.display="none";
+   botAudioSource.style.display="none"
     const inputValue = document.getElementById('textInput').value
     document.querySelector('#userChat').innerText = inputValue;
       console.log(inputValue)
@@ -164,12 +171,12 @@ function handleSubmit(event) {
         content:inputValue,
       },
    ]
-  fetch('/conversation', {
+  fetch('/music', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
   },
-  body:JSON.stringify(userMessage)
+  body:JSON.stringify({inputValue})
 })
   .then(response => {
     if (!response.ok) {
@@ -178,9 +185,9 @@ function handleSubmit(event) {
    return response.json()
   })
   .then(data => {
-   return botChat.innerText = JSON.stringify(data.content);
-
-  
+   
+      
+        return botChat.setAttribute('src', `${data}`), botAudioSource.load(), botAudioSource.play(),botAudioSource.style.display="block",botChat.style.display="block",botChatLoading.innerText="", console.log(data);
   })
   .catch(error => {
    
@@ -191,8 +198,8 @@ function handleSubmit(event) {
   }
    const handleCodePage =() => window.location.href="/chatCode";
    const handleImagePage =() => window.location.href="/chatImage";
-   const handleMusicPage =() => window.location.href="/chatMusic";
-   const handleRantBuddyPage =() => window.location.href="/chatRantBuddy";
+   const handleConversationPage =() => window.location.href="/chatConversation";
+   const handleRantBuddyPage = () => window.location.href="/chatRantBuddy"
 
 </script>
 <!-- Team End -->
