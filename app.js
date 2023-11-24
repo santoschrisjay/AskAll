@@ -26,62 +26,82 @@ app.set("view engine", "ejs");
 
 //**ALL PAGES START */
 //**Pages */
-app.get("/", (req, res) => res.render("index.ejs"));
-app.get("/about", (req, res) => res.render("about.ejs"));
-app.get("/contact", (req, res) => res.render("contact.ejs"));
-app.get("/service", (req, res) => res.render("service.ejs"));
-app.get("/team", (req, res) => res.render("team.ejs"));
-app.get("/profile", (req, res) => res.render("profile.ejs"));
-app.get("/reference", (req, res) => res.render("reference.ejs"));
+app.get("/", (req, res) => res.render("main-pages/index.ejs"));
+app.get("/about", (req, res) => res.render("main-pages/about.ejs"));
+app.get("/contact", (req, res) => res.render("main-pages/contact.ejs"));
+app.get("/services", (req, res) => res.render("main-pages/services.ejs"));
+app.get("/team", (req, res) => res.render("main-pages/team.ejs"));
+app.get("/reference", (req, res) => res.render("main-pages/reference.ejs"));
 
-//**Login - Register */
-app.get("/login", (req, res) => res.render("login.ejs"));
-app.get("/register", (req, res) => res.render("register.ejs"));
-app.get("/forgotPassGetCode", (req, res) =>
-	res.render("forgotPassGetCode.ejs")
+//**authentication */
+app.get("/login", (req, res) => res.render("authentication/login.ejs"));
+app.get("/register", (req, res) => res.render("authentication/register.ejs"));
+app.get("/forgot-password-get-code", (req, res) =>
+	res.render("authentication/forgotPasswordGetCode.ejs")
 );
-app.get("/forgotPasswordGetCode", (req, res) =>
-	res.render("forgotPasswordGetCode.ejs")
-);
-app.get("/forgotPasswordLastStep", (req, res) =>
-	res.render("forgotPasswordLastStep.ejs")
+app.get("/forgot-password-last-step", (req, res) =>
+	res.render("authentication/forgotPasswordLastStep.ejs")
 );
 
-//**Profile */
-app.get("/history", (req, res) => res.render("profileHistory.ejs"));
-app.get("/notification", (req, res) => res.render("profileNotification.ejs"));
-app.get("/security", (req, res) => res.render("profileSecurity.ejs"));
+//**profile */
+app.get("/profile", (req, res) => res.render("profile/profile.ejs"));
+app.get("/profile-history", (req, res) =>
+	res.render("profile/profileHistory.ejs")
+);
+app.get("/profile-notification", (req, res) =>
+	res.render("profile/profileNotification.ejs")
+);
+app.get("/profile-security", (req, res) =>
+	res.render("profile/profileSecurity.ejs")
+);
 
-//**Admin */
-app.get("/admin", (req, res) => res.render("admin.ejs"));
-app.get("/admin-history", (req, res) => res.render("adminHistory.ejs"));
+//**admin */
+app.get("/admin", (req, res) => res.render("admin/admin.ejs"));
+app.get("/admin-history", (req, res) => res.render("admin/adminHistory.ejs"));
 app.get("/admin-notification", (req, res) =>
-	res.render("adminNotification.ejs")
+	res.render("admin/adminNotification.ejs")
 );
-app.get("/admin-security", (req, res) => res.render("adminSecurity.ejs"));
+app.get("/admin-security", (req, res) => res.render("admin/adminSecurity.ejs"));
 
-//**Features */
-app.get("/todo", (req, res) => res.render("todo.ejs"));
-app.get("/weather", (req, res) => res.render("weather.ejs"));
-app.get("/chatAI", (req, res) => res.render("chatAI.ejs"));
-app.get("/calculator", (req, res) => res.render("calculator.ejs"));
-app.get("/wordToPdf", (req, res) => res.render("wordToPdf.ejs"));
-app.get("/pdfToWord", (req, res) => res.render("pdfToWord.ejs"));
-app.get("/converter", (req, res) => res.render("converter.ejs"));
+//**ALL FEATURES START */
+//**quick-information */
+app.get("/todo-list", (req, res) =>
+	res.render("quick-information/todoList.ejs")
+);
+app.get("/weather", (req, res) => res.render("quick-information/weather.ejs"));
+app.get("/calculator", (req, res) =>
+	res.render("quick-information/calculator.ejs")
+);
+
+//**chat-AI */
+app.get("/chatAI", (req, res) => res.render("chat-AI/chatAI.ejs"));
+
+//**document-converter */
+app.get("/word-to-pdf", (req, res) =>
+	res.render("document-converter/wordToPdf.ejs")
+);
+app.get("/pdf-to-word", (req, res) =>
+	res.render("document-converter/pdfToWord.ejs")
+);
+
+//**unit-converter */
+app.get("/converter", (req, res) => res.render("unit-converter/converter.ejs"));
+
+//**ALL FEATURES END */
 
 //**Resumes */
-app.get("/resumeChris", (req, res) => res.render("resumes/resumeChris.ejs"));
-app.get("/resumeGracezen", (req, res) =>
+app.get("/resume-chris", (req, res) => res.render("resumes/resumeChris.ejs"));
+app.get("/resume-gracezen", (req, res) =>
 	res.render("resumes/resumeGracezen.ejs")
 );
-app.get("/resumeMark", (req, res) => res.render("resumes/resumeMark.ejs"));
-app.get("/resumeNath", (req, res) => res.render("resumes/resumeNath.ejs"));
-app.get("/resumePhoebe", (req, res) => res.render("resumes/resumePhoebe.ejs"));
-app.get("/resumePunla", (req, res) => res.render("resumes/resumePunla.ejs"));
-app.get("/resumeRonnie", (req, res) => res.render("resumes/resumeRonnie.ejs"));
-app.get("/resumeSoza", (req, res) => res.render("resumes/resumeSoza.ejs"));
-app.get("/resumeVital", (req, res) => res.render("resumes/resumeVital.ejs"));
-app.get("/resumeZapanta", (req, res) =>
+app.get("/resume-mark", (req, res) => res.render("resumes/resumeMark.ejs"));
+app.get("/resume-nath", (req, res) => res.render("resumes/resumeNath.ejs"));
+app.get("/resume-phoebe", (req, res) => res.render("resumes/resumePhoebe.ejs"));
+app.get("/resume-punla", (req, res) => res.render("resumes/resumePunla.ejs"));
+app.get("/resume-ronnie", (req, res) => res.render("resumes/resumeRonnie.ejs"));
+app.get("/resume-soza", (req, res) => res.render("resumes/resumeSoza.ejs"));
+app.get("/resume-vital", (req, res) => res.render("resumes/resumeVital.ejs"));
+app.get("/resume-zapanta", (req, res) =>
 	res.render("resumes/resumeZapanta.ejs")
 );
 //**ALL PAGES END */

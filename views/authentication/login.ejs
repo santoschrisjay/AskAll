@@ -1,4 +1,4 @@
-<%- include('partials/pages/headerLogin') %>
+<%- include('../partials/pages/headerLogin') %>
 
     <!-- Navbar Continuation -->
     <div id="header-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
@@ -33,7 +33,7 @@
                                             <!--Email-->
                                             <div class="input-group form-group my-4">
                                                 <div class="input-group-prepend"><span class="input-group-text"><i
-                                                    class="fa fa-envelope input-icon"></i></span></div>
+                                                            class="fa fa-envelope input-icon"></i></span></div>
                                                 <input class="form-control" type="email" placeholder="Email"
                                                     required="">
                                                 <div class="invalid-feedback">Please enter valid email address!</div>
@@ -41,7 +41,7 @@
                                             <!--Password-->
                                             <div class="input-group form-group mb-3">
                                                 <div class="input-group-prepend"><span class="input-group-text"><i
-                                                    class="fa fa-lock input-icon"></i></span></div>
+                                                            class="fa fa-lock input-icon"></i></span></div>
                                                 <input class="form-control" type="password" placeholder="Password"
                                                     required="">
                                                 <div class="invalid-feedback">Please enter valid password!</div>
@@ -51,7 +51,8 @@
                                                     <a class="nav-link-inline font-size-sm" href="register">
                                                         Register</a>
                                                 </p>
-                                                <a class="nav-link-inline font-size-sm" href="forgotPasswordGetCode">Forgot
+                                                <a class="nav-link-inline font-size-sm"
+                                                    href="forgot-password-get-code">Forgot
                                                     password?</a>
                                             </div>
                                             <hr class="text-dark">
@@ -72,4 +73,4 @@
 
 
 
-    <%- include('partials/pages/footerLogin') %>
+    <%- include('../partials/pages/footerLogin') %>

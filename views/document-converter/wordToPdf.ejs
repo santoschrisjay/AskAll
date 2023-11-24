@@ -1,5 +1,5 @@
-<%- include('partials/header') %>
-    <%- include('partials/features/headerWeather') %>
+<%- include('../partials/header') %>
+    <%- include('../partials/features/headerWordToPdf') %>
 
         <!-- Team Start -->
         <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
@@ -13,14 +13,4 @@
         </div>
         <!-- Team End -->
 
-        <!-- Weather Start -->
-        <h1>GET Weather</h1>
-
-        <form action="/weather" method="post">
-            <label for="cityName">City Name:</label>
-            <input id="cityName" type="text" name="cityName" placeholder="City Name">
-            <button type="submit">Go</button>
-        </form>
-        <!-- Weather End -->
-
-        <%- include('partials/footer') %>
+        <%- include('../partials/footer') %>
