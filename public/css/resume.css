@@ -36,7 +36,11 @@
   --bs-gray-700: #495057;
   --bs-gray-800: #343a40;
   --bs-gray-900: #212529;
+<<<<<<< HEAD
   --bs-primary: #091E3E;
+=======
+  --bs-primary: #434E5E;
+>>>>>>> ronnie-branch
   --bs-secondary: #58677c;
   --bs-primary-rgb: 67, 78, 94;
   --bs-secondary-rgb: 88.2236024845, 102.7080745342, 123.7763975155;
@@ -84,8 +88,12 @@
 
 .back-btn {
   display: flex;
+<<<<<<< HEAD
   margin: 10px 50px 0px 200px;
   color: #0a58ca;
+=======
+  margin: 10px 50px 0px 200px
+>>>>>>> ronnie-branch
 }
 
 body {
@@ -3203,8 +3211,13 @@ fieldset:disabled .btn {
 
 .btn-primary {
   --bs-btn-color: #fff;
+<<<<<<< HEAD
   --bs-btn-bg: #091E3E;
   --bs-btn-border-color: #091E3E;
+=======
+  --bs-btn-bg: #434E5E;
+  --bs-btn-border-color: #434E5E;
+>>>>>>> ronnie-branch
   --bs-btn-hover-color: #fff;
   --bs-btn-hover-bg: #394250;
   --bs-btn-hover-border-color: #363e4b;
@@ -3214,8 +3227,13 @@ fieldset:disabled .btn {
   --bs-btn-active-border-color: #323b47;
   --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   --bs-btn-disabled-color: #fff;
+<<<<<<< HEAD
   --bs-btn-disabled-bg: #091E3E;
   --bs-btn-disabled-border-color: #091E3E;
+=======
+  --bs-btn-disabled-bg: #434E5E;
+  --bs-btn-disabled-border-color: #434E5E;
+>>>>>>> ronnie-branch
 }
 
 .btn-secondary {
@@ -3236,6 +3254,7 @@ fieldset:disabled .btn {
 }
 
 .btn-outline-primary {
+<<<<<<< HEAD
   --bs-btn-color: #091E3E;
   --bs-btn-border-color: #091E3E;
   --bs-btn-hover-color: #fff;
@@ -3247,6 +3266,19 @@ fieldset:disabled .btn {
   --bs-btn-active-border-color: #091E3E;
   --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   --bs-btn-disabled-color: #091E3E;
+=======
+  --bs-btn-color: #434E5E;
+  --bs-btn-border-color: #434E5E;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #434E5E;
+  --bs-btn-hover-border-color: #434E5E;
+  --bs-btn-focus-shadow-rgb: 67, 78, 94;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #434E5E;
+  --bs-btn-active-border-color: #434E5E;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #434E5E;
+>>>>>>> ronnie-branch
   --bs-btn-disabled-bg: transparent;
   --bs-gradient: none;
 }
@@ -7081,7 +7113,11 @@ fieldset:disabled .btn {
 }
 
 .link-primary {
+<<<<<<< HEAD
   color: #091E3E !important;
+=======
+  color: #434E5E !important;
+>>>>>>> ronnie-branch
 }
 
 .link-primary:hover,
@@ -11888,12 +11924,20 @@ body {
   background: #F7F8FA;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+<<<<<<< HEAD
   color: #091E3E;
+=======
+  color: #434E5E;
+>>>>>>> ronnie-branch
   overflow-x: hidden;
 }
 
 a {
+<<<<<<< HEAD
   color: #091E3E;
+=======
+  color: #434E5E;
+>>>>>>> ronnie-branch
 }
 
 a:hover {
@@ -11913,7 +11957,11 @@ a.text-link:hover {
 }
 
 .theme-bg-primary {
+<<<<<<< HEAD
   background-color: #091E3E;
+=======
+  background-color: #434E5E;
+>>>>>>> ronnie-branch
 }
 
 .theme-bg-primary-darken {
@@ -11943,7 +11991,11 @@ a.theme-btn-on-bg:active,
 }
 
 .theme-progress-bar-dark {
+<<<<<<< HEAD
   background-color: #091E3E;
+=======
+  background-color: #434E5E;
+>>>>>>> ronnie-branch
 }
 
 .resume-wrapper {
@@ -11956,7 +12008,11 @@ a.theme-btn-on-bg:active,
 }
 
 .resume-header {
+<<<<<<< HEAD
   background: #091E3E;
+=======
+  background: #434E5E;
+>>>>>>> ronnie-branch
   color: rgba(255, 255, 255, 0.9);
   height: 220px;
 }
@@ -11994,13 +12050,21 @@ a.theme-btn-on-bg:active,
   height: 24px;
   border-radius: 0.125rem;
   background: white;
+<<<<<<< HEAD
   color: #091E3E;
+=======
+  color: #434E5E;
+>>>>>>> ronnie-branch
 }
 
 .resume-section-title {
   font-size: 1.25rem;
   position: relative;
+<<<<<<< HEAD
   color: #091E3E;
+=======
+  color: #434E5E;
+>>>>>>> ronnie-branch
 }
 
 .resume-section-title:after {
@@ -12062,7 +12126,11 @@ a.theme-btn-on-bg:active,
 
 .resume-position-title {
   font-size: 1.125rem;
+<<<<<<< HEAD
   color: #091E3E;
+=======
+  color: #434E5E;
+>>>>>>> ronnie-branch
 }
 
 .resume-timeline-item-desc-heading {
@@ -12071,12 +12139,20 @@ a.theme-btn-on-bg:active,
 
 .resume-skills-cat {
   font-size: 1rem;
+<<<<<<< HEAD
   color: #091E3E;
+=======
+  color: #434E5E;
+>>>>>>> ronnie-branch
 }
 
 .resume-skill-name {
   font-size: 0.8125rem;
+<<<<<<< HEAD
   color: #091E3E;
+=======
+  color: #434E5E;
+>>>>>>> ronnie-branch
 }
 
 .badge-light {
@@ -12085,7 +12161,11 @@ a.theme-btn-on-bg:active,
 }
 
 .resume-degree {
+<<<<<<< HEAD
   color: #091E3E;
+=======
+  color: #434E5E;
+>>>>>>> ronnie-branch
 }
 
 .resume-degree-org {
@@ -12105,7 +12185,11 @@ a.theme-btn-on-bg:active,
 
 .resume-award-name {
   font-weight: bold;
+<<<<<<< HEAD
   color: #091E3E;
+=======
+  color: #434E5E;
+>>>>>>> ronnie-branch
 }
 
 .resume-award-desc {
@@ -12113,7 +12197,11 @@ a.theme-btn-on-bg:active,
 }
 
 .resume-lang-name {
+<<<<<<< HEAD
   color: #091E3E;
+=======
+  color: #434E5E;
+>>>>>>> ronnie-branch
 }
 
 .footer .fa-heart {

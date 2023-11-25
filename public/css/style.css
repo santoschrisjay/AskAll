@@ -61,10 +61,13 @@
     opacity: 1;
 }
 
+<<<<<<< HEAD
 /*** Justify ***/
 .justify-text {
     text-align: justify;
 }
+=======
+>>>>>>> ronnie-branch
 
 /*** Heading ***/
 h1,
@@ -505,6 +508,7 @@ h6,
     }
 }
 
+<<<<<<< HEAD
 .text-dark {
     color: var(--dark);
 }
@@ -518,6 +522,8 @@ h6,
     font-size: 24px;
 }
 
+=======
+>>>>>>> ronnie-branch
 .back-to-top {
     position: fixed;
     display: none;
