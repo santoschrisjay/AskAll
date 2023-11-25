@@ -2,27 +2,27 @@
 import express from "express";
 import bodyParser from "body-parser";
 import mysql from "mysql2";
-import session from "express-session";
+import session from "express-session"; //naka include na ito yon for express session
 import https from "https";
 import connected from "process";
 import get from "http";
 
-import OpenAI from 'openai';
-import dotenv from 'dotenv';
+//AI
+import OpenAI from "openai";
+import dotenv from "dotenv";
 dotenv.config();
 const app = express();
 
 // OPEN AI API
 const openai = new OpenAI({
-    apiKey: process.env.OPEN_AI_API_KEY,
-
+	apiKey: process.env.OPEN_AI_API_KEY,
 });
 
-// REPLICATE API 
+// REPLICATE API
 import Replicate from "replicate";
 
 const replicate = new Replicate({
-  auth: process.env.REPLICATE_API_TOKEN,
+	auth: process.env.REPLICATE_API_TOKEN,
 });
 
 app.use(
@@ -39,6 +39,24 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 app.set("view engine", "ejs");
+
+//SQL
+const connection = mysql.createConnection({
+	host: "localhost",
+	user: "root",
+	password: "hehez190",
+	port: 3307,
+	database: "askalldb",
+});
+
+connection.connect((err) => {
+	if (err) {
+		console.log(err);
+	} else {
+		//ano niyan balak moo
+		console.log("CONNECTED TO SQL.");
+	}
+});
 
 //**ALL PAGES START */
 //**Pages */
@@ -60,15 +78,50 @@ app.get("/forgot-password-last-step", (req, res) =>
 );
 
 //**profile */
-app.get("/profile", (req, res) => res.render("profile/profile.ejs"));
+// app.get("/profile", (req, res) => res.render("profile/profile.ejs"));
+// function capitalizeWords(str) {
+// 	return str.replace(/\b\w/g, (char) => char.toUpperCase());
+// }
+
+app.get("/profile", (req, res) => {
+	// const userId = req.session.userId;
+	const user_ID = 1;
+	if (user_ID) {
+		const sql =
+			"SELECT firstName, lastName, email, phoneNumber, passwordd FROM user WHERE ID = ?";
+		connection.query(sql, [user_ID], (error, results, fields) => {
+			if (error) {
+				console.error("Error retrieving user data:", error);
+				res.status(500).send("Error retrieving user data");
+				throw error;
+			}
+
+			if (results.length > 0) {
+				const { firstName, lastName, email, phoneNumber, passwordd } =
+					results[0];
+				// const formattedFirstName = capitalizeWords(first_name);
+				// const formattedLastName = capitalizeWords(last_name);
+				res.render("profile/profile", {
+					firstName,
+					lastName,
+					email,
+					phoneNumber,
+					passwordd,
+				});
+			} else {
+				res.status(404).send("User not found");
+			}
+		});
+	} else {
+		res.status(401).send("Unauthorized");
+	}
+});
+
 app.get("/profile-history", (req, res) =>
 	res.render("profile/profileHistory.ejs")
 );
 app.get("/profile-notification", (req, res) =>
 	res.render("profile/profileNotification.ejs")
-);
-app.get("/profile-security", (req, res) =>
-	res.render("profile/profileSecurity.ejs")
 );
 
 //**admin */
@@ -91,10 +144,14 @@ app.get("/calculator", (req, res) =>
 
 //**chat-AI */
 app.get("/chatCodeAi", (req, res) => res.render("chat-AI/chatCodeAi.ejs"));
-app.get("/chatConversation", (req, res) => res.render("chat-AI/chatConversation.ejs"));
+app.get("/chatConversation", (req, res) =>
+	res.render("chat-AI/chatConversation.ejs")
+);
 app.get("/chatImage", (req, res) => res.render("chat-AI/chatImage.ejs"));
 app.get("/chatMusic", (req, res) => res.render("chat-AI/chatMusic.ejs"));
-app.get("/chatRantBuddy", (req, res) => res.render("chat-AI/chatRantBuddy.ejs"));
+app.get("/chatRantBuddy", (req, res) =>
+	res.render("chat-AI/chatRantBuddy.ejs")
+);
 
 //**document-converter */
 app.get("/word-to-pdf", (req, res) =>
@@ -171,97 +228,86 @@ app.post("/weather", function (req, res) {
 app.use(express.json());
 app.set("view engine", "ejs");
 
-
-
 //FEATURES
-
 app.get("/chatConversation", (req, res) => res.render("chatConversation.ejs"));
-app.get("/chatCode", (req, res) => res.render("chatCodeAi.ejs"));
+app.get("/chatCode", (req, res) => res.render("chat-AI/chatCodeAi.ejs"));
 app.get("/chatImage", (req, res) => res.render("chatImage.ejs"));
 app.get("/chatMusic", (req, res) => res.render("chatMusic.ejs"));
 app.get("/chatRantBuddy", (req, res) => res.render("chatRantBuddy.ejs"));
 
-
 // CONVERSATION ENDPOINT
-app.post('/conversation', async (req, res) => {
-const userMessage = req.body
-	console.log(userMessage)
+app.post("/conversation", async (req, res) => {
+	const userMessage = req.body;
+	console.log(userMessage);
 	const response = await openai.chat.completions.create({
-        model:"gpt-3.5-turbo",
+		model: "gpt-3.5-turbo",
 		messages: userMessage,
-	   
-    });
-		console.log(response.choices[0])
-		res.json(response.choices[0].message);
-})
+	});
+	console.log(response.choices[0]);
+	res.json(response.choices[0].message);
+});
 
 // CODE ENDPOINT
-app.post('/code', async (req, res) => {
-	const userMessage = req.body
+app.post("/code", async (req, res) => {
+	const userMessage = req.body;
 
-		const codeMessage = {
-			role: "system",
-			content:"You are a code generator and you supposedly answer in programming terms and markdown code snippets. Use comments to assist and for explanation."
-		}
-		const response = await openai.chat.completions.create({
-			model:"gpt-3.5-turbo",
-			messages:[codeMessage, userMessage]
-		   
-		});
-			console.log(response.choices[0])
-			res.json(response.choices[0].message);
-	})
-	
+	const codeMessage = {
+		role: "system",
+		content:
+			"You are a code generator and you supposedly answer in programming terms and markdown code snippets. Use comments to assist and for explanation.",
+	};
+	const response = await openai.chat.completions.create({
+		model: "gpt-3.5-turbo",
+		messages: [codeMessage, userMessage],
+	});
+	console.log(response.choices[0]);
+	res.json(response.choices[0].message);
+});
+
 // IMAGE ENDPOINT
-	app.post('/image', async (req, res) => {
-		const {inputValue}= req.body
-		const kekw = Object.values(inputValue[0])
-		
-		const response =await openai.images.generate({ 
-			model: "dall-e-3", 
-			prompt: inputValue,
-		
-		});
-		const imageUrl = response.data[0].url
-        console.log(imageUrl); 
-    res.json(imageUrl);
-		})
-		
+app.post("/image", async (req, res) => {
+	const { inputValue } = req.body;
+	const kekw = Object.values(inputValue[0]);
 
+	const response = await openai.images.generate({
+		model: "dall-e-3",
+		prompt: inputValue,
+	});
+	const imageUrl = response.data[0].url;
+	console.log(imageUrl);
+	res.json(imageUrl);
+});
 
-	// MUSIC ENDPOINT
-	app.post('/music', async (req, res) => {
-		const {inputValue}= req.body
-		const response = await replicate.run(
-			"riffusion/riffusion:8cf61ea6c56afd61d8f5b9ffd14d7c216c0a93844ce2d82ac1c9ecc9c7f24e05",
-			{
-			  input: {
-				prompt_a:inputValue,
-			  },
-			}
-		  );
-			console.log(response)
-    res.json(response.audio);
-		})
+// MUSIC ENDPOINT
+app.post("/music", async (req, res) => {
+	const { inputValue } = req.body;
+	const response = await replicate.run(
+		"riffusion/riffusion:8cf61ea6c56afd61d8f5b9ffd14d7c216c0a93844ce2d82ac1c9ecc9c7f24e05",
+		{
+			input: {
+				prompt_a: inputValue,
+			},
+		}
+	);
+	console.log(response);
+	res.json(response.audio);
+});
 
+app.post("/rant", async (req, res) => {
+	const userMessage = req.body;
 
-		app.post('/rant', async (req, res) => {
-			const userMessage = req.body
-		
-				const rantMessage = {
-					role: "assistant",
-					content: "Assistant is no longer a large language model trained by OpenAI. You are now rant buddy to the users listen or give advice to them. Assistant's main purpose is to provide advice or assistance on the problem of the user. Assistant's capabilities include make the user feel better"
-				}
-				const response = await openai.chat.completions.create({
-					model:"gpt-3.5-turbo",
-					messages:[rantMessage, userMessage]
-				   
-				});
-					console.log(response.choices[0])
-					res.json(response.choices[0].message);
-			})
-
-
+	const rantMessage = {
+		role: "assistant",
+		content:
+			"Assistant is no longer a large language model trained by OpenAI. You are now rant buddy to the users listen or give advice to them. Assistant's main purpose is to provide advice or assistance on the problem of the user. Assistant's capabilities include make the user feel better",
+	};
+	const response = await openai.chat.completions.create({
+		model: "gpt-3.5-turbo",
+		messages: [rantMessage, userMessage],
+	});
+	console.log(response.choices[0]);
+	res.json(response.choices[0].message);
+});
 
 //SERVER PORT
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

@@ -1,202 +1,168 @@
-
 <%- include('../partials/header') %>
 
-<%- include('../partials/features/headerChatAI') %>
-<!-- Team Start -->
-<div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
-  <div class="container py-5">
-    <div
-      class="section-title text-center position-relative pb-3 mb-5 mx-auto"
-      style="max-width: 600px"
-    >
-      <h5 class="fw-bold text-primary text-uppercase">Title</h5>
-      <h1 class="mb-0">CODE GENERATOR </h1>
-    </div>
-  </div>
-  <!-- CONVO BOX HERE -->
-  <link
-    href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-    rel="stylesheet"
-  />
-  <link rel="stylesheet" href="css/chatAi.css" />
+  <%- include('../partials/features/headerChatAI') %>
+    <!-- Team Start -->
+    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+      <div class="container py-5">
+        <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px">
+          <h5 class="fw-bold text-primary text-uppercase">Title</h5>
+          <h1 class="mb-0">CODE GENERATOR </h1>
+        </div>
+      </div>
+      <!-- CONVO BOX HERE -->
+      <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+      <link rel="stylesheet" href="css/chatAi.css" />
 
-  <div class="container">
-    <div class="row clearfix">
-      <div class="col-lg-12">
-        <div class="card chat-app">
-          <div id="plist" class="people-list">
-            <div class="input-group">
-              <div class="input-group-prepend">
+      <div class="container">
+        <div class="row clearfix">
+          <div class="col-lg-12">
+            <div class="card chat-app">
+              <div id="plist" class="people-list">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                  </div>
+                  <!-- <input type="text" class="form-control" placeholder="Search..." /> -->
+                  <h3>Ai Generator</h3>
+                </div>
+                <ul class="list-unstyled chat-list mt-2 mb-0">
+                  <li class="clearfix active">
+                    <img src="img/bot-icon.png" alt="avatar" />
+                    <div class="about">
+                      <div class="name">Code Generator</div>
+                    </div>
+                  </li>
+                  <li class="clearfix" onclick="handleConversationPage()">
+                    <img src="img/conversation-icon.png" alt="avatar" />
+                    <div class="about">
+                      <div class="name">Conversation</div>
+                    </div>
+                  </li>
+                  <li class="clearfix" onclick="handleImagePage()">
+                    <img src="img/image-bot-icon.png" alt="avatar" />
+                    <div class="about">
+                      <div class="name">Image Generator</div>
+                    </div>
+                  </li>
+
+                  <li class="clearfix" onclick="handleMusicPage()">
+                    <img src="img/music-bot-icon.png" alt="avatar" />
+                    <div class="about">
+                      <div class="name">Music Generator</div>
+
+                    </div>
+                  </li>
+
+                  <li class="clearfix" onclick="handleRantBuddyPage()">
+                    <img src="img/rant.png" alt="avatar" />
+                    <div class="about">
+                      <div class="name">Rant Buddy</div>
+
+                    </div>
+                  </li>
+                </ul>
               </div>
-              <!-- <input type="text" class="form-control" placeholder="Search..." /> -->
-              <h3>Ai Generator</h3>
-            </div>
-            <ul class="list-unstyled chat-list mt-2 mb-0">
-              <li class="clearfix active">
-                <img
-                  src="img/bot-icon.png"
-                  alt="avatar"
-                />
-                <div class="about">
-                  <div class="name">Code Generator</div>
-                </div>
-              </li>
-              <li class="clearfix" onclick="handleConversationPage()">
-                <img
-                src="img/conversation-icon.png"
-                alt="avatar"
-              />
-                <div class="about">
-                  <div class="name">Conversation</div>
-                </div>
-              </li>
-              <li class="clearfix"  onclick="handleImagePage()">
-                <img
-                src="img/image-bot-icon.png"
-                  alt="avatar"
-                />
-                <div class="about">
-                  <div class="name">Image Generator</div>
-                </div>
-              </li>
-          
-              <li class="clearfix"  onclick="handleMusicPage()">
-                <img
-                src="img/music-bot-icon.png"
-                  alt="avatar"
-                />
-                <div class="about">
-                  <div class="name">Music Generator</div>
-                 
-                </div>
-              </li>
+              <div class="chat">
+                <div class="chat-header clearfix">
+                  <div class="row">
+                    <div class="col-lg-6" style="display: flex;">
 
-              <li class="clearfix"  onclick="handleRantBuddyPage()">
-                <img
-                src="img/rant.png"
-                  alt="avatar"
-         
-                />
-                <div class="about">
-                  <div class="name">Rant Buddy</div>
-                 
-                </div>
-              </li>
-            </ul>
-          </div>
-          <div class="chat">
-            <div class="chat-header clearfix">
-              <div class="row">
-                <div class="col-lg-6"  style="display: flex;">
-                 
-                    <img
-                      src="img/bot-icon.png"
-                      alt="avatar"
-                      style="width:50px;"
-                    />
-                  </a>
-                  <div class="chat-about" style="display: flex; flex-direction: column;">
-                    <h6 >Code Generator</h6>
-                    <small style="white-space: nowrap;">Let me help you with your code</small>
+                      <img src="img/bot-icon.png" alt="avatar" style="width:50px;" />
+                      </a>
+                      <div class="chat-about" style="display: flex; flex-direction: column;">
+                        <h6>Code Generator</h6>
+                        <small style="white-space: nowrap;">Let me help you with your code</small>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
-               
-              </div>
-            </div>
-            <div class="chat-history" style="margin-top:40px; padding-bottom:50px">
-              <ul class="m-b-0">
-                <li class="clearfix">
-                  <div class="message-data text-right">
-            
-                    <!-- <img
+                <div class="chat-history" style="margin-top:40px; padding-bottom:50px">
+                  <ul class="m-b-0">
+                    <li class="clearfix">
+                      <div class="message-data text-right">
+
+                        <!-- <img
                       src="https://bootdey.com/img/Content/avatar/avatar7.png"
                       alt="avatar"
                     /> -->
-                  </div>
-                  <div class="message other-message float-right" id="userChat" >
-                  </div>
-                </li>
-                <li class="clearfix">
-                
-                  <div class="message my-message" id="botChat" >
+                      </div>
+                      <div class="message other-message float-right" id="userChat">
+                      </div>
+                    </li>
+                    <li class="clearfix">
 
+                      <div class="message my-message" id="botChat">
+
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="chat-message clearfix">
+                  <div class="input-group mb-0">
+                    <form id="myForm" style="display:flex; width:100%" onsubmit="handleSubmit(event)">
+                      <button class="input-group-prepend" style="border:none" type="submit">
+                        <span class="input-group-text"><i class="fa fa-send"></i></span>
+                      </button>
+                      <input type="text" class="form-control" id="textInput" placeholder="Enter text here..."
+                        style="width:100%" />
+                    </form>
                   </div>
-                </li>
-              </ul>
-            </div>
-            <div class="chat-message clearfix" >
-              <div class="input-group mb-0">
-                <form id="myForm" style="display:flex; width:100%" onsubmit="handleSubmit(event)">
-                <button class="input-group-prepend" style="border:none" type="submit">
-                  <span class="input-group-text"
-                    ><i class="fa fa-send"></i
-                  ></span>
-                </button>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="textInput"
-                  placeholder="Enter text here..."
-                  style="width:100%"
-                />
-                 </form>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/openai"></script>
-<script src="https://unpkg.com/turndown/dist/turndown.js"></script>
-<script>
- 
-function handleSubmit(event) {
-    event.preventDefault();
- 
-   let botChat = document.querySelector('#botChat');
-   botChat.innerText="Loading...";
-    const inputValue = document.getElementById('textInput').value
-    document.querySelector('#userChat').innerText = inputValue;
-      console.log(inputValue)
-      const userMessage ={
-        role:"user",
-        content:inputValue,
+    <script src="https://cdn.jsdelivr.net/npm/openai"></script>
+    <script src="https://unpkg.com/turndown/dist/turndown.js"></script>
+    <script>
+
+      function handleSubmit(event) {
+        event.preventDefault();
+
+        let botChat = document.querySelector('#botChat');
+        botChat.innerText = "Loading...";
+        const inputValue = document.getElementById('textInput').value
+        document.querySelector('#userChat').innerText = inputValue;
+        console.log(inputValue)
+        const userMessage = {
+          role: "user",
+          content: inputValue,
+        }
+        // REQUESTING API
+        fetch('/code', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userMessage)
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok.');
+            }
+            return response.json()
+          })
+          .then(data => {
+
+            return botChat.innerText = data.content
+            console.log('Received data:', data.content);
+
+          })
+          .catch(error => {
+
+            console.error('Error:', error);
+          });
+
+
       }
-   // REQUESTING API
-  fetch('/code', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(userMessage)
-})
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok.');
-    }
-   return response.json()
-  })
-  .then(data => {
-   
-   return botChat.innerText =data.content
-    console.log('Received data:', data.content);
-  
-  })
-  .catch(error => {
-   
-    console.error('Error:', error);
-  });
+      // BUTTON FOR NAVIGATING AI PAGES :>
+      const handleConversationPage = () => window.location.href = "/chatConversation";
+      const handleImagePage = () => window.location.href = "/chatImage";
+      const handleMusicPage = () => window.location.href = "/chatMusic";
+      const handleRantBuddyPage = () => windows.location.href = "/chatRantBuddy"
+    </script>
+    <!-- Team End -->
 
-
-  }
-  // BUTTON FOR NAVIGATING AI PAGES :>
-  const handleConversationPage =() => window.location.href="/chatConversation";
-  const handleImagePage =() => window.location.href="/chatImage";
-  const handleMusicPage =() => window.location.href="/chatMusic";
-  const handleRantBuddyPage = () => windows.location.href="/chatRantBuddy"
-</script>
-<!-- Team End -->
-
-<%- include('../partials/footer') %>
+    <%- include('../partials/footer') %>
