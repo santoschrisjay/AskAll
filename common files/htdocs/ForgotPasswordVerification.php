@@ -167,7 +167,7 @@ if ($result_session['ID'] != 0) {
                                               $update_session->execute();
 
 
-                                              $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+                                              $hashedPassword = md5($newPassword);
 
                                               $changePass = $pdo->prepare("UPDATE user SET passwordd = '$hashedPassword' WHERE email = '$mail'");
                                               $changePass->execute();

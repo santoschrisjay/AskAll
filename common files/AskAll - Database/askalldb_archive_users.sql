@@ -16,13 +16,13 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `archive_user`
+-- Table structure for table `archive_users`
 --
 
-DROP TABLE IF EXISTS `archive_user`;
+DROP TABLE IF EXISTS `archive_users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `archive_user` (
+CREATE TABLE `archive_users` (
   `ID` int NOT NULL AUTO_INCREMENT,
   `firstName` varchar(50) NOT NULL,
   `lastName` varchar(50) NOT NULL,
@@ -35,12 +35,12 @@ CREATE TABLE `archive_user` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `archive_user`
+-- Dumping data for table `archive_users`
 --
 
-LOCK TABLES `archive_user` WRITE;
-/*!40000 ALTER TABLE `archive_user` DISABLE KEYS */;
-/*!40000 ALTER TABLE `archive_user` ENABLE KEYS */;
+LOCK TABLES `archive_users` WRITE;
+/*!40000 ALTER TABLE `archive_users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `archive_users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-26 17:08:28
+-- Dump completed on 2023-11-27  2:44:37

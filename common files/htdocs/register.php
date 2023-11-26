@@ -215,7 +215,7 @@ if ($result_session['ID'] != 0) {
                                                         $queryInsert = "INSERT INTO user(firstName, lastName, email, phoneNumber, passwordd) VALUES (:firstName, :lastName, :email, :phoneNumber, :passwordd)";
 
                                                         $queryInsertRun = $pdo->prepare($queryInsert);
-                                                        $hashedPassword = password_hash($passwordd, PASSWORD_DEFAULT);
+                                                        $hashedPassword = md5($passwordd);
                                                         $data = [
                                                             ':firstName' => $firstName,
                                                             ':lastName' => $lastName,
