@@ -5,7 +5,7 @@
         <!-- Account page navigation-->
         <nav class="nav nav-borders">
             <p><a class="nav-link active ms-0" href="admin">Admin</a></p>
-            <p><a class="nav-link" href="admin-history">History</a></p>
+            <p><a class="nav-link" href="admin-users">Users</a></p>
             <p><a class="nav-link" href="admin-notification">Notifications</a></p>
         </nav>
         <hr class="mt-0 mb-4">
@@ -22,13 +22,13 @@
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputFirstName">First Name</label>
                                     <input class="form-control" id="inputFirstName" type="text" placeholder="First Name"
-                                        value="">
+                                        value="<%= first_name %>">
                                 </div>
                                 <!-- Form Group (Last Name)-->
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputLastName">Last Name</label>
                                     <input class="form-control" id="inputLastName" type="text" placeholder="Last Name"
-                                        value="">
+                                        value="<%= last_name %>">
                                 </div>
                             </div>
                             <!-- Form Row        -->
@@ -37,13 +37,13 @@
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputOrgName">Email Address</label>
                                     <input class="form-control" id="inputOrgName" type="text"
-                                        placeholder="Email Address" value="">
+                                        placeholder="Email Address" value="<%= email_address %>">
                                 </div>
                                 <!-- Form Group (Phone Number)-->
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputLocation">Phone Number</label>
                                     <input class="form-control" id="inputLocation" type="text"
-                                        placeholder="Phone Number" value="">
+                                        placeholder="Phone Number" value="<%= phone_number %>">
                                 </div>
                             </div>
                             <!-- Save changes button-->
@@ -59,7 +59,7 @@
                             <div class="mb-3">
                                 <label class="small mb-1" for="currentPassword">Current Password</label>
                                 <input class="form-control" id="currentPassword" type="text"
-                                    placeholder="Enter current password" value="">
+                                    placeholder="Enter current password" value="<%= password %>">
                             </div>
                             <!-- Form Group (new password)-->
                             <div class="mb-3">

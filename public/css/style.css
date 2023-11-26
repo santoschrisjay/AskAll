@@ -518,6 +518,10 @@ h6,
     font-size: 24px;
 }
 
+.user-button {
+    width: 500px;
+}
+
 .back-to-top {
     position: fixed;
     display: none;

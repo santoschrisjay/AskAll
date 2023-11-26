@@ -128,8 +128,53 @@ app.get("/profile-notification", (req, res) =>
 );
 
 //**admin */
-app.get("/admin", (req, res) => res.render("admin/admin.ejs"));
-app.get("/admin-history", (req, res) => res.render("admin/adminHistory.ejs"));
+// app.get("/admin", (req, res) => res.render("admin/admin.ejs"));
+
+app.get("/admin", (req, res) => {
+	// const userId = req.session.userId;
+	const user_ID = 1;
+	if (user_ID) {
+		const sql =
+			"SELECT first_name, last_name, email_address, phone_number, password FROM admin WHERE admin_ID = ?";
+		connection.query(sql, [user_ID], (error, results, fields) => {
+			if (error) {
+				console.error("Error retrieving user data:", error);
+				res.status(500).send("Error retrieving user data");
+				throw error;
+			}
+
+			if (results.length > 0) {
+				const { first_name, last_name, email_address, phone_number, password } =
+					results[0];
+				res.render("admin/admin", {
+					first_name,
+					last_name,
+					email_address,
+					phone_number,
+					password,
+				});
+			} else {
+				res.status(404).send("User not found");
+			}
+		});
+	} else {
+		res.status(401).send("Unauthorized");
+	}
+});
+
+app.get("/admin-users", (req, res) => {
+	const sql = "SELECT * FROM user"; // Adjust the query based on your table name
+	connection.query(sql, (error, results, fields) => {
+		if (error) {
+			console.error("Error retrieving admin history:", error);
+			res.status(500).send("Error retrieving admin history");
+			throw error;
+		}
+
+		res.render("admin/adminHistory.ejs", { adminHistory: results });
+	});
+});
+
 app.get("/admin-notification", (req, res) =>
 	res.render("admin/adminNotification.ejs")
 );
