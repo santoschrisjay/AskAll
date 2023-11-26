@@ -76,6 +76,9 @@ app.get("/forgot-password-get-code", (req, res) =>
 app.get("/forgot-password-last-step", (req, res) =>
 	res.render("authentication/forgotPasswordLastStep.ejs")
 );
+app.get("/admin-login", (req, res) =>
+	res.render("authentication/adminLogin.ejs")
+);
 
 //**profile */
 // app.get("/profile", (req, res) => res.render("profile/profile.ejs"));
@@ -130,7 +133,6 @@ app.get("/admin-history", (req, res) => res.render("admin/adminHistory.ejs"));
 app.get("/admin-notification", (req, res) =>
 	res.render("admin/adminNotification.ejs")
 );
-app.get("/admin-security", (req, res) => res.render("admin/adminSecurity.ejs"));
 
 //**ALL FEATURES START */
 //**quick-information */
