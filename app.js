@@ -66,6 +66,10 @@ app.get("/contact", (req, res) => res.render("main-pages/contact.ejs"));
 app.get("/services", (req, res) => res.render("main-pages/services.ejs"));
 app.get("/team", (req, res) => res.render("main-pages/team.ejs"));
 app.get("/reference", (req, res) => res.render("main-pages/reference.ejs"));
+app.get("/logout", (req, res) => {
+	req.logout();
+	res.redirect("/");
+});
 
 //**authentication */
 app.get("/login", (req, res) => res.render("authentication/login.ejs"));
