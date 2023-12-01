@@ -45,7 +45,7 @@ app.set("view engine", "ejs");
 const connection = mysql.createConnection({
 	host: "localhost",
 	user: "root",
-	password: "hehez190",
+	password: "weakka12",
 	port: 3306,
 	database: "askalldb",
 });
