@@ -59,23 +59,23 @@ connection.connect((err) => {
 	}
 });
 
-// 
+//
 const checkIfLogined = (res, path) => {
 	connection.query("SELECT ID FROM sessionn", (error, results, fields) => {
 		if (error) {
-			console.error('Error fetching data:', error.message);
+			console.error("Error fetching data:", error.message);
 		} else {
-		console.log('Fetched data:', results);
+			console.log("Fetched data:", results);
 		}
 
 		let user_ID = results[0].ID;
 
-		if (user_ID == 0){
+		if (user_ID == 0) {
 			res.redirect("http://localhost/");
-		}else{
+		} else {
 			res.render(path);
 		}
-	})
+	});
 };
 //**ALL PAGES START */
 //**Pages */
@@ -93,22 +93,27 @@ app.get("/services", (req, res) => {
 app.get("/team", (req, res) => res.render("main-pages/team.ejs"));
 app.get("/reference", (req, res) => res.render("main-pages/reference.ejs"));
 app.get("/logout", (req, res) => {
-	const updateSession = 'UPDATE sessionn SET ID = 0';
+	const updateSession = "UPDATE sessionn SET ID = 0";
 	connection.query(updateSession, (error, results) => {
 		if (error) {
-			console.error('Error updating user:', error.message);
+			console.error("Error updating user:", error.message);
 		} else {
-			console.log('User updated successfully:', results.affectedRows, 'rows affected');
+			console.log(
+				"User updated successfully:",
+				results.affectedRows,
+				"rows affected"
+			);
 		}
-	})
+	});
 	res.redirect("http://localhost/");
 });
-
 
 //**authentication */
 app.get("/login", (req, res) => res.redirect("http://localhost/"));
 
-app.get("/register", (req, res) => res.redirect("http://localhost/register.php"));
+app.get("/register", (req, res) =>
+	res.redirect("http://localhost/register.php")
+);
 app.get("/forgot-password-get-code", (req, res) =>
 	res.render("authentication/forgotPasswordGetCode.ejs")
 );
@@ -128,14 +133,13 @@ app.get("/admin-login", (req, res) =>
 app.get("/profile", (req, res) => {
 	// const userId = req.session.userId;
 
-
 	let user_ID;
 
 	connection.query("SELECT ID FROM sessionn", (error, results, fields) => {
 		if (error) {
-			console.error('Error fetching data:', error.message);
+			console.error("Error fetching data:", error.message);
 		} else {
-		console.log('Fetched data:', results);
+			console.log("Fetched data:", results);
 		}
 
 		user_ID = results[0].ID;
@@ -149,7 +153,7 @@ app.get("/profile", (req, res) => {
 					res.status(500).send("Error retrieving user data");
 					throw error;
 				}
-	
+
 				if (results.length > 0) {
 					const { firstName, lastName, email, phoneNumber, passwordd } =
 						results[0];
@@ -169,7 +173,6 @@ app.get("/profile", (req, res) => {
 		} else {
 			res.status(401).send("Unauthorized");
 		}
-
 	});
 });
 
@@ -184,7 +187,7 @@ app.get("/profile-notification", (req, res) =>
 // app.get("/admin", (req, res) => res.render("admin/admin.ejs"));
 
 app.get("/admin", (req, res) => {
-	// const userId = req.session.userId;
+	// const userId = req.session.userId; bali dapat parang ganto
 	const user_ID = 1;
 	if (user_ID) {
 		const sql =
@@ -232,13 +235,77 @@ app.get("/admin-notification", (req, res) =>
 	res.render("admin/adminNotification.ejs")
 );
 
+// user
+app.put("/user-update:ID", async (req, res) => {
+	const ID = req.params.ID;
+
+	const updatedData = req.body;
+	for (const [key, value] of Object.entries(updatedData)) {
+		const parsedData = JSON.parse(key);
+
+		const { first_name, last_name, email_address, phone_number } = parsedData;
+
+		if (!ID || isNaN(ID)) {
+			res.status(400).send("Invalid user ID");
+			return;
+		}
+
+		const sql =
+			"UPDATE user SET firstName=?, lastName=?, email=?, phoneNumber=? WHERE ID = ?";
+
+		connection.query(
+			sql,
+			[first_name, last_name, email_address, phone_number, ID],
+			(error, results, fields) => {
+				if (error) {
+					console.error("Error updating user data:", error);
+					res.status(500).send("Error updating user data");
+				} else {
+					if (results.affectedRows > 0) {
+						res.status(200).send("User data updated successfully");
+					} else {
+						res.status(404).send("User not found or no changes were made");
+					}
+				}
+			}
+		);
+	}
+});
+
+// password update
+app.put("/user/pass/update:ID", async (req, res) => {
+	const ID = req.params.ID;
+	const confirmPassInput = req.body;
+	console.log(ID, confirmPassInput);
+	for (const [key, value] of Object.entries(confirmPassInput)) {
+		const parsedData = JSON.parse(key);
+
+		const { confirmPassInput } = parsedData;
+		const sql = "UPDATE user SET passwordd=? WHERE ID = ?";
+		connection.query(sql, [confirmPassInput, ID], (error, results, fields) => {
+			if (error) {
+				console.error("Error updating user data:", error);
+				res.status(500).send("Error updating user data");
+			} else {
+				if (results.affectedRows > 0) {
+					res.status(200).send("User data updated successfully");
+				} else {
+					res.status(404).send("User not found or no changes were made");
+				}
+			}
+		});
+	}
+});
+
 //**ALL FEATURES START */
 //**quick-information */
-app.get("/todo-list", (req, res) => 
+app.get("/todo-list", (req, res) =>
 	checkIfLogined(res, "quick-information/todoList.ejs")
 );
 
-app.get("/weather", (req, res) => checkIfLogined(res, "quick-information/weather.ejs"));
+app.get("/weather", (req, res) =>
+	checkIfLogined(res, "quick-information/weather.ejs")
+);
 
 app.get("/calculator", (req, res) =>
 	checkIfLogined(res, "quick-information/calculator.ejs")
@@ -253,11 +320,11 @@ app.get("/chatConversation", (req, res) =>
 	checkIfLogined(res, "chat-AI/chatConversation.ejs")
 );
 
-app.get("/chatImage", (req, res) => 
+app.get("/chatImage", (req, res) =>
 	checkIfLogined(res, "chat-AI/chatImage.ejs")
 );
 
-app.get("/chatMusic", (req, res) => 
+app.get("/chatMusic", (req, res) =>
 	checkIfLogined(res, "chat-AI/chatMusic.ejs")
 );
 
@@ -275,7 +342,7 @@ app.get("/pdf-to-word", (req, res) =>
 );
 
 //**unit-converter */
-app.get("/converter", (req, res) => 
+app.get("/converter", (req, res) =>
 	checkIfLogined(res, "unit-converter/converter.ejs")
 );
 
@@ -344,11 +411,17 @@ app.use(express.json());
 app.set("view engine", "ejs");
 
 //FEATURES
-app.get("/chatConversation", (req, res) => checkIfLogined(res, "chatConversation.ejs"));
-app.get("/chatCode", (req, res) => checkIfLogined(res, "chat-AI/chatCodeAi.ejs"));
+app.get("/chatConversation", (req, res) =>
+	checkIfLogined(res, "chatConversation.ejs")
+);
+app.get("/chatCode", (req, res) =>
+	checkIfLogined(res, "chat-AI/chatCodeAi.ejs")
+);
 app.get("/chatImage", (req, res) => checkIfLogined(res, "chatImage.ejs"));
 app.get("/chatMusic", (req, res) => checkIfLogined(res, "chatMusic.ejs"));
-app.get("/chatRantBuddy", (req, res) => checkIfLogined(res, "chatRantBuddy.ejs"));
+app.get("/chatRantBuddy", (req, res) =>
+	checkIfLogined(res, "chatRantBuddy.ejs")
+);
 
 // CONVERSATION ENDPOINT
 app.post("/conversation", async (req, res) => {
@@ -382,7 +455,6 @@ app.post("/code", async (req, res) => {
 // IMAGE ENDPOINT
 app.post("/image", async (req, res) => {
 	const { inputValue } = req.body;
-	const kekw = Object.values(inputValue[0]);
 
 	const response = await openai.images.generate({
 		model: "dall-e-3",
