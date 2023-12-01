@@ -106,8 +106,9 @@ app.get("/logout", (req, res) => {
 
 
 //**authentication */
-app.get("/login", (req, res) => res.render("authentication/login.ejs"));
-app.get("/register", (req, res) => res.render("authentication/register.ejs"));
+app.get("/login", (req, res) => res.redirect("http://localhost/"));
+
+app.get("/register", (req, res) => res.redirect("http://localhost/register.php"));
 app.get("/forgot-password-get-code", (req, res) =>
 	res.render("authentication/forgotPasswordGetCode.ejs")
 );
