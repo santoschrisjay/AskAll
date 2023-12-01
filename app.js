@@ -20,6 +20,7 @@ const openai = new OpenAI({
 
 // REPLICATE API
 import Replicate from "replicate";
+import { render } from "ejs";
 
 const replicate = new Replicate({
 	auth: process.env.REPLICATE_API_TOKEN,
@@ -45,7 +46,7 @@ const connection = mysql.createConnection({
 	host: "localhost",
 	user: "root",
 	password: "hehez190",
-	port: 3307,
+	port: 3306,
 	database: "askalldb",
 });
 
@@ -58,18 +59,51 @@ connection.connect((err) => {
 	}
 });
 
+// 
+const checkIfLogined = (res, path) => {
+	connection.query("SELECT ID FROM sessionn", (error, results, fields) => {
+		if (error) {
+			console.error('Error fetching data:', error.message);
+		} else {
+		console.log('Fetched data:', results);
+		}
+
+		let user_ID = results[0].ID;
+
+		if (user_ID == 0){
+			res.redirect("http://localhost/");
+		}else{
+			res.render(path);
+		}
+	})
+};
 //**ALL PAGES START */
 //**Pages */
-app.get("/", (req, res) => res.render("main-pages/index.ejs"));
+app.get("/", (req, res) => {
+	checkIfLogined(res, "main-pages/index.ejs");
+});
+
 app.get("/about", (req, res) => res.render("main-pages/about.ejs"));
 app.get("/contact", (req, res) => res.render("main-pages/contact.ejs"));
-app.get("/services", (req, res) => res.render("main-pages/services.ejs"));
+
+app.get("/services", (req, res) => {
+	checkIfLogined(res, "main-pages/services.ejs");
+});
+
 app.get("/team", (req, res) => res.render("main-pages/team.ejs"));
 app.get("/reference", (req, res) => res.render("main-pages/reference.ejs"));
 app.get("/logout", (req, res) => {
-	req.logout();
-	res.redirect("/");
+	const updateSession = 'UPDATE sessionn SET ID = 0';
+	connection.query(updateSession, (error, results) => {
+		if (error) {
+			console.error('Error updating user:', error.message);
+		} else {
+			console.log('User updated successfully:', results.affectedRows, 'rows affected');
+		}
+	})
+	res.redirect("http://localhost/");
 });
+
 
 //**authentication */
 app.get("/login", (req, res) => res.render("authentication/login.ejs"));
@@ -81,7 +115,7 @@ app.get("/forgot-password-last-step", (req, res) =>
 	res.render("authentication/forgotPasswordLastStep.ejs")
 );
 app.get("/admin-login", (req, res) =>
-	res.render("authentication/adminLogin.ejs")
+	res.redirect("http://localhost/adminLogin.php")
 );
 
 //**profile */
@@ -92,36 +126,50 @@ app.get("/admin-login", (req, res) =>
 
 app.get("/profile", (req, res) => {
 	// const userId = req.session.userId;
-	const user_ID = 1;
-	if (user_ID) {
-		const sql =
-			"SELECT firstName, lastName, email, phoneNumber, passwordd FROM user WHERE ID = ?";
-		connection.query(sql, [user_ID], (error, results, fields) => {
-			if (error) {
-				console.error("Error retrieving user data:", error);
-				res.status(500).send("Error retrieving user data");
-				throw error;
-			}
 
-			if (results.length > 0) {
-				const { firstName, lastName, email, phoneNumber, passwordd } =
-					results[0];
-				// const formattedFirstName = capitalizeWords(first_name);
-				// const formattedLastName = capitalizeWords(last_name);
-				res.render("profile/profile", {
-					firstName,
-					lastName,
-					email,
-					phoneNumber,
-					passwordd,
-				});
-			} else {
-				res.status(404).send("User not found");
-			}
-		});
-	} else {
-		res.status(401).send("Unauthorized");
-	}
+
+	let user_ID;
+
+	connection.query("SELECT ID FROM sessionn", (error, results, fields) => {
+		if (error) {
+			console.error('Error fetching data:', error.message);
+		} else {
+		console.log('Fetched data:', results);
+		}
+
+		user_ID = results[0].ID;
+
+		if (user_ID) {
+			const sql =
+				"SELECT firstName, lastName, email, phoneNumber, passwordd FROM user WHERE ID = ?";
+			connection.query(sql, [user_ID], (error, results, fields) => {
+				if (error) {
+					console.error("Error retrieving user data:", error);
+					res.status(500).send("Error retrieving user data");
+					throw error;
+				}
+	
+				if (results.length > 0) {
+					const { firstName, lastName, email, phoneNumber, passwordd } =
+						results[0];
+					// const formattedFirstName = capitalizeWords(first_name);
+					// const formattedLastName = capitalizeWords(last_name);
+					res.render("profile/profile", {
+						firstName,
+						lastName,
+						email,
+						phoneNumber,
+						passwordd,
+					});
+				} else {
+					res.status(404).send("User not found");
+				}
+			});
+		} else {
+			res.status(401).send("Unauthorized");
+		}
+
+	});
 });
 
 app.get("/profile-history", (req, res) =>
@@ -185,35 +233,50 @@ app.get("/admin-notification", (req, res) =>
 
 //**ALL FEATURES START */
 //**quick-information */
-app.get("/todo-list", (req, res) =>
-	res.render("quick-information/todoList.ejs")
+app.get("/todo-list", (req, res) => 
+	checkIfLogined(res, "quick-information/todoList.ejs")
 );
-app.get("/weather", (req, res) => res.render("quick-information/weather.ejs"));
+
+app.get("/weather", (req, res) => checkIfLogined(res, "quick-information/weather.ejs"));
+
 app.get("/calculator", (req, res) =>
-	res.render("quick-information/calculator.ejs")
+	checkIfLogined(res, "quick-information/calculator.ejs")
 );
 
 //**chat-AI */
-app.get("/chatCodeAi", (req, res) => res.render("chat-AI/chatCodeAi.ejs"));
-app.get("/chatConversation", (req, res) =>
-	res.render("chat-AI/chatConversation.ejs")
+app.get("/chatCodeAi", (req, res) =>
+	checkIfLogined(res, "chat-AI/chatCodeAi.ejs")
 );
-app.get("/chatImage", (req, res) => res.render("chat-AI/chatImage.ejs"));
-app.get("/chatMusic", (req, res) => res.render("chat-AI/chatMusic.ejs"));
+
+app.get("/chatConversation", (req, res) =>
+	checkIfLogined(res, "chat-AI/chatConversation.ejs")
+);
+
+app.get("/chatImage", (req, res) => 
+	checkIfLogined(res, "chat-AI/chatImage.ejs")
+);
+
+app.get("/chatMusic", (req, res) => 
+	checkIfLogined(res, "chat-AI/chatMusic.ejs")
+);
+
 app.get("/chatRantBuddy", (req, res) =>
-	res.render("chat-AI/chatRantBuddy.ejs")
+	checkIfLogined(res, "chat-AI/chatRantBuddy.ejs")
 );
 
 //**document-converter */
 app.get("/word-to-pdf", (req, res) =>
-	res.render("document-converter/wordToPdf.ejs")
+	checkIfLogined(res, "document-converter/wordToPdf.ejs")
 );
+
 app.get("/pdf-to-word", (req, res) =>
-	res.render("document-converter/pdfToWord.ejs")
+	checkIfLogined(res, "document-converter/pdfToWord.ejs")
 );
 
 //**unit-converter */
-app.get("/converter", (req, res) => res.render("unit-converter/converter.ejs"));
+app.get("/converter", (req, res) => 
+	checkIfLogined(res, "unit-converter/converter.ejs")
+);
 
 //**ALL FEATURES END */
 
@@ -280,11 +343,11 @@ app.use(express.json());
 app.set("view engine", "ejs");
 
 //FEATURES
-app.get("/chatConversation", (req, res) => res.render("chatConversation.ejs"));
-app.get("/chatCode", (req, res) => res.render("chat-AI/chatCodeAi.ejs"));
-app.get("/chatImage", (req, res) => res.render("chatImage.ejs"));
-app.get("/chatMusic", (req, res) => res.render("chatMusic.ejs"));
-app.get("/chatRantBuddy", (req, res) => res.render("chatRantBuddy.ejs"));
+app.get("/chatConversation", (req, res) => checkIfLogined(res, "chatConversation.ejs"));
+app.get("/chatCode", (req, res) => checkIfLogined(res, "chat-AI/chatCodeAi.ejs"));
+app.get("/chatImage", (req, res) => checkIfLogined(res, "chatImage.ejs"));
+app.get("/chatMusic", (req, res) => checkIfLogined(res, "chatMusic.ejs"));
+app.get("/chatRantBuddy", (req, res) => checkIfLogined(res, "chatRantBuddy.ejs"));
 
 // CONVERSATION ENDPOINT
 app.post("/conversation", async (req, res) => {
