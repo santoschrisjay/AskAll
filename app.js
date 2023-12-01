@@ -15,22 +15,22 @@ const app = express();
 
 // OPEN AI API
 const openai = new OpenAI({
-	apiKey: process.env.OPEN_AI_API_KEY,
+  apiKey: process.env.OPEN_AI_API_KEY,
 });
 
 // REPLICATE API
 import Replicate from "replicate";
 
 const replicate = new Replicate({
-	auth: process.env.REPLICATE_API_TOKEN,
+  auth: process.env.REPLICATE_API_TOKEN,
 });
 
 app.use(
-	session({
-		secret: "your-secret-key",
-		resave: false,
-		saveUninitialized: true,
-	})
+  session({
+    secret: "your-secret-key",
+    resave: false,
+    saveUninitialized: true,
+  })
 );
 
 const port = 3000;
@@ -42,20 +42,20 @@ app.set("view engine", "ejs");
 
 //SQL
 const connection = mysql.createConnection({
-	host: "localhost",
-	user: "root",
-	password: "hehez190",
-	port: 3307,
-	database: "askalldb",
+  host: "127.0.0.1",
+  user: "root",
+  password: "hehez190",
+  port: 3306,
+  database: "askalldb",
 });
 
 connection.connect((err) => {
-	if (err) {
-		console.log(err);
-	} else {
-		//ano niyan balak moo
-		console.log("CONNECTED TO SQL.");
-	}
+  if (err) {
+    console.log(err);
+  } else {
+    //ano niyan balak moo
+    console.log("CONNECTED TO SQL.");
+  }
 });
 
 //**ALL PAGES START */
@@ -75,13 +75,13 @@ app.get("/logout", (req, res) => {
 app.get("/login", (req, res) => res.render("authentication/login.ejs"));
 app.get("/register", (req, res) => res.render("authentication/register.ejs"));
 app.get("/forgot-password-get-code", (req, res) =>
-	res.render("authentication/forgotPasswordGetCode.ejs")
+  res.render("authentication/forgotPasswordGetCode.ejs")
 );
 app.get("/forgot-password-last-step", (req, res) =>
-	res.render("authentication/forgotPasswordLastStep.ejs")
+  res.render("authentication/forgotPasswordLastStep.ejs")
 );
 app.get("/admin-login", (req, res) =>
-	res.render("authentication/adminLogin.ejs")
+  res.render("authentication/adminLogin.ejs")
 );
 
 //**profile */
@@ -91,125 +91,195 @@ app.get("/admin-login", (req, res) =>
 // }
 
 app.get("/profile", (req, res) => {
-	// const userId = req.session.userId;
-	const user_ID = 1;
-	if (user_ID) {
-		const sql =
-			"SELECT firstName, lastName, email, phoneNumber, passwordd FROM user WHERE ID = ?";
-		connection.query(sql, [user_ID], (error, results, fields) => {
-			if (error) {
-				console.error("Error retrieving user data:", error);
-				res.status(500).send("Error retrieving user data");
-				throw error;
-			}
+  // const userId = req.session.userId;
+  const user_ID = 1;
+  if (user_ID) {
+    const sql =
+      "SELECT firstName, lastName, email, phoneNumber, passwordd FROM user WHERE ID = ?";
+    connection.query(sql, [user_ID], (error, results, fields) => {
+      if (error) {
+        console.error("Error retrieving user data:", error);
+        res.status(500).send("Error retrieving user data");
+        throw error;
+      }
 
-			if (results.length > 0) {
-				const { firstName, lastName, email, phoneNumber, passwordd } =
-					results[0];
-				// const formattedFirstName = capitalizeWords(first_name);
-				// const formattedLastName = capitalizeWords(last_name);
-				res.render("profile/profile", {
-					firstName,
-					lastName,
-					email,
-					phoneNumber,
-					passwordd,
-				});
-			} else {
-				res.status(404).send("User not found");
-			}
-		});
-	} else {
-		res.status(401).send("Unauthorized");
-	}
+      if (results.length > 0) {
+        const { firstName, lastName, email, phoneNumber, passwordd } =
+          results[0];
+        // const formattedFirstName = capitalizeWords(first_name);
+        // const formattedLastName = capitalizeWords(last_name);
+        res.render("profile/profile", {
+          firstName,
+          lastName,
+          email,
+          phoneNumber,
+          passwordd,
+        });
+      } else {
+        res.status(404).send("User not found");
+      }
+    });
+  } else {
+    res.status(401).send("Unauthorized");
+  }
 });
 
 app.get("/profile-history", (req, res) =>
-	res.render("profile/profileHistory.ejs")
+  res.render("profile/profileHistory.ejs")
 );
 app.get("/profile-notification", (req, res) =>
-	res.render("profile/profileNotification.ejs")
+  res.render("profile/profileNotification.ejs")
 );
 
 //**admin */
 // app.get("/admin", (req, res) => res.render("admin/admin.ejs"));
 
 app.get("/admin", (req, res) => {
-	// const userId = req.session.userId;
-	const user_ID = 1;
-	if (user_ID) {
-		const sql =
-			"SELECT first_name, last_name, email_address, phone_number, password FROM admin WHERE admin_ID = ?";
-		connection.query(sql, [user_ID], (error, results, fields) => {
-			if (error) {
-				console.error("Error retrieving user data:", error);
-				res.status(500).send("Error retrieving user data");
-				throw error;
-			}
+  // const userId = req.session.userId; bali dapat parang ganto
+  const user_ID = 1;
+  if (user_ID) {
+    const sql =
+      "SELECT first_name, last_name, email_address, phone_number, password FROM admin WHERE admin_ID = ?";
+    connection.query(sql, [user_ID], (error, results, fields) => {
+      if (error) {
+        console.error("Error retrieving user data:", error);
+        res.status(500).send("Error retrieving user data");
+        throw error;
+      }
 
-			if (results.length > 0) {
-				const { first_name, last_name, email_address, phone_number, password } =
-					results[0];
-				res.render("admin/admin", {
-					first_name,
-					last_name,
-					email_address,
-					phone_number,
-					password,
-				});
-			} else {
-				res.status(404).send("User not found");
-			}
-		});
-	} else {
-		res.status(401).send("Unauthorized");
-	}
+      if (results.length > 0) {
+        const { first_name, last_name, email_address, phone_number, password } =
+          results[0];
+        res.render("admin/admin", {
+          first_name,
+          last_name,
+          email_address,
+          phone_number,
+          password,
+        });
+      } else {
+        res.status(404).send("User not found");
+      }
+    });
+  } else {
+    res.status(401).send("Unauthorized");
+  }
 });
 
 app.get("/admin-users", (req, res) => {
-	const sql = "SELECT * FROM user"; // Adjust the query based on your table name
-	connection.query(sql, (error, results, fields) => {
-		if (error) {
-			console.error("Error retrieving admin history:", error);
-			res.status(500).send("Error retrieving admin history");
-			throw error;
-		}
+  const sql = "SELECT * FROM user"; // Adjust the query based on your table name
+  connection.query(sql, (error, results, fields) => {
+    if (error) {
+      console.error("Error retrieving admin history:", error);
+      res.status(500).send("Error retrieving admin history");
+      throw error;
+    }
 
-		res.render("admin/adminHistory.ejs", { adminHistory: results });
-	});
+    res.render("admin/adminHistory.ejs", { adminHistory: results });
+  });
 });
 
 app.get("/admin-notification", (req, res) =>
-	res.render("admin/adminNotification.ejs")
+  res.render("admin/adminNotification.ejs")
 );
+
+// user
+app.put("/user-update:ID",async (req, res) => {
+ const ID = req.params.ID
+
+  const  updatedData  = req.body
+  for (const [key, value] of Object.entries(updatedData)) {
+
+	const parsedData = JSON.parse(key);
+  
+	
+	const { first_name, last_name, email_address, phone_number } = parsedData;
+  
+  if (!ID || isNaN(ID)) {
+    res.status(400).send("Invalid user ID");
+    return;
+  }
+
+  const sql =
+    "UPDATE user SET firstName=?, lastName=?, email=?, phoneNumber=? WHERE ID = ?";
+
+  connection.query(
+    sql,
+    [first_name, last_name, email_address, phone_number, ID],
+    (error, results, fields) => {
+      if (error) {
+        console.error("Error updating user data:", error);
+        res.status(500).send("Error updating user data");
+      } else {
+        if (results.affectedRows > 0) {
+          res.status(200).send("User data updated successfully");
+        } else {
+          res.status(404).send("User not found or no changes were made");
+        }
+      }
+    }
+  );
+}
+});
+
+// password update 
+app.put("/user/pass/update:ID",async (req, res) => {
+const ID = req.params.ID;
+const confirmPassInput = req.body;
+console.log(ID, confirmPassInput )
+for (const [key, value] of Object.entries(confirmPassInput)) {
+
+	const parsedData = JSON.parse(key);
+  
+	
+	const { confirmPassInput } = parsedData;
+const sql ="UPDATE user SET passwordd=? WHERE ID = ?";
+connection.query(
+    sql,
+    [confirmPassInput, ID],
+    (error, results, fields) => {
+      if (error) {
+        console.error("Error updating user data:", error);
+        res.status(500).send("Error updating user data");
+      } else {
+        if (results.affectedRows > 0) {
+          res.status(200).send("User data updated successfully");
+        } else {
+          res.status(404).send("User not found or no changes were made");
+        }
+      }
+    }
+  );
+}
+});
 
 //**ALL FEATURES START */
 //**quick-information */
 app.get("/todo-list", (req, res) =>
-	res.render("quick-information/todoList.ejs")
+  res.render("quick-information/todoList.ejs")
 );
 app.get("/weather", (req, res) => res.render("quick-information/weather.ejs"));
 app.get("/calculator", (req, res) =>
-	res.render("quick-information/calculator.ejs")
+  res.render("quick-information/calculator.ejs")
 );
 
 //**chat-AI */
 app.get("/chatCodeAi", (req, res) => res.render("chat-AI/chatCodeAi.ejs"));
 app.get("/chatConversation", (req, res) =>
-	res.render("chat-AI/chatConversation.ejs")
+  res.render("chat-AI/chatConversation.ejs")
 );
 app.get("/chatImage", (req, res) => res.render("chat-AI/chatImage.ejs"));
 app.get("/chatMusic", (req, res) => res.render("chat-AI/chatMusic.ejs"));
 app.get("/chatRantBuddy", (req, res) =>
-	res.render("chat-AI/chatRantBuddy.ejs")
+  res.render("chat-AI/chatRantBuddy.ejs")
 );
 
 //**document-converter */
 app.get("/word-to-pdf", (req, res) =>
-	res.render("document-converter/wordToPdf.ejs")
+  res.render("document-converter/wordToPdf.ejs")
 );
 app.get("/pdf-to-word", (req, res) =>
-	res.render("document-converter/pdfToWord.ejs")
+  res.render("document-converter/pdfToWord.ejs")
 );
 
 //**unit-converter */
@@ -220,7 +290,7 @@ app.get("/converter", (req, res) => res.render("unit-converter/converter.ejs"));
 //**Resumes */
 app.get("/resume-chris", (req, res) => res.render("resumes/resumeChris.ejs"));
 app.get("/resume-gracezen", (req, res) =>
-	res.render("resumes/resumeGracezen.ejs")
+  res.render("resumes/resumeGracezen.ejs")
 );
 app.get("/resume-mark", (req, res) => res.render("resumes/resumeMark.ejs"));
 app.get("/resume-nath", (req, res) => res.render("resumes/resumeNath.ejs"));
@@ -230,7 +300,7 @@ app.get("/resume-ronnie", (req, res) => res.render("resumes/resumeRonnie.ejs"));
 app.get("/resume-soza", (req, res) => res.render("resumes/resumeSoza.ejs"));
 app.get("/resume-vital", (req, res) => res.render("resumes/resumeVital.ejs"));
 app.get("/resume-zapanta", (req, res) =>
-	res.render("resumes/resumeZapanta.ejs")
+  res.render("resumes/resumeZapanta.ejs")
 );
 //**ALL PAGES END */
 
@@ -238,39 +308,39 @@ app.get("/resume-zapanta", (req, res) =>
 
 //**WEATHER START */
 app.post("/weather", function (req, res) {
-	const query = req.body.cityName;
-	const apiKey = "5acdcc6fb7aabb8e9d762027922eaf96";
-	const unit = "metric";
-	const url =
-		"https://api.openweathermap.org/data/2.5/weather?q=" +
-		query +
-		"&appid=" +
-		apiKey +
-		"&units=" +
-		unit;
+  const query = req.body.cityName;
+  const apiKey = "5acdcc6fb7aabb8e9d762027922eaf96";
+  const unit = "metric";
+  const url =
+    "https://api.openweathermap.org/data/2.5/weather?q=" +
+    query +
+    "&appid=" +
+    apiKey +
+    "&units=" +
+    unit;
 
-	https.get(url, function (response) {
-		console.log(response.statusCode);
+  https.get(url, function (response) {
+    console.log(response.statusCode);
 
-		response.on("data", function (data) {
-			const weatherData = JSON.parse(data);
-			const temp = weatherData.main.temp;
-			const weatherDescription = weatherData.weather[0].description;
-			const icon = weatherData.weather[0].icon;
-			const imgURL = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
+    response.on("data", function (data) {
+      const weatherData = JSON.parse(data);
+      const temp = weatherData.main.temp;
+      const weatherDescription = weatherData.weather[0].description;
+      const icon = weatherData.weather[0].icon;
+      const imgURL = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
 
-			res.write("<p>The weather is currently " + weatherDescription + "</p>");
-			res.write(
-				"<h1>The temperature in " +
-					query +
-					" is " +
-					temp +
-					" degree celsius.</h1>"
-			);
-			res.write("<img src=" + imgURL + ">");
-			res.send();
-		});
-	});
+      res.write("<p>The weather is currently " + weatherDescription + "</p>");
+      res.write(
+        "<h1>The temperature in " +
+          query +
+          " is " +
+          temp +
+          " degree celsius.</h1>"
+      );
+      res.write("<img src=" + imgURL + ">");
+      res.send();
+    });
+  });
 });
 //**WEATHER START */
 //*TODO: FEATURES END */
@@ -288,76 +358,76 @@ app.get("/chatRantBuddy", (req, res) => res.render("chatRantBuddy.ejs"));
 
 // CONVERSATION ENDPOINT
 app.post("/conversation", async (req, res) => {
-	const userMessage = req.body;
-	console.log(userMessage);
-	const response = await openai.chat.completions.create({
-		model: "gpt-3.5-turbo",
-		messages: userMessage,
-	});
-	console.log(response.choices[0]);
-	res.json(response.choices[0].message);
+  const userMessage = req.body;
+  console.log(userMessage);
+  const response = await openai.chat.completions.create({
+    model: "gpt-3.5-turbo",
+    messages: userMessage,
+  });
+  console.log(response.choices[0]);
+  res.json(response.choices[0].message);
 });
 
 // CODE ENDPOINT
 app.post("/code", async (req, res) => {
-	const userMessage = req.body;
+  const userMessage = req.body;
 
-	const codeMessage = {
-		role: "system",
-		content:
-			"You are a code generator and you supposedly answer in programming terms and markdown code snippets. Use comments to assist and for explanation.",
-	};
-	const response = await openai.chat.completions.create({
-		model: "gpt-3.5-turbo",
-		messages: [codeMessage, userMessage],
-	});
-	console.log(response.choices[0]);
-	res.json(response.choices[0].message);
+  const codeMessage = {
+    role: "system",
+    content:
+      "You are a code generator and you supposedly answer in programming terms and markdown code snippets. Use comments to assist and for explanation.",
+  };
+  const response = await openai.chat.completions.create({
+    model: "gpt-3.5-turbo",
+    messages: [codeMessage, userMessage],
+  });
+  console.log(response.choices[0]);
+  res.json(response.choices[0].message);
 });
 
 // IMAGE ENDPOINT
 app.post("/image", async (req, res) => {
-	const { inputValue } = req.body;
-	const kekw = Object.values(inputValue[0]);
+  const { inputValue } = req.body;
 
-	const response = await openai.images.generate({
-		model: "dall-e-3",
-		prompt: inputValue,
-	});
-	const imageUrl = response.data[0].url;
-	console.log(imageUrl);
-	res.json(imageUrl);
+
+  const response = await openai.images.generate({
+    model: "dall-e-3",
+    prompt: inputValue,
+  });
+  const imageUrl = response.data[0].url;
+  console.log(imageUrl);
+  res.json(imageUrl);
 });
 
 // MUSIC ENDPOINT
 app.post("/music", async (req, res) => {
-	const { inputValue } = req.body;
-	const response = await replicate.run(
-		"riffusion/riffusion:8cf61ea6c56afd61d8f5b9ffd14d7c216c0a93844ce2d82ac1c9ecc9c7f24e05",
-		{
-			input: {
-				prompt_a: inputValue,
-			},
-		}
-	);
-	console.log(response);
-	res.json(response.audio);
+  const { inputValue } = req.body;
+  const response = await replicate.run(
+    "riffusion/riffusion:8cf61ea6c56afd61d8f5b9ffd14d7c216c0a93844ce2d82ac1c9ecc9c7f24e05",
+    {
+      input: {
+        prompt_a: inputValue,
+      },
+    }
+  );
+  console.log(response);
+  res.json(response.audio);
 });
 
 app.post("/rant", async (req, res) => {
-	const userMessage = req.body;
+  const userMessage = req.body;
 
-	const rantMessage = {
-		role: "assistant",
-		content:
-			"Assistant is no longer a large language model trained by OpenAI. You are now rant buddy to the users listen or give advice to them. Assistant's main purpose is to provide advice or assistance on the problem of the user. Assistant's capabilities include make the user feel better",
-	};
-	const response = await openai.chat.completions.create({
-		model: "gpt-3.5-turbo",
-		messages: [rantMessage, userMessage],
-	});
-	console.log(response.choices[0]);
-	res.json(response.choices[0].message);
+  const rantMessage = {
+    role: "assistant",
+    content:
+      "Assistant is no longer a large language model trained by OpenAI. You are now rant buddy to the users listen or give advice to them. Assistant's main purpose is to provide advice or assistance on the problem of the user. Assistant's capabilities include make the user feel better",
+  };
+  const response = await openai.chat.completions.create({
+    model: "gpt-3.5-turbo",
+    messages: [rantMessage, userMessage],
+  });
+  console.log(response.choices[0]);
+  res.json(response.choices[0].message);
 });
 
 //SERVER PORT

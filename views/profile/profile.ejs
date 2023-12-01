@@ -2,6 +2,7 @@
     <%- include('../partials/pages/headerProfile') %>
 
         <!-- Team Start -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
         <div class="container-fluid pt-5 wow fadeInUp" data-wow-delay="0.1s">
             <div class="container pt-5">
                 <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
@@ -28,7 +29,7 @@
                     <div class="card mb-4">
                         <div class="card-header">Account Details</div>
                         <div class="card-body">
-                            <form>
+                            <form onsubmit="handleSubmitName(event)">
                                 <!-- Form Row-->
                                 <div class="row gx-3 mb-3">
                                     <!-- Form Group (First Name)-->
@@ -60,33 +61,44 @@
                                     </div>
                                 </div>
                                 <!-- Save changes button-->
-                                <button class="btn btn-primary" type="button">Save changes</button>
+                                <button class="btn btn-primary" type="submit">Save changes</button>
                             </form>
                         </div>
                     </div>
                     <div class="card mb-4">
                         <div class="card-header">Change Password</div>
                         <div class="card-body">
-                            <form>
+                            <form onsubmit="handleSubmitPass(event)">
                                 <!-- Form Group (current password)-->
                                 <div class="mb-3">
                                     <label class="small mb-1" for="currentPassword">Current Password</label>
-                                    <input class="form-control" id="currentPassword" type="text"
-                                        placeholder="Enter current password" value="<%= passwordd %>">
+                                    <div style="display: flex; align-items: center;">  
+                                    <input class="form-control" id="currentPassword" type="password"
+                                        placeholder="Enter current password" >
+                                        <i class="far fa-eye-slash" id="togglePasswordCurrent" ="handleCurrentPass()" style="margin-left: -30px;" ></i>
+                                    </div>
+                                    <span id="errorCurrent" style="color: rgb(167, 11, 11);"></span>
                                 </div>
                                 <!-- Form Group (new password)-->
                                 <div class="mb-3">
                                     <label class="small mb-1" for="newPassword">New Password</label>
+                                    <div style="display: flex; align-items: center;">  
                                     <input class="form-control" id="newPassword" type="password"
                                         placeholder="Enter new password">
+                                        <i class="far fa-eye-slash" id="togglePasswordNew" onclick="handleNewPass()" style="margin-left: -30px;" ></i>
+                                        </div>
                                 </div>
                                 <!-- Form Group (confirm password)-->
                                 <div class="mb-3">
                                     <label class="small mb-1" for="confirmPassword">Confirm Password</label>
+                                    <div style="display: flex; align-items: center;">  
                                     <input class="form-control" id="confirmPassword" type="password"
                                         placeholder="Confirm new password">
+                                        <i class="far fa-eye-slash"  id="togglePasswordConfirm" onclick="handleConfirmPass()" style="margin-left: -30px;" ></i>
+                                        </div>
+                                        <span id="errorNew" style="color: rgb(167, 11, 11);"></span>
                                 </div>
-                                <button class="btn btn-primary" type="button">Save changes</button>
+                                <button class="btn btn-primary" type="submit">Save changes</button>
                             </form>
                         </div>
                     </div>
@@ -125,5 +137,107 @@
                 </div>
             </div>
         </div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
 
+
+const handleSubmitName= async (event) => {
+    event.preventDefault();
+const ID =1 ; // to be change to dynamic
+    const updatedData = {
+        first_name: document.getElementById('inputFirstName').value,
+        last_name: document.getElementById('inputLastName').value,
+        email_address: document.getElementById('inputOrgName').value,
+        phone_number: document.getElementById("inputLocation").value,
+
+      };
+
+     const response =  await axios.put(`/user-update${ID}`,JSON.stringify(updatedData));
+
+    if(response.status===200){
+        location.reload();
+    }
+    else{
+        return;
+    }
+}
+
+
+
+
+let eyeIcon = document.getElementById('togglePasswordCurrent');
+eyeIcon.addEventListener('click', function(){
+      
+        let currentPass = document.getElementById('currentPassword')
+        const type =  currentPass.getAttribute('type') === 'password' ? 'text' : 'password';
+        currentPass.setAttribute('type', type);
+        if (type === 'password') {
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+    } else {
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+    }
+});
+const handleNewPass = () =>{
+        let newPassword= document.getElementById('newPassword')
+        const type =  newPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+        newPassword.setAttribute('type', type);
+        let eyeIcon = document.getElementById('togglePasswordNew');
+        if (type === 'password') {
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+    } else {
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+    }
+}
+const handleConfirmPass = () =>{
+        let ConfirmPass = document.getElementById('confirmPassword')
+        const type =  ConfirmPass.getAttribute('type') === 'password' ? 'text' : 'password';
+        ConfirmPass.setAttribute('type', type);
+        let eyeIcon = document.getElementById('togglePasswordConfirm');
+        if (type === 'password') {
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+    } else {
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+    }
+}
+
+
+
+
+
+const handleSubmitPass = async (event) => {
+event.preventDefault()
+const ID = 1;
+let errorCurrent = document.getElementById('errorCurrent')
+errorCurrent.innerText="";
+const currentPass ='<%= passwordd %>';
+let currentPassInput = document.getElementById('currentPassword').value
+let newPassInput = document.getElementById('newPassword').value
+let errorNew  = document.getElementById('errorNew')
+let confirmPassInput = document.getElementById('confirmPassword').value
+if(currentPass !== currentPassInput){
+return errorCurrent.innerText="Password not match"
+}
+if(confirmPassInput!==newPassInput){
+    return errorNew.innerText="Confirm and Current password doesn't match"
+}
+
+
+const response =  await axios.put(`/user/pass/update${ID}`,JSON.stringify({confirmPassInput}));
+
+if(response.status===200){
+        location.reload();
+    }
+    else{
+        return;
+    }
+
+}
+
+</script>
         <%- include('../partials/footer') %>
