@@ -1,0 +1,98 @@
+<%- include('../partials/pages/headerAdmin') %>
+
+    <!-- Profile Start-->
+    <div class="container-xl px-4 mt-4">
+        <!-- Account page navigation-->
+        <nav class="nav nav-borders">
+            <p><a class="nav-link ms-0" href="admin">Admin</a></p>
+            <p><a class="nav-link active" href="admin-users">Users</a></p>
+            <p><a class="nav-link" href="admin-notification">Notifications</a></p>
+        </nav>
+        <hr class="mt-0 mb-4">
+        <div class="card mb-4">
+            <div class="card-header">User Details</div>
+            <div class="card-body">
+                <form>
+                    <!-- Form Row-->
+                    <div class="col-md-6 mx-auto">
+                        <label class="small mb-1" for="adminId">User ID</label>
+                        <input class="form-control" id="adminId" type="text" placeholder="User ID" value="" readonly>
+                    </div>
+                    <div class="row gx-3 mb-3">
+                        <!-- Form Group (First Name)-->
+                        <div class="col-md-6">
+                            <label class="small mb-1" for="firstName">First Name</label>
+                            <input class="form-control" id="firstName" type="text" placeholder="First Name" value="">
+                        </div>
+                        <!-- Form Group (Last Name)-->
+                        <div class="col-md-6">
+                            <label class="small mb-1" for="lastName">Last Name</label>
+                            <input class="form-control" id="lastName" type="text" placeholder="Last Name" value="">
+                        </div>
+                    </div>
+                    <!-- Form Row        -->
+                    <div class="row gx-3 mb-3">
+                        <!-- Form Group (Email Address)-->
+                        <div class="col-md-6">
+                            <label class="small mb-1" for="emailAddress">Email Address</label>
+                            <input class="form-control text-left" id="emailAddress" type="text"
+                                placeholder="Email Address" value="">
+                        </div>
+                        <!-- Form Group (Phone Number)-->
+                        <div class="col-md-6">
+                            <label class="small mb-1" for="phoneNumber">Phone Number</label>
+                            <input class="form-control" id="phoneNumber" type="text" placeholder="Phone Number"
+                                value="">
+                        </div>
+                    </div>
+                    <!-- Save changes button-->
+                    <div class="row mx-auto user-button">
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-danger" type="button">Delete User</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-primary" type="button">Update User</button>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        <div class="container mt-5">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Phone Number</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% adminHistory.forEach(admin=> { %>
+                        <tr class="table-row" data-admin-id="<%= admin.ID %>">
+                            <td>
+                                <%= admin.ID %>
+                            </td>
+                            <td>
+                                <%= admin.firstName %>
+                            </td>
+                            <td>
+                                <%= admin.lastName %>
+                            </td>
+                            <td>
+                                <%= admin.email %>
+                            </td>
+                            <td>
+                                <%= admin.phoneNumber %>
+                            </td>
+                        </tr>
+                        <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <%- include('../partials/pages/footerLogin') %>
