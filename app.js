@@ -45,8 +45,8 @@ app.set("view engine", "ejs");
 const connection = mysql.createConnection({
 	host: "localhost",
 	user: "root",
-	password: "weakka12",
-	port: 3306,
+	password: "hehez190",
+	port: 3307,
 	database: "askalldb",
 });
 
@@ -71,7 +71,7 @@ const checkIfLogined = (res, path) => {
 		let user_ID = results[0].ID;
 
 		if (user_ID == 0) {
-			res.redirect("http://localhost/");
+			res.redirect("http://localhost:8080/");
 		} else {
 			res.render(path);
 		}
@@ -105,14 +105,14 @@ app.get("/logout", (req, res) => {
 			);
 		}
 	});
-	res.redirect("http://localhost/");
+	res.redirect("http://localhost:8080/");
 });
 
 //**authentication */
-app.get("/login", (req, res) => res.redirect("http://localhost/"));
+app.get("/login", (req, res) => res.redirect("http://localhost:8080/"));
 
 app.get("/register", (req, res) =>
-	res.redirect("http://localhost/register.php")
+	res.redirect("http://localhost:8080/register.php")
 );
 app.get("/forgot-password-get-code", (req, res) =>
 	res.render("authentication/forgotPasswordGetCode.ejs")
@@ -121,7 +121,7 @@ app.get("/forgot-password-last-step", (req, res) =>
 	res.render("authentication/forgotPasswordLastStep.ejs")
 );
 app.get("/admin-login", (req, res) =>
-	res.redirect("http://localhost/adminLogin.php")
+	res.redirect("http://localhost:8080/adminLogin.php")
 );
 
 //**profile */
