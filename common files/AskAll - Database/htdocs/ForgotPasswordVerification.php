@@ -1,7 +1,7 @@
 <?php
 session_start();
 $user = "root";
-$password = "hehez190";
+$password = "weakka12";
 
 try {
   $pdo = new PDO("mysql:host=localhost;dbname=askalldb", $user, $password);

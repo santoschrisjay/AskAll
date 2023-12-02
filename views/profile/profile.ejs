@@ -227,7 +227,6 @@ if(confirmPassInput!==newPassInput){
     return errorNew.innerText="Confirm and Current password doesn't match"
 }
 
-
 const response =  await axios.put(`/user/pass/update${ID}`,JSON.stringify({confirmPassInput}));
 
 if(response.status===200){

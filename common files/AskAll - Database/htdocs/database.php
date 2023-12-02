@@ -3,7 +3,7 @@ session_start();
 $_SESSION["otp"] = "";
 
 $user = "root";
-$password = "hehez190";
+$password = "weakka12";
 
 try {
     $pdo = new PDO("mysql:host=localhost;dbname=askalldb", $user, $password);
