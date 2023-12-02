@@ -1,0 +1,50 @@
+<%- include('../partials/header') %>
+    <%- include('../partials/features/headerConverter') %>
+
+        <!-- Team Start -->
+        <div class="container-xl">
+            <nav class="nav nav-borders mx-auto">
+                <p><a class="nav-link" href="profile">Profile</a></p>
+                <p><a class="nav-link" href="profile-history">History</a></p>
+                <p><a class="nav-link" href="profile-notification">Notifications</a></p>
+            </nav>
+            <h2>Weight Converter</h2>
+            <label for="inputWeight">Enter Weight:</label>
+            <input type="number" id="inputWeight" placeholder="Enter weight">
+            
+            <label for="fromUnit">From Unit:</label>
+            <select id="fromUnit">
+                <option value="kilogram">Kilogram</option>
+                <option value="gram">Gram</option>
+                <option value="milligram">Milligram</option>
+                <option value="metricTon">Metric Ton</option>
+                <option value="longTon">Long Ton</option>
+                <option value="shortTon">Short Ton</option>
+                <option value="pound">Pound</option>
+                <option value="ounce">Ounce</option>
+                <option value="carrat">carrat</option>
+                <option value="atomicMassUnit">Atomic Mass Unit</option>
+            </select>
+            
+            <label for="toUnit">To Unit:</label>
+            <select id="toUnit">
+                <option value="kilogram">Kilogram</option>
+                <option value="gram">Gram</option>
+                <option value="milligram">Milligram</option>
+                <option value="metricTon">Metric Ton</option>
+                <option value="longTon">Long Ton</option>
+                <option value="shortTon">Short Ton</option>
+                <option value="pound">Pound</option>
+                <option value="ounce">Ounce</option>
+                <option value="carrat">carrat</option>
+                <option value="atomicMassUnit">Atomic Mass Unit</option>
+            </select>
+            
+            <button onclick="convertWeight()">Convert</button>
+            
+            <p id="weightResult"></p>
+        </div>
+    
+        <!-- Team End -->
+
+        <%- include('../partials/footer') %>
