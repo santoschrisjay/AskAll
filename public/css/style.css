@@ -509,6 +509,10 @@ h6,
     color: var(--dark);
 }
 
+.text-light {
+    color: var(--light)
+}
+
 .text-dark-input {
     color: var(--dark);
     text-align: left;

@@ -342,8 +342,28 @@ app.get("/pdf-to-word", (req, res) =>
 );
 
 //**unit-converter */
-app.get("/converter", (req, res) =>
-	checkIfLogined(res, "unit-converter/converter.ejs")
+app.get("/area-converter", (req, res) =>
+	checkIfLogined(res, "unit-converter/areaConverter.ejs")
+);
+
+app.get("/length-converter", (req, res) =>
+	checkIfLogined(res, "unit-converter/lengthConverter.ejs")
+);
+
+app.get("/temperature-converter", (req, res) =>
+	checkIfLogined(res, "unit-converter/temperatureConverter.ejs")
+);
+
+app.get("/time-converter", (req, res) =>
+	checkIfLogined(res, "unit-converter/timeConverter.ejs")
+);
+
+app.get("/volume-converter", (req, res) =>
+	checkIfLogined(res, "unit-converter/volumeConverter.ejs")
+);
+
+app.get("/weight-converter", (req, res) =>
+	checkIfLogined(res, "unit-converter/weightConverter.ejs")
 );
 
 //**ALL FEATURES END */
