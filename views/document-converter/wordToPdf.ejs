@@ -2,15 +2,27 @@
     <%- include('../partials/features/headerWordToPdf') %>
 
         <!-- Team Start -->
-        <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
-            <div class="container py-5">
+        <div class="container-fluid pt-5 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="container pt-5">
                 <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
-                    <h5 class="fw-bold text-primary text-uppercase">Title</h5>
-                    <h1 class="mb-0">SOME CHENA</h1>
+                    <h5 class="fw-bold text-primary text-uppercase">Document Converter</h5>
+                    <h1 class="mb-0">Word Document to <br>PDF Document</h1>
                 </div>
-
             </div>
         </div>
         <!-- Team End -->
+        <div class="container-xl">
+            <div class="bg-light text-center py-5">
+                <p>Upload your file here to convert the Word document to PDF format.</p>
+                <form action="/convertPdfToWord" method="post" enctype="multipart/form-data">
+                    <input class="" type="file" name="pdfFile" accept=".pdf" required>
+                    <button class="btn btn-primary py-2 px-4" type="submit">Convert And Download</button>
+                </form>
+            </div>
+            <div class="container-fluid py-1 text-center wow fadeInUp" data-wow-delay="0.1s ">
+                <a href="pdf-to-word" class="btn btn-outline-dark py-3 px-5 mt-3 ms-5 wow zoomIn mx-auto"
+                    data-wow-delay="0.9s">Need PDF to Word?</a>
+            </div>
+        </div>
 
         <%- include('../partials/footer') %>
