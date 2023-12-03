@@ -45,8 +45,8 @@ app.set("view engine", "ejs");
 const connection = mysql.createConnection({
 	host: "localhost",
 	user: "root",
-	password: "hehez190",
-	port: 3307,
+	password: "weakka12",
+	port: 3306,
 	database: "askalldb",
 });
 
@@ -71,7 +71,7 @@ const checkIfLogined = (res, path) => {
 		let user_ID = results[0].ID;
 
 		if (user_ID == 0) {
-			res.redirect("http://localhost:8080/");
+			res.redirect("http://localhost"); // localhost:8000 if hindi nag wwork sayo
 		} else {
 			res.render(path);
 		}
@@ -176,26 +176,41 @@ app.get("/services", (req, res) => {
 app.get("/team", (req, res) => res.render("main-pages/team.ejs"));
 app.get("/reference", (req, res) => res.render("main-pages/reference.ejs"));
 app.get("/logout", (req, res) => {
-	const updateSession = "UPDATE sessionn SET ID = 0";
+	connection.query("SELECT ID FROM sessionn", (error, results) => {
+		if (!error){
+			let sessionnID = results[0];
+			connection.query(`SELECT * FROM auditTrail WHERE userID = ${sessionnID.ID}`, (error, results) => {
+				if (!error){
+					connection.query(`UPDATE auditTrail SET logout = NOW() WHERE userID = ${sessionnID.ID} AND ID = ${results[results.length - 1].ID}`, (error, results) => {
+						if (!error){
+							console.log("Success")
+						}
+					})
+				}
+			})
+		}
+	})
+
+	let updateSession = "UPDATE sessionn SET ID = 0";
 	connection.query(updateSession, (error, results) => {
 		if (error) {
-			console.error("Error updating user:", error.message);
+			console.error("Error updating session:", error.message);
 		} else {
 			console.log(
-				"User updated successfully:",
+				"session updated successfully:",
 				results.affectedRows,
 				"rows affected"
 			);
 		}
 	});
-	res.redirect("http://localhost:8080/");
+	res.redirect("http://localhost/");
 });
 
 //**authentication */
-app.get("/login", (req, res) => res.redirect("http://localhost:8080/"));
+app.get("/login", (req, res) => res.redirect("http://localhost/"));
 
 app.get("/register", (req, res) =>
-	res.redirect("http://localhost:8080/register.php")
+	res.redirect("http://localhost/register.php")
 );
 app.get("/forgot-password-get-code", (req, res) =>
 	res.render("authentication/forgotPasswordGetCode.ejs")
@@ -204,7 +219,7 @@ app.get("/forgot-password-last-step", (req, res) =>
 	res.render("authentication/forgotPasswordLastStep.ejs")
 );
 app.get("/admin-login", (req, res) =>
-	res.redirect("http://localhost:8080/adminLogin.php")
+	res.redirect("http://localhost/adminLogin.php") // localhost:8000/adminLogin.php if hindi nag wwork sayo
 );
 
 //**profile */
@@ -315,7 +330,7 @@ app.get("/admin-users", (req, res) => {
 });
 
 app.get("/admin-audit-trail", (req, res) => {
-	const sql = "SELECT * FROM user"; // Adjust the query based on your table name
+	const sql = "SELECT * FROM auditTrail"; // Adjust the query based on your table name
 	connection.query(sql, (error, results, fields) => {
 		if (error) {
 			console.error("Error retrieving admin history:", error);

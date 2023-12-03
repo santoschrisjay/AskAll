@@ -171,6 +171,10 @@ if ($result_session['ID'] != 0) {
 
                                               $changePass = $pdo->prepare("UPDATE user SET passwordd = '$hashedPassword' WHERE email = '$mail'");
                                               $changePass->execute();
+
+                                              $updateLoginTime = $pdo -> prepare("UPDATE user SET login = CURRENT_TIME()");
+                                              $updateLoginTime->execute(); 
+                                              
                                               echo "<script>window.location = 'http://localhost:3000/'</script>";
                                               exit();
                                             } else {
