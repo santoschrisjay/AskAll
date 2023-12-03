@@ -164,8 +164,6 @@
                                                         $mail->Body = "Your OTP is: ".$_SESSION['otp']; 
                                                     
                                                         $mail->send();
-                                                        $store_OTP = $pdo->prepare("UPDATE user SET otp = '$otp' WHERE email = '$email'");
-                                                        $store_OTP->execute();
 
                                                         echo "<script>window.location = './ForgotPasswordVerification.php'</script>";
                                                         exit();
