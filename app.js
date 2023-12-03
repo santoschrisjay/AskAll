@@ -45,8 +45,8 @@ app.set("view engine", "ejs");
 const connection = mysql.createConnection({
 	host: "localhost",
 	user: "root",
-	password: "weakka12",
-	port: 3306,
+	password: "hehez190",
+	port: 3307,
 	database: "askalldb",
 });
 
@@ -71,7 +71,7 @@ const checkIfLogined = (res, path) => {
 		let user_ID = results[0].ID;
 
 		if (user_ID == 0) {
-			res.redirect("http://localhost/");
+			res.redirect("http://localhost:8080/");
 		} else {
 			res.render(path);
 		}
@@ -90,34 +90,43 @@ app.post("/update-admin-profile", (req, res) => {
 	let email = req.body.inputEmailAddress;
 	let phoneNumber = req.body.inputPhoneNumber;
 
-	let queryFirstName = `first_name = '${firstName}'`
-	let queryLastName = `last_name = '${lastName}'`
-	let queryEmail = `email_address = '${email}'`
-	let queryPhoneNumber = `phone_number = '${phoneNumber}'`
+	let queryFirstName = `first_name = '${firstName}'`;
+	let queryLastName = `last_name = '${lastName}'`;
+	let queryEmail = `email_address = '${email}'`;
+	let queryPhoneNumber = `phone_number = '${phoneNumber}'`;
 
-	connection.query(`UPDATE admin SET ${queryFirstName}, ${queryLastName}, ${queryEmail}, ${queryPhoneNumber}`, (error, results) => {
-		if (!error) {
-			console.log("success")
+	connection.query(
+		`UPDATE admin SET ${queryFirstName}, ${queryLastName}, ${queryEmail}, ${queryPhoneNumber}`,
+		(error, results) => {
+			if (!error) {
+				console.log("success");
+			}
+			res.redirect("http://localhost:3000/admin");
 		}
-		res.redirect("http://localhost:3000/admin")
-	})
-})
+	);
+});
 
 app.post("/update-admin-password", (req, res) => {
 	let currentPassword = req.body.currentPassword;
 	let newPassword = req.body.newPassword;
-	
-	connection.query(`SELECT admin_ID FROM admin WHERE password = md5('${currentPassword}')`, (error, results, fields) => {
-		if(results[0]){
-			connection.query(`UPDATE admin SET password = md5('${newPassword}')`, (error, results) => {
-				if (!error){
-					console.log("Success")
-				}
-			})
+
+	connection.query(
+		`SELECT admin_ID FROM admin WHERE password = md5('${currentPassword}')`,
+		(error, results, fields) => {
+			if (results[0]) {
+				connection.query(
+					`UPDATE admin SET password = md5('${newPassword}')`,
+					(error, results) => {
+						if (!error) {
+							console.log("Success");
+						}
+					}
+				);
+			}
+			res.redirect("http://localhost:3000/admin");
 		}
-		res.redirect("http://localhost:3000/admin")
-	})
-})
+	);
+});
 
 //UPDATE AND DELETE users CHENA CHENA
 app.post("/update-user-info", (req, res) => {
@@ -128,30 +137,34 @@ app.post("/update-user-info", (req, res) => {
 	let phoneNumber = req.body.phoneNumber;
 	let button = req.body.button;
 
-	if (button == "update"){
-		let queryFirstName = `firstName = '${firstName}'`
-		let queryLastName = `lastName = '${lastName}'`
-		let queryEmail = `email = '${email}'`
-		let queryPhoneNumber = `phoneNumber = '${phoneNumber}'`
-	
-		connection.query(`UPDATE user SET ${queryFirstName}, ${queryLastName}, ${queryEmail}, ${queryPhoneNumber} WHERE ID = ${userID}`, (error, results) => {
-			if (!error) {
-				console.log("success")
+	if (button == "update") {
+		let queryFirstName = `firstName = '${firstName}'`;
+		let queryLastName = `lastName = '${lastName}'`;
+		let queryEmail = `email = '${email}'`;
+		let queryPhoneNumber = `phoneNumber = '${phoneNumber}'`;
+
+		connection.query(
+			`UPDATE user SET ${queryFirstName}, ${queryLastName}, ${queryEmail}, ${queryPhoneNumber} WHERE ID = ${userID}`,
+			(error, results) => {
+				if (!error) {
+					console.log("success");
+				}
+				res.redirect("http://localhost:3000/admin-users");
 			}
-			res.redirect("http://localhost:3000/admin-users")
-		})
-	}else{
-		connection.query(`DELETE FROM user WHERE ID = ${userID}`, (error, results) => {
-			if (!error) {
-				console.log("Deleted")
+		);
+	} else {
+		connection.query(
+			`DELETE FROM user WHERE ID = ${userID}`,
+			(error, results) => {
+				if (!error) {
+					console.log("Deleted");
+				}
+				res.redirect("http://localhost:3000/admin-users");
 			}
-			res.redirect("http://localhost:3000/admin-users")
-		})	
+		);
 	}
-
-})
+});
 //DELETE Users CHENA CHENA
-
 
 app.get("/about", (req, res) => res.render("main-pages/about.ejs"));
 app.get("/contact", (req, res) => res.render("main-pages/contact.ejs"));
@@ -175,14 +188,14 @@ app.get("/logout", (req, res) => {
 			);
 		}
 	});
-	res.redirect("http://localhost/");
+	res.redirect("http://localhost:8080/");
 });
 
 //**authentication */
-app.get("/login", (req, res) => res.redirect("http://localhost/"));
+app.get("/login", (req, res) => res.redirect("http://localhost:8080/"));
 
 app.get("/register", (req, res) =>
-	res.redirect("http://localhost/register.php")
+	res.redirect("http://localhost:8080/register.php")
 );
 app.get("/forgot-password-get-code", (req, res) =>
 	res.render("authentication/forgotPasswordGetCode.ejs")
@@ -191,7 +204,7 @@ app.get("/forgot-password-last-step", (req, res) =>
 	res.render("authentication/forgotPasswordLastStep.ejs")
 );
 app.get("/admin-login", (req, res) =>
-	res.redirect("http://localhost/adminLogin.php")
+	res.redirect("http://localhost:8080/adminLogin.php")
 );
 
 //**profile */
@@ -297,13 +310,22 @@ app.get("/admin-users", (req, res) => {
 			throw error;
 		}
 
-		res.render("admin/adminHistory.ejs", { adminHistory: results });
+		res.render("admin/adminUsers.ejs", { adminUsers: results });
 	});
 });
 
-app.get("/admin-notification", (req, res) =>
-	res.render("admin/adminNotification.ejs")
-);
+app.get("/admin-audit-trail", (req, res) => {
+	const sql = "SELECT * FROM user"; // Adjust the query based on your table name
+	connection.query(sql, (error, results, fields) => {
+		if (error) {
+			console.error("Error retrieving admin history:", error);
+			res.status(500).send("Error retrieving admin history");
+			throw error;
+		}
+
+		res.render("admin/adminAuditTrail.ejs", { adminUsers: results });
+	});
+});
 
 // user
 let ID;
@@ -354,13 +376,13 @@ app.put("/user-update:ID", async (req, res) => {
 // password update
 app.put("/user/pass/update:ID", async (req, res) => {
 	connection.query("SELECT ID FROM sessionn", (error, results, fields) => {
-	if (error) {
-		console.error("Error fetching data:", error.message);
-	} else {
-		console.log("Fetched data:", results);
-	}
+		if (error) {
+			console.error("Error fetching data:", error.message);
+		} else {
+			console.log("Fetched data:", results);
+		}
 
-	ID = results[0].ID;
+		ID = results[0].ID;
 
 		const confirmPassInput = req.body;
 		console.log(ID, confirmPassInput);
@@ -369,18 +391,22 @@ app.put("/user/pass/update:ID", async (req, res) => {
 
 			const { confirmPassInput } = parsedData;
 			const sql = "UPDATE user SET passwordd=? WHERE ID = ?";
-			connection.query(sql, [confirmPassInput, ID], (error, results, fields) => {
-				if (error) {
-					console.error("Error updating user data:", error);
-					res.status(500).send("Error updating user data");
-				} else {
-					if (results.affectedRows > 0) {
-						res.status(200).send("User data updated successfully");
+			connection.query(
+				sql,
+				[confirmPassInput, ID],
+				(error, results, fields) => {
+					if (error) {
+						console.error("Error updating user data:", error);
+						res.status(500).send("Error updating user data");
 					} else {
-						res.status(404).send("User not found or no changes were made");
+						if (results.affectedRows > 0) {
+							res.status(200).send("User data updated successfully");
+						} else {
+							res.status(404).send("User not found or no changes were made");
+						}
 					}
 				}
-			});
+			);
 		}
 	});
 });

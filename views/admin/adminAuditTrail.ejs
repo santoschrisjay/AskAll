@@ -4,9 +4,9 @@
     <div class="container-xl px-4 mt-4">
         <!-- Account page navigation-->
         <nav class="nav nav-borders">
-            <p><a class="nav-link ms-0" href="admin">Admin</a></p>
-            <p><a class="nav-link active" href="admin-users">Users</a></p>
-            <p><a class="nav-link" href="admin-notification">Notifications</a></p>
+            <p><a class="nav-link" href="admin">Admin</a></p>
+            <p><a class="nav-link" href="admin-users">Users</a></p>
+            <p><a class="nav-link" href="admin-audit-trail">Audit Trail</a></p>
         </nav>
         <hr class="mt-0 mb-4">
         <div class="card mb-4">
@@ -16,18 +16,21 @@
                     <!-- Form Row-->
                     <div class="col-md-6 mx-auto">
                         <label class="small mb-1" for="adminId">User ID</label>
-                        <input class="form-control" id="adminId" name="userID" type="text" placeholder="User ID" value="" readonly>
+                        <input class="form-control" id="adminId" name="userID" type="text" placeholder="User ID"
+                            value="" readonly>
                     </div>
                     <div class="row gx-3 mb-3">
                         <!-- Form Group (First Name)-->
                         <div class="col-md-6">
                             <label class="small mb-1" for="firstName">First Name</label>
-                            <input class="form-control" id="firstName" name='firstName' type="text" placeholder="First Name" value="">
+                            <input class="form-control" id="firstName" name='firstName' type="text"
+                                placeholder="First Name" value="">
                         </div>
                         <!-- Form Group (Last Name)-->
                         <div class="col-md-6">
                             <label class="small mb-1" for="lastName">Last Name</label>
-                            <input class="form-control" id="lastName" name="lastName" type="text" placeholder="Last Name" value="">
+                            <input class="form-control" id="lastName" name="lastName" type="text"
+                                placeholder="Last Name" value="">
                         </div>
                     </div>
                     <!-- Form Row        -->
@@ -41,17 +44,19 @@
                         <!-- Form Group (Phone Number)-->
                         <div class="col-md-6">
                             <label class="small mb-1" for="phoneNumber">Phone Number</label>
-                            <input class="form-control" id="phoneNumber" name="phoneNumber" type="text" placeholder="Phone Number"
-                                value="">
+                            <input class="form-control" id="phoneNumber" name="phoneNumber" type="text"
+                                placeholder="Phone Number" value="">
                         </div>
                     </div>
                     <!-- Save changes button-->
                     <div class="row mx-auto user-button">
                         <div class="col-md-6">
-                            <button class="btn btn-outline-danger" name="button" value="delete" type="submit">Delete User</button>
+                            <button class="btn btn-outline-danger" name="button" value="delete" type="submit">Delete
+                                User</button>
                         </div>
                         <div class="col-md-6">
-                            <button class="btn btn-primary" name="button" value="update" type="submit">Update User</button>
+                            <button class="btn btn-primary" name="button" value="update" type="submit">Update
+                                User</button>
                         </div>
                     </div>
                 </form>
@@ -69,7 +74,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% adminHistory.forEach(admin=> { %>
+                    <% adminUsers.forEach(admin=> { %>
                         <tr class="table-row" data-admin-id="<%= admin.ID %>">
                             <td>
                                 <%= admin.ID %>

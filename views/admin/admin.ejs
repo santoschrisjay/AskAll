@@ -4,9 +4,9 @@
     <div class="container-xl px-4 mt-4">
         <!-- Account page navigation-->
         <nav class="nav nav-borders">
-            <p><a class="nav-link active ms-0" href="admin">Admin</a></p>
+            <p><a class="nav-link" href="admin">Admin</a></p>
             <p><a class="nav-link" href="admin-users">Users</a></p>
-            <p><a class="nav-link" href="admin-notification">Notifications</a></p>
+            <p><a class="nav-link" href="admin-audit-trail">Audit Trail</a></p>
         </nav>
         <hr class="mt-0 mb-4">
         <div class="row">
@@ -21,14 +21,14 @@
                                 <!-- Form Group (First Name)-->
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputFirstName">First Name</label>
-                                    <input class="form-control" id="inputFirstName" name="inputFirstName" type="text" placeholder="First Name"
-                                        value="<%= first_name %>">
+                                    <input class="form-control" id="inputFirstName" name="inputFirstName" type="text"
+                                        placeholder="First Name" value="<%= first_name %>">
                                 </div>
                                 <!-- Form Group (Last Name)-->
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputLastName">Last Name</label>
-                                    <input class="form-control" id="inputLastName" name="inputLastName" type="text" placeholder="Last Name"
-                                        value="<%= last_name %>">
+                                    <input class="form-control" id="inputLastName" name="inputLastName" type="text"
+                                        placeholder="Last Name" value="<%= last_name %>">
                                 </div>
                             </div>
                             <!-- Form Row        -->
@@ -36,14 +36,14 @@
                                 <!-- Form Group (Email Address)-->
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputEmailAddress">Email Address</label>
-                                    <input class="form-control" id="inputEmailAddress" name="inputEmailAddress" type="text"
-                                        placeholder="Email Address" value="<%= email_address %>">
+                                    <input class="form-control" id="inputEmailAddress" name="inputEmailAddress"
+                                        type="text" placeholder="Email Address" value="<%= email_address %>">
                                 </div>
                                 <!-- Form Group (Phone Number)-->
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputPhoneNumber">Phone Number</label>
-                                    <input class="form-control" id="inputPhoneNumber" name="inputPhoneNumber" type="text"
-                                        placeholder="Phone Number" value="<%= phone_number %>">
+                                    <input class="form-control" id="inputPhoneNumber" name="inputPhoneNumber"
+                                        type="text" placeholder="Phone Number" value="<%= phone_number %>">
                                 </div>
                             </div>
                             <!-- Save changes button-->
@@ -86,7 +86,7 @@
             let confirmPassword = document.getElementById("confirmPassword").value;
             let newPassword = document.getElementById("newPassword").value;
 
-            if (confirmPassword != newPassword || newPassword == ""){
+            if (confirmPassword != newPassword || newPassword == "") {
                 alert("New password and confirm password must be equal");
                 return false;
             }
@@ -94,5 +94,5 @@
         }
     </script>
 
-    
+
     <%- include('../partials/pages/footerLogin') %>
