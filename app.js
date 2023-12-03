@@ -92,6 +92,89 @@ app.get("/", (req, res) => {
 	checkIfLogined(res, "main-pages/index.ejs");
 });
 
+//ADMIN UPDATES CHENA CHENA
+app.post("/update-admin-profile", (req, res) => {
+	let firstName = req.body.inputFirstName;
+	let lastName = req.body.inputLastName;
+	let email = req.body.inputEmailAddress;
+	let phoneNumber = req.body.inputPhoneNumber;
+
+	let queryFirstName = `first_name = '${firstName}'`;
+	let queryLastName = `last_name = '${lastName}'`;
+	let queryEmail = `email_address = '${email}'`;
+	let queryPhoneNumber = `phone_number = '${phoneNumber}'`;
+
+	connection.query(
+		`UPDATE admin SET ${queryFirstName}, ${queryLastName}, ${queryEmail}, ${queryPhoneNumber}`,
+		(error, results) => {
+			if (!error) {
+				console.log("success");
+			}
+			res.redirect("http://localhost:3000/admin");
+		}
+	);
+});
+
+app.post("/update-admin-password", (req, res) => {
+	let currentPassword = req.body.currentPassword;
+	let newPassword = req.body.newPassword;
+
+	connection.query(
+		`SELECT admin_ID FROM admin WHERE password = md5('${currentPassword}')`,
+		(error, results, fields) => {
+			if (results[0]) {
+				connection.query(
+					`UPDATE admin SET password = md5('${newPassword}')`,
+					(error, results) => {
+						if (!error) {
+							console.log("Success");
+						}
+					}
+				);
+			}
+			res.redirect("http://localhost:3000/admin");
+		}
+	);
+});
+
+//UPDATE AND DELETE users CHENA CHENA
+app.post("/update-user-info", (req, res) => {
+	let userID = req.body.userID;
+	let firstName = req.body.firstName;
+	let lastName = req.body.lastName;
+	let email = req.body.emailAddress;
+	let phoneNumber = req.body.phoneNumber;
+	let button = req.body.button;
+
+	if (button == "update") {
+		let queryFirstName = `firstName = '${firstName}'`;
+		let queryLastName = `lastName = '${lastName}'`;
+		let queryEmail = `email = '${email}'`;
+		let queryPhoneNumber = `phoneNumber = '${phoneNumber}'`;
+
+		connection.query(
+			`UPDATE user SET ${queryFirstName}, ${queryLastName}, ${queryEmail}, ${queryPhoneNumber} WHERE ID = ${userID}`,
+			(error, results) => {
+				if (!error) {
+					console.log("success");
+				}
+				res.redirect("http://localhost:3000/admin-users");
+			}
+		);
+	} else {
+		connection.query(
+			`DELETE FROM user WHERE ID = ${userID}`,
+			(error, results) => {
+				if (!error) {
+					console.log("Deleted");
+				}
+				res.redirect("http://localhost:3000/admin-users");
+			}
+		);
+	}
+});
+//DELETE Users CHENA CHENA
+
 app.get("/about", (req, res) => res.render("main-pages/about.ejs"));
 app.get("/contact", (req, res) => res.render("main-pages/contact.ejs"));
 
@@ -236,74 +319,105 @@ app.get("/admin-users", (req, res) => {
 			throw error;
 		}
 
-		res.render("admin/adminHistory.ejs", { adminHistory: results });
+		res.render("admin/adminUsers.ejs", { adminUsers: results });
 	});
 });
 
-app.get("/admin-notification", (req, res) =>
-	res.render("admin/adminNotification.ejs")
-);
-
-// user
-app.put("/user-update:ID", async (req, res) => {
-	const ID = req.params.ID;
-
-	const updatedData = req.body;
-	for (const [key, value] of Object.entries(updatedData)) {
-		const parsedData = JSON.parse(key);
-
-		const { first_name, last_name, email_address, phone_number } = parsedData;
-
-		if (!ID || isNaN(ID)) {
-			res.status(400).send("Invalid user ID");
-			return;
+app.get("/admin-audit-trail", (req, res) => {
+	const sql = "SELECT * FROM user"; // Adjust the query based on your table name
+	connection.query(sql, (error, results, fields) => {
+		if (error) {
+			console.error("Error retrieving admin history:", error);
+			res.status(500).send("Error retrieving admin history");
+			throw error;
 		}
 
-		const sql =
-			"UPDATE user SET firstName=?, lastName=?, email=?, phoneNumber=? WHERE ID = ?";
+		res.render("admin/adminAuditTrail.ejs", { adminUsers: results });
+	});
+});
 
-		connection.query(
-			sql,
-			[first_name, last_name, email_address, phone_number, ID],
-			(error, results, fields) => {
-				if (error) {
-					console.error("Error updating user data:", error);
-					res.status(500).send("Error updating user data");
-				} else {
-					if (results.affectedRows > 0) {
-						res.status(200).send("User data updated successfully");
+// user
+let ID;
+app.put("/user-update:ID", async (req, res) => {
+	connection.query("SELECT ID FROM sessionn", (error, results, fields) => {
+		if (error) {
+			console.error("Error fetching data:", error.message);
+		} else {
+			console.log("Fetched data:", results);
+		}
+
+		ID = results[0].ID;
+
+		const updatedData = req.body;
+		for (const [key, value] of Object.entries(updatedData)) {
+			const parsedData = JSON.parse(key);
+
+			const { first_name, last_name, email_address, phone_number } = parsedData;
+
+			if (!ID || isNaN(ID)) {
+				res.status(400).send("Invalid user ID");
+				return;
+			}
+
+			const sql =
+				"UPDATE user SET firstName=?, lastName=?, email=?, phoneNumber=? WHERE ID = ?";
+
+			connection.query(
+				sql,
+				[first_name, last_name, email_address, phone_number, ID],
+				(error, results, fields) => {
+					if (error) {
+						console.error("Error updating user data:", error);
+						res.status(500).send("Error updating user data");
 					} else {
-						res.status(404).send("User not found or no changes were made");
+						if (results.affectedRows > 0) {
+							res.status(200).send("User data updated successfully");
+						} else {
+							res.status(404).send("User not found or no changes were made");
+						}
 					}
 				}
-			}
-		);
-	}
+			);
+		}
+	});
 });
 
 // password update
 app.put("/user/pass/update:ID", async (req, res) => {
-	const ID = req.params.ID;
-	const confirmPassInput = req.body;
-	console.log(ID, confirmPassInput);
-	for (const [key, value] of Object.entries(confirmPassInput)) {
-		const parsedData = JSON.parse(key);
+	connection.query("SELECT ID FROM sessionn", (error, results, fields) => {
+		if (error) {
+			console.error("Error fetching data:", error.message);
+		} else {
+			console.log("Fetched data:", results);
+		}
 
-		const { confirmPassInput } = parsedData;
-		const sql = "UPDATE user SET passwordd=? WHERE ID = ?";
-		connection.query(sql, [confirmPassInput, ID], (error, results, fields) => {
-			if (error) {
-				console.error("Error updating user data:", error);
-				res.status(500).send("Error updating user data");
-			} else {
-				if (results.affectedRows > 0) {
-					res.status(200).send("User data updated successfully");
-				} else {
-					res.status(404).send("User not found or no changes were made");
+		ID = results[0].ID;
+
+		const confirmPassInput = req.body;
+		console.log(ID, confirmPassInput);
+		for (const [key, value] of Object.entries(confirmPassInput)) {
+			const parsedData = JSON.parse(key);
+
+			const { confirmPassInput } = parsedData;
+			const sql = "UPDATE user SET passwordd=? WHERE ID = ?";
+			connection.query(
+				sql,
+				[confirmPassInput, ID],
+				(error, results, fields) => {
+					if (error) {
+						console.error("Error updating user data:", error);
+						res.status(500).send("Error updating user data");
+					} else {
+						if (results.affectedRows > 0) {
+							res.status(200).send("User data updated successfully");
+						} else {
+							res.status(404).send("User not found or no changes were made");
+						}
+					}
 				}
-			}
-		});
-	}
+			);
+		}
+	});
 });
 
 //**ALL FEATURES START */
