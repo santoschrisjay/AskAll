@@ -7,6 +7,8 @@ import https from "https";
 import fs from "fs";
 import CloudmersiveConvertApiClient from "cloudmersive-convert-api-client";
 import fileUpload from "express-fileupload";
+import _ from "lodash";
+import expressMyConnection from "express-myconnection";
 import connected from "process";
 import get from "http";
 
@@ -24,6 +26,7 @@ const openai = new OpenAI({
 // REPLICATE API
 import Replicate from "replicate";
 import { render } from "ejs";
+import { log } from "console";
 
 const replicate = new Replicate({
 	auth: process.env.REPLICATE_API_TOKEN,
@@ -305,9 +308,79 @@ app.put("/user/pass/update:ID", async (req, res) => {
 
 //**ALL FEATURES START */
 //**quick-information */
-app.get("/todo-list", (req, res) =>
-	checkIfLogined(res, "quick-information/todoList.ejs")
-);
+// app.get("/todo-list", (req, res) =>
+// 	checkIfLogined(res, "quick-information/todoList.ejs")
+// );
+
+const defaultItems = [
+	{ name: "Welcome to your todolist!" },
+	{ name: "Hit the + button to add new item." },
+	{ name: "<-- Hit this to delete an item." },
+];
+
+app.get("/todo-list", (req, res) => {
+	connection.query("SELECT * FROM todo_list", (err, rows) => {
+		if (err) throw err;
+
+		if (rows.length === 0) {
+			connection.query(
+				"INSERT INTO todo_list (items) VALUES ?",
+				[defaultItems.map((item) => [item.name])],
+				(err) => {
+					if (err) throw err;
+					console.log("Data successfully added!");
+					res.redirect("/todo-list");
+				}
+			);
+		} else {
+			res.render("quick-information/todoList", {
+				listTitle: "Today",
+				newListItems: rows,
+			});
+		}
+	});
+});
+
+app.post("/todo-list-delete", (req, res) => {
+	const checkedItemID = req.body.checkbox;
+	const listName = req.body.listName;
+
+	console.log("Checked Item ID:", checkedItemID);
+	console.log("List Name:", listName);
+
+	// Assuming you have a database connection named 'connection'
+	const sql = "DELETE FROM todo_list WHERE todo_ID = ?";
+
+	connection.query(sql, [checkedItemID], (err, result) => {
+		if (err) {
+			console.error("Error deleting item:", err);
+			res.status(500).send("Internal Server Error");
+		} else {
+			console.log("Item deleted successfully!");
+			res.redirect("todo-list"); // Redirect back to the to-do list
+		}
+	});
+});
+
+app.post("/todo-list-add", async (req, res) => {
+	const newItem = req.body.newItem;
+	const listName = req.body.listName; // Assuming you have a form field named 'list'
+
+	console.log(newItem);
+	console.log("List Name:", listName);
+
+	const sql = "INSERT INTO todo_list (items) VALUES (?)";
+
+	connection.query(sql, [newItem], (err, result) => {
+		if (err) {
+			console.error("Error deleting item:", err);
+			res.status(500).send("Internal Server Error");
+		} else {
+			console.log("Item deleted successfully!");
+			res.redirect("todo-list"); // Redirect back to the to-do list
+		}
+	});
+});
 
 app.get("/weather", (req, res) =>
 	checkIfLogined(res, "quick-information/weather.ejs")
