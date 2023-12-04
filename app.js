@@ -46,7 +46,7 @@ const connection = mysql.createConnection({
 	host: "localhost",
 	user: "root",
 	password: "hehez190",
-	port: 3307,
+	port: 3306,
 	database: "askalldb",
 });
 
@@ -195,7 +195,7 @@ app.get("/logout", (req, res) => {
 app.get("/login", (req, res) => res.redirect("http://localhost:8080/"));
 
 app.get("/register", (req, res) =>
-	res.redirect("http://localhost:8080/register.php")
+	res.redirect("http://localhost:80/register.php")
 );
 app.get("/forgot-password-get-code", (req, res) =>
 	res.render("authentication/forgotPasswordGetCode.ejs")
@@ -301,8 +301,35 @@ app.get("/admin", (req, res) => {
 	}
 });
 
+app.post("/admin-users", (req, res) => {
+    const  input  = req.body;
+	const resultData = [];
+	for (const [key, value] of Object.entries(input)) {
+		const parsedData = JSON.parse(key);
+
+		const { input } = parsedData;
+	
+
+    const sql = 'SELECT * FROM user WHERE firstName LIKE ? OR lastName LIKE ? OR email LIKE ? OR phoneNumber LIKE ?';
+    const searchInput = `%${input}%`;
+	console.log(searchInput)
+	
+
+    connection.query(sql, [searchInput, searchInput, searchInput, searchInput], (error, results, fields) => {
+        if (error) {
+            console.error("Error retrieving admin history:", error);
+            res.status(500).send("Error retrieving admin history");
+            throw error;
+        }
+		console.log(results)
+		res.status(200).json(results);
+    });
+	}
+});
+
+
 app.get("/admin-users", (req, res) => {
-	const sql = "SELECT * FROM user"; // Adjust the query based on your table name
+	const sql = "SELECT * FROM user ";
 	connection.query(sql, (error, results, fields) => {
 		if (error) {
 			console.error("Error retrieving admin history:", error);
