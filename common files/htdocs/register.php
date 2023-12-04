@@ -212,7 +212,7 @@ if ($result_session['ID'] != 0) {
 
                                                 if (empty($result)) {
                                                     if ($passwordd == $confirmPassword) {
-                                                        $queryInsert = "INSERT INTO user(firstName, lastName, email, phoneNumber, passwordd) VALUES (:firstName, :lastName, :email, :phoneNumber, :passwordd)";
+                                                        $queryInsert = "INSERT INTO user(firstName, lastName, email, phoneNumber, passwordd, accountDateCreated) VALUES (:firstName, :lastName, :email, :phoneNumber, :passwordd, NOW())";
 
                                                         $queryInsertRun = $pdo->prepare($queryInsert);
                                                         $hashedPassword = md5($passwordd);
