@@ -46,7 +46,7 @@ const connection = mysql.createConnection({
 	host: "localhost",
 	user: "root",
 	password: "hehez190",
-	port: 3306,
+	port: 3307,
 	database: "askalldb",
 });
 
@@ -71,7 +71,7 @@ const checkIfLogined = (res, path) => {
 		let user_ID = results[0].ID;
 
 		if (user_ID == 0) {
-			res.redirect("http://localhost"); // localhost:8000 if hindi nag wwork sayo
+			res.redirect("http://localhost:8080"); // localhost:8080:8000 if hindi nag wwork sayo
 		} else {
 			res.render(path);
 		}
@@ -177,19 +177,27 @@ app.get("/team", (req, res) => res.render("main-pages/team.ejs"));
 app.get("/reference", (req, res) => res.render("main-pages/reference.ejs"));
 app.get("/logout", (req, res) => {
 	connection.query("SELECT ID FROM sessionn", (error, results) => {
-		if (!error){
+		if (!error) {
 			let sessionnID = results[0];
-			connection.query(`SELECT * FROM auditTrail WHERE userID = ${sessionnID.ID}`, (error, results) => {
-				if (!error){
-					connection.query(`UPDATE auditTrail SET logout = NOW() WHERE userID = ${sessionnID.ID} AND ID = ${results[results.length - 1].ID}`, (error, results) => {
-						if (!error){
-							console.log("Success")
-						}
-					})
+			connection.query(
+				`SELECT * FROM auditTrail WHERE userID = ${sessionnID.ID}`,
+				(error, results) => {
+					if (!error) {
+						connection.query(
+							`UPDATE auditTrail SET logout = NOW() WHERE userID = ${
+								sessionnID.ID
+							} AND ID = ${results[results.length - 1].ID}`,
+							(error, results) => {
+								if (!error) {
+									console.log("Success");
+								}
+							}
+						);
+					}
 				}
-			})
+			);
 		}
-	})
+	});
 
 	let updateSession = "UPDATE sessionn SET ID = 0";
 	connection.query(updateSession, (error, results) => {
@@ -203,14 +211,14 @@ app.get("/logout", (req, res) => {
 			);
 		}
 	});
-	res.redirect("http://localhost/");
+	res.redirect("http://localhost:8080/");
 });
 
 //**authentication */
-app.get("/login", (req, res) => res.redirect("http://localhost/"));
+app.get("/login", (req, res) => res.redirect("http://localhost:8080/"));
 
 app.get("/register", (req, res) =>
-	res.redirect("http://localhost:80/register.php")
+	res.redirect("http://localhost:8080:80/register.php")
 );
 app.get("/forgot-password-get-code", (req, res) =>
 	res.render("authentication/forgotPasswordGetCode.ejs")
@@ -218,8 +226,9 @@ app.get("/forgot-password-get-code", (req, res) =>
 app.get("/forgot-password-last-step", (req, res) =>
 	res.render("authentication/forgotPasswordLastStep.ejs")
 );
-app.get("/admin-login", (req, res) =>
-	res.redirect("http://localhost/adminLogin.php") // localhost:8000/adminLogin.php if hindi nag wwork sayo
+app.get(
+	"/admin-login",
+	(req, res) => res.redirect("http://localhost:8080/adminLogin.php") // localhost:8080:8000/adminLogin.php if hindi nag wwork sayo
 );
 
 //**profile */
@@ -298,7 +307,7 @@ app.get("/admin", (req, res) => {
 			}
 
 			if (results.length > 0) {
-				const { first_name, last_name, email_address, phone_number} =
+				const { first_name, last_name, email_address, phone_number } =
 					results[0];
 				res.render("admin/admin", {
 					first_name,
@@ -316,37 +325,39 @@ app.get("/admin", (req, res) => {
 });
 
 app.post("/admin-users", (req, res) => {
-    const  input  = req.body;
+	const input = req.body;
 	const resultData = [];
 	for (const [key, value] of Object.entries(input)) {
 		const parsedData = JSON.parse(key);
 
 		const { input } = parsedData;
-	
 
-    const sql = 'SELECT * FROM user WHERE firstName LIKE ? OR lastName LIKE ? OR email LIKE ? OR phoneNumber LIKE ?';
-    const searchInput = `%${input}%`;
-	console.log(searchInput)
-	
+		const sql =
+			"SELECT * FROM user WHERE firstName LIKE ? OR lastName LIKE ? OR email LIKE ? OR phoneNumber LIKE ?";
+		const searchInput = `%${input}%`;
+		console.log(searchInput);
 
-    connection.query(sql, [searchInput, searchInput, searchInput, searchInput], (error, results, fields) => {
-        if (error) {
-            console.error("Error retrieving admin history:", error);
-            res.status(500).send("Error retrieving admin history");
-            throw error;
-        }
-		console.log(results)
-		res.status(200).json(results);
-    });
+		connection.query(
+			sql,
+			[searchInput, searchInput, searchInput, searchInput],
+			(error, results, fields) => {
+				if (error) {
+					console.error("Error retrieving admin history:", error);
+					res.status(500).send("Error retrieving admin history");
+					throw error;
+				}
+				console.log(results);
+				res.status(200).json(results);
+			}
+		);
 	}
 });
-
 
 app.get("/admin-users", (req, res) => {
 	const sql = "SELECT * FROM user ";
 	connection.query(sql, (error, results, fields) => {
 		if (error) {
-			console.error("Error retrieving admin history:", error);
+			console.error("Error retrieving admin users:", error);
 			res.status(500).send("Error retrieving admin history");
 			throw error;
 		}
