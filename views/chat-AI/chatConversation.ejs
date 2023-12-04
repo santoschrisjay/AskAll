@@ -153,6 +153,13 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/openai"></script>
 <script>
+    textToVoice = (data) => {
+      let virtualMouth = new SpeechSynthesisUtterance();
+
+      virtualMouth.text = data;
+      window.speechSynthesis.speak(virtualMouth);
+      window.speechSynthesis.speak(virtualMouth);
+    }
 function handleSubmit(event) {
     event.preventDefault();
    let botChat = document.querySelector('#botChat');
@@ -179,6 +186,7 @@ function handleSubmit(event) {
    return response.json()
   })
   .then(data => {
+    textToVoice(data.content)
    return botChat.innerText = JSON.stringify(data.content);
 
   

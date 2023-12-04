@@ -35,13 +35,13 @@
                                     <!-- Form Group (First Name)-->
                                     <div class="col-md-6">
                                         <label class="small mb-1" for="inputFirstName">First Name</label>
-                                        <input class="form-control" id="inputFirstName" type="text"
+                                        <input class="form-control" id="inputFirstName" required="" type="text"
                                             placeholder="First Name" value="<%= firstName %>">
                                     </div>
                                     <!-- Form Group (Last Name)-->
                                     <div class="col-md-6">
                                         <label class="small mb-1" for="inputLastName">Last Name</label>
-                                        <input class="form-control" id="inputLastName" type="text"
+                                        <input class="form-control" id="inputLastName" required="" type="text"
                                             placeholder="Last Name" value="<%= lastName %>">
                                     </div>
                                 </div>
@@ -50,13 +50,13 @@
                                     <!-- Form Group (Email Address)-->
                                     <div class="col-md-6">
                                         <label class="small mb-1" for="inputOrgName">Email Address</label>
-                                        <input class="form-control" id="inputOrgName" type="text"
+                                        <input class="form-control" id="inputOrgName" required="" type="text"
                                             placeholder="Email Address" value="<%= email %>">
                                     </div>
                                     <!-- Form Group (Phone Number)-->
                                     <div class="col-md-6">
                                         <label class="small mb-1" for="inputLocation">Phone Number</label>
-                                        <input class="form-control" id="inputLocation" type="text"
+                                        <input class="form-control" id="inputLocation" required="" type="text"
                                             placeholder="Phone Number" value="<%= phoneNumber %>">
                                     </div>
                                 </div>
@@ -73,7 +73,7 @@
                                 <div class="mb-3">
                                     <label class="small mb-1" for="currentPassword">Current Password</label>
                                     <div style="display: flex; align-items: center;">  
-                                    <input class="form-control" id="currentPassword" type="password"
+                                    <input class="form-control"  required="" id="currentPassword" type="password"
                                         placeholder="Enter current password" >
                                         <i class="far fa-eye-slash" id="togglePasswordCurrent" ="handleCurrentPass()" style="margin-left: -30px;" ></i>
                                     </div>
@@ -83,7 +83,7 @@
                                 <div class="mb-3">
                                     <label class="small mb-1" for="newPassword">New Password</label>
                                     <div style="display: flex; align-items: center;">  
-                                    <input class="form-control" id="newPassword" type="password"
+                                    <input  class="form-control" id="newPassword" required="" type="password"
                                         placeholder="Enter new password">
                                         <i class="far fa-eye-slash" id="togglePasswordNew" onclick="handleNewPass()" style="margin-left: -30px;" ></i>
                                         </div>
@@ -92,7 +92,7 @@
                                 <div class="mb-3">
                                     <label class="small mb-1" for="confirmPassword">Confirm Password</label>
                                     <div style="display: flex; align-items: center;">  
-                                    <input class="form-control" id="confirmPassword" type="password"
+                                    <input class="form-control" required="" id="confirmPassword" type="password"
                                         placeholder="Confirm new password">
                                         <i class="far fa-eye-slash"  id="togglePasswordConfirm" onclick="handleConfirmPass()" style="margin-left: -30px;" ></i>
                                         </div>
@@ -118,7 +118,7 @@
                                     <label class="form-check-label" for="twoFactorOn">On</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" id="twoFactorOff" type="radio" name="twoFactor">
+                                    <input class="form-check-input" id="twoFactorOff"  type="radio" name="twoFactor">
                                     <label class="form-check-label" for="twoFactorOff">Off</label>
                                 </div>
                             </form>
@@ -138,8 +138,12 @@
             </div>
         </div>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 <script>
 
+function hashPassword(password) {
+  return CryptoJS.MD5(password).toString();
+}
 
 const handleSubmitName= async (event) => {
     event.preventDefault();
@@ -205,8 +209,7 @@ const handleConfirmPass = () =>{
         eyeIcon.classList.add('fa-eye');
     }
 }
-
-
+// wait lang
 
 
 
@@ -220,12 +223,14 @@ let currentPassInput = document.getElementById('currentPassword').value
 let newPassInput = document.getElementById('newPassword').value
 let errorNew  = document.getElementById('errorNew')
 let confirmPassInput = document.getElementById('confirmPassword').value
+currentPassInput =hashPassword(currentPassInput)
 if(currentPass !== currentPassInput){
 return errorCurrent.innerText="Password not match"
 }
 if(confirmPassInput!==newPassInput){
     return errorNew.innerText="Confirm and Current password doesn't match"
 }
+confirmPassInput = hashPassword(confirmPassInput);
 
 const response =  await axios.put(`/user/pass/update${ID}`,JSON.stringify({confirmPassInput}));
 

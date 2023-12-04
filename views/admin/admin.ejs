@@ -15,35 +15,38 @@
                 <div class="card mb-4">
                     <div class="card-header">Account Details</div>
                     <div class="card-body">
-                        <form action="/update-admin-profile" method="post">
+                        <div class="col-md-6">
+                            <h3 id="notif" style="text-align: center; color: rgb(199, 54, 54);" class="small mb-1"></h3>
+                        </div> 
+                        <form action="/update-admin-profile" method="post" onsubmit="return checkInputs()">
                             <!-- Form Row-->
                             <div class="row gx-3 mb-3">
                                 <!-- Form Group (First Name)-->
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputFirstName">First Name</label>
-                                    <input class="form-control" id="inputFirstName" name="inputFirstName" type="text"
+                                    <input class="form-control" id="inputFirstName" required="" name="inputFirstName" type="text"
                                         placeholder="First Name" value="<%= first_name %>">
-                                </div>
+                                </div> 
                                 <!-- Form Group (Last Name)-->
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputLastName">Last Name</label>
-                                    <input class="form-control" id="inputLastName" name="inputLastName" type="text"
+                                    <input class="form-control" id="inputLastName" name="inputLastName" required="" type="text"
                                         placeholder="Last Name" value="<%= last_name %>">
                                 </div>
                             </div>
                             <!-- Form Row        -->
                             <div class="row gx-3 mb-3">
                                 <!-- Form Group (Email Address)-->
-                                <div class="col-md-6">
+                                <div class="col-md-6"> 
                                     <label class="small mb-1" for="inputEmailAddress">Email Address</label>
-                                    <input class="form-control" id="inputEmailAddress" name="inputEmailAddress"
-                                        type="text" placeholder="Email Address" value="<%= email_address %>">
+                                    <input class="form-control" id="inputEmailAddress" required="" name="inputEmailAddress"
+                                        type="email" placeholder="Email Address" value="<%= email_address %>">
                                 </div>
-                                <!-- Form Group (Phone Number)-->
+                                <!-- Form Group (Phone Number)--> 
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputPhoneNumber">Phone Number</label>
-                                    <input class="form-control" id="inputPhoneNumber" name="inputPhoneNumber"
-                                        type="text" placeholder="Phone Number" value="<%= phone_number %>">
+                                    <input class="form-control" id="inputPhoneNumber"  name="inputPhoneNumber"
+                                        type="number" minlength="11" required placeholder="Phone Number" value="<%= phone_number %>">
                                 </div>
                             </div>
                             <!-- Save changes button-->
@@ -54,23 +57,26 @@
                 <div class="card mb-4">
                     <div class="card-header">Change Password</div>
                     <div class="card-body">
+                        <div class="col-md-6">
+                            <h3 id="notifPass" style="text-align: center; color: rgb(199, 54, 54);" class="small mb-1"></h3>
+                        </div> 
                         <form action="/update-admin-password" method="POST" onsubmit="return notEqual()">
                             <!-- Form Group (current password)-->
                             <div class="mb-3">
                                 <label class="small mb-1" for="currentPassword">Current Password</label>
-                                <input class="form-control" id="currentPassword" name="currentPassword"
-                                    placeholder="Enter current password" value="<%= password %>">
+                                <input class="form-control" id="currentPassword" required="" name="currentPassword"
+                                    placeholder="Enter current password" type="password">
                             </div>
                             <!-- Form Group (new password)-->
                             <div class="mb-3">
                                 <label class="small mb-1" for="newPassword">New Password</label>
-                                <input class="form-control" id="newPassword" name="newPassword" type="password"
+                                <input class="form-control" id="newPassword" required="" name="newPassword" type="password"
                                     placeholder="Enter new password">
                             </div>
                             <!-- Form Group (confirm password)-->
                             <div class="mb-3">
                                 <label class="small mb-1" for="confirmPassword">Confirm Password</label>
-                                <input class="form-control" id="confirmPassword" name="confirmPassword" type="password"
+                                <input class="form-control" id="confirmPassword" required="" name="confirmPassword" type="password"
                                     placeholder="Confirm new password">
                             </div>
                             <button class="btn btn-primary" type="submit">Save changes</button>
@@ -82,15 +88,29 @@
     </div>
 
     <script>
+        let checkInputs = () => {
+            let inputPhoneNumber = document.getElementById("inputPhoneNumber");
+            let notif = document.getElementById("notif");
+
+            if (inputPhoneNumber.value.length != 11){
+                notif.innerHTML = "Please check if you entered your phone number correctly";
+                return false;
+            }
+            notif.innerHTML = "";
+            return true;
+        }
+        
         let notEqual = () => {
             let confirmPassword = document.getElementById("confirmPassword").value;
             let newPassword = document.getElementById("newPassword").value;
-
+            notifPass = document.getElementById("notifPass");
+            
             if (confirmPassword != newPassword || newPassword == "") {
-                alert("New password and confirm password must be equal");
+                notifPass.innerHTML = "New password and confirm password must be equal";
                 return false;
             }
-            return true
+            notifPass.innerHTML = "";
+            return true;
         }
     </script>
 

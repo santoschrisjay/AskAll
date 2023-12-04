@@ -298,14 +298,13 @@ app.get("/admin", (req, res) => {
 			}
 
 			if (results.length > 0) {
-				const { first_name, last_name, email_address, phone_number, password } =
+				const { first_name, last_name, email_address, phone_number} =
 					results[0];
 				res.render("admin/admin", {
 					first_name,
 					last_name,
 					email_address,
 					phone_number,
-					password,
 				});
 			} else {
 				res.status(404).send("User not found");
