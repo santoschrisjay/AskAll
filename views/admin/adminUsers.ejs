@@ -87,22 +87,13 @@
                 </thead>
                 <tbody id="adminTable">
                     <% adminUsers.forEach(admin=> { %>
-                        <tr class="table-row" data-admin-id="<%= admin.ID %>">
-                            <td>
-                                <%= admin.ID %>
-                            </td>
-                            <td>
-                                <%= admin.firstName %>
-                            </td>
-                            <td>
-                                <%= admin.lastName %>
-                            </td>
-                            <td>
-                                <%= admin.email %>
-                            </td>
-                            <td>
-                                <%= admin.phoneNumber %>
-                            </td>
+                   
+                        <tr class="table-row" id="row-users" data-admin-id="<%= admin.ID %>">
+                            <td><%= admin.ID %></td>
+                            <td> <%= admin.firstName %></td>
+                            <td><%= admin.lastName %></td> 
+                            <td><%= admin.email %></td>
+                            <td> <%= admin.phoneNumber %></td>
                         </tr>
                         <% }); %>
 
@@ -149,9 +140,30 @@
     }
 };
 
+const insertData =(event) =>{
+    
+let ID =  document.querySelector("#adminId")
+let firstName =  document.querySelector("#firstName")
+let lastName =  document.querySelector("#lastName")
+let  email =  document.querySelector("#emailAddress")
+let phoneNumber=  document.querySelector("#phoneNumber")
+
+const element = event.target.parentElement.children;
+
+
+ID.value = element[0].lastChild.nodeValue;
+ firstName.value =  element[1].lastChild.nodeValue;
+lastName.value  = element[2].lastChild.nodeValue;
+email.value  =  element[3].lastChild.nodeValue;
+ phoneNumber.value  =  element[4].lastChild.nodeValue;
+
+
+}
+
 
 function updateAdminTable(adminUsers) {
         const adminTable = document.getElementById('adminTable');
+        const rowUsers = document.getElementById('row-users');
         adminTable.innerHTML = ''; 
 
       adminUsers.forEach(admin => {
@@ -160,6 +172,7 @@ function updateAdminTable(adminUsers) {
                const row = document.createElement('tr');
             row.setAttribute('class', 'table-row');
             row.setAttribute('data-admin-id', admin.ID);
+           row.setAttribute('onclick', 'insertData(event)')
 
             row.innerHTML = `
                 <td>${admin.ID}</td>
@@ -168,6 +181,7 @@ function updateAdminTable(adminUsers) {
                 <td>${admin.email}</td>
                 <td>${admin.phoneNumber}</td>
             `;
+
        adminTable.appendChild(row);
         });
     }
