@@ -4,9 +4,9 @@
     <div class="container-xl px-4 mt-4">
         <!-- Account page navigation-->
         <nav class="nav nav-borders">
-            <p><a class="nav-link active ms-0" href="admin">Admin</a></p>
+            <p><a class="nav-link" href="admin">Admin</a></p>
             <p><a class="nav-link" href="admin-users">Users</a></p>
-            <p><a class="nav-link" href="admin-notification">Notifications</a></p>
+            <p><a class="nav-link" href="admin-audit-trail">Audit Trail</a></p>
         </nav>
         <hr class="mt-0 mb-4">
         <div class="row">
@@ -15,20 +15,20 @@
                 <div class="card mb-4">
                     <div class="card-header">Account Details</div>
                     <div class="card-body">
-                        <form >
+                        <form action="/update-admin-profile" method="post">
                             <!-- Form Row-->
                             <div class="row gx-3 mb-3">
                                 <!-- Form Group (First Name)-->
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputFirstName">First Name</label>
-                                    <input class="form-control" id="inputFirstName" type="text" placeholder="First Name"
-                                        value="<%= first_name %>">
+                                    <input class="form-control" id="inputFirstName" name="inputFirstName" type="text"
+                                        placeholder="First Name" value="<%= first_name %>">
                                 </div>
                                 <!-- Form Group (Last Name)-->
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputLastName">Last Name</label>
-                                    <input class="form-control" id="inputLastName" type="text" placeholder="Last Name"
-                                        value="<%= last_name %>">
+                                    <input class="form-control" id="inputLastName" name="inputLastName" type="text"
+                                        placeholder="Last Name" value="<%= last_name %>">
                                 </div>
                             </div>
                             <!-- Form Row        -->
@@ -36,48 +36,63 @@
                                 <!-- Form Group (Email Address)-->
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputEmailAddress">Email Address</label>
-                                    <input class="form-control" id="inputEmailAddress" type="text"
-                                        placeholder="Email Address" value="<%= email_address %>">
+                                    <input class="form-control" id="inputEmailAddress" name="inputEmailAddress"
+                                        type="text" placeholder="Email Address" value="<%= email_address %>">
                                 </div>
                                 <!-- Form Group (Phone Number)-->
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputPhoneNumber">Phone Number</label>
-                                    <input class="form-control" id="inputPhoneNumber" type="text"
-                                        placeholder="Phone Number" value="<%= phone_number %>">
+                                    <input class="form-control" id="inputPhoneNumber" name="inputPhoneNumber"
+                                        type="text" placeholder="Phone Number" value="<%= phone_number %>">
                                 </div>
                             </div>
                             <!-- Save changes button-->
-                            <button class="btn btn-primary" type="button">Save changes</button>
+                            <button class="btn btn-primary" type="submit">Save changes</button>
                         </form>
                     </div>
                 </div>
                 <div class="card mb-4">
                     <div class="card-header">Change Password</div>
                     <div class="card-body">
-                        <form>
+                        <form action="/update-admin-password" method="POST" onsubmit="return notEqual()">
                             <!-- Form Group (current password)-->
                             <div class="mb-3">
                                 <label class="small mb-1" for="currentPassword">Current Password</label>
-                                <input class="form-control" id="currentPassword" type="text"
+                                <input class="form-control" id="currentPassword" name="currentPassword"
                                     placeholder="Enter current password" value="<%= password %>">
                             </div>
                             <!-- Form Group (new password)-->
                             <div class="mb-3">
                                 <label class="small mb-1" for="newPassword">New Password</label>
-                                <input class="form-control" id="newPassword" type="password"
+                                <input class="form-control" id="newPassword" name="newPassword" type="password"
                                     placeholder="Enter new password">
                             </div>
                             <!-- Form Group (confirm password)-->
                             <div class="mb-3">
                                 <label class="small mb-1" for="confirmPassword">Confirm Password</label>
-                                <input class="form-control" id="confirmPassword" type="password"
+                                <input class="form-control" id="confirmPassword" name="confirmPassword" type="password"
                                     placeholder="Confirm new password">
                             </div>
-                            <button class="btn btn-primary" type="button">Save changes</button>
+                            <button class="btn btn-primary" type="submit">Save changes</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        let notEqual = () => {
+            let confirmPassword = document.getElementById("confirmPassword").value;
+            let newPassword = document.getElementById("newPassword").value;
+
+            if (confirmPassword != newPassword || newPassword == "") {
+                alert("New password and confirm password must be equal");
+                return false;
+            }
+            return true
+        }
+    </script>
+
+
     <%- include('../partials/pages/footerLogin') %>

@@ -2,15 +2,50 @@
     <%- include('../partials/features/headerTodo') %>
 
         <!-- Team Start -->
-        <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
-            <div class="container py-5">
+        <div class="container-fluid pt-5 wow fadeInUp" data-wow-delay="0.1s">
+            <link rel="stylesheet" href="css/todoList.css">
+            <div class="container pt-5">
                 <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
-                    <h5 class="fw-bold text-primary text-uppercase">Title</h5>
-                    <h1 class="mb-0">SOME CHENA</h1>
+                    <h5 class="fw-bold text-primary text-uppercase">Your tasks</h5>
+                    <h1 class="mb-0">To-Do List</h1>
                 </div>
 
             </div>
+
+
+            <div class="container-xl w-50">
+                <div class="bg-light rounded p-5">
+                    <div class="section-title section-title-sm position-relative pb-3 mb-4">
+                        <h3 class="mb-0">Get tasks done fast, be productive!</h3>
+                    </div>
+                    <div class="box form-check p-5 w-100">
+                        <% newListItems.forEach(function (item) { %>
+                            <form action="/todo-list-delete" method="post">
+                                <div class="item">
+                                    <input class="form-check-input" type="checkbox" name="checkbox"
+                                        value="<%= item.todo_ID %>" onchange="this.form.submit()">
+                                    <p class="p-item">
+                                        <%= item.items %>
+                                    </p>
+                                </div>
+                                <input class="form-check-input" type="hidden" name="listName" value="<%= listTitle %>">
+                            </form>
+                            <% }) %>
+
+                                <form class="item" action="/todo-list-add" method="post">
+                                    <input class="input-text-item input-text-item-steady form-check-input" type="text" name="newItem" placeholder="New Item"
+                                        autocomplete="off">
+                                    <button class="btn btn-dark" type="submit" name="list"
+                                        value="<%= listTitle %>">+</button>
+                                </form>
+                    </div>
+
+                </div>
+            </div>
         </div>
         <!-- Team End -->
+        <!-- Team End -->
+
+
 
         <%- include('../partials/footer') %>

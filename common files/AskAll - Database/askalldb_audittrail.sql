@@ -16,26 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `sessionn`
+-- Table structure for table `audittrail`
 --
 
-DROP TABLE IF EXISTS `sessionn`;
+DROP TABLE IF EXISTS `audittrail`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sessionn` (
-  `ID` int NOT NULL,
+CREATE TABLE `audittrail` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `userID` int DEFAULT NULL,
+  `firstName` varchar(50) NOT NULL,
+  `lastName` varchar(50) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `otp` varchar(25) DEFAULT NULL,
+  `login` timestamp NULL DEFAULT NULL,
+  `logout` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `sessionn`
+-- Dumping data for table `audittrail`
 --
 
-LOCK TABLES `sessionn` WRITE;
-/*!40000 ALTER TABLE `sessionn` DISABLE KEYS */;
-INSERT INTO `sessionn` VALUES (0);
-/*!40000 ALTER TABLE `sessionn` ENABLE KEYS */;
+LOCK TABLES `audittrail` WRITE;
+/*!40000 ALTER TABLE `audittrail` DISABLE KEYS */;
+/*!40000 ALTER TABLE `audittrail` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

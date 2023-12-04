@@ -2,7 +2,6 @@
     <%- include('../partials/pages/headerProfile') %>
 
         <!-- Team Start -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
         <div class="container-fluid pt-5 wow fadeInUp" data-wow-delay="0.1s">
             <div class="container pt-5">
                 <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
@@ -226,7 +225,6 @@ return errorCurrent.innerText="Password not match"
 if(confirmPassInput!==newPassInput){
     return errorNew.innerText="Confirm and Current password doesn't match"
 }
-
 
 const response =  await axios.put(`/user/pass/update${ID}`,JSON.stringify({confirmPassInput}));
 

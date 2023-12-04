@@ -16,31 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `archive_users`
+-- Table structure for table `todo_list`
 --
 
-DROP TABLE IF EXISTS `archive_users`;
+DROP TABLE IF EXISTS `todo_list`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `archive_users` (
-  `ID` int NOT NULL AUTO_INCREMENT,
-  `firstName` varchar(50) NOT NULL,
-  `lastName` varchar(50) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `phoneNumber` varchar(50) NOT NULL,
-  `passwordd` varchar(250) NOT NULL,
-  `otp` varchar(10) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
+CREATE TABLE `todo_list` (
+  `todo_ID` int NOT NULL AUTO_INCREMENT,
+  `user_ID` int DEFAULT NULL,
+  `items` varchar(60) DEFAULT NULL,
+  PRIMARY KEY (`todo_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `archive_users`
+-- Dumping data for table `todo_list`
 --
 
-LOCK TABLES `archive_users` WRITE;
-/*!40000 ALTER TABLE `archive_users` DISABLE KEYS */;
-/*!40000 ALTER TABLE `archive_users` ENABLE KEYS */;
+LOCK TABLES `todo_list` WRITE;
+/*!40000 ALTER TABLE `todo_list` DISABLE KEYS */;
+/*!40000 ALTER TABLE `todo_list` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-27  2:44:37
+-- Dump completed on 2023-12-04 22:07:56

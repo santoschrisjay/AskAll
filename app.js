@@ -4,6 +4,11 @@ import bodyParser from "body-parser";
 import mysql from "mysql2";
 import session from "express-session"; //naka include na ito yon for express session
 import https from "https";
+import fs from "fs";
+import CloudmersiveConvertApiClient from "cloudmersive-convert-api-client";
+import fileUpload from "express-fileupload";
+import _ from "lodash";
+import expressMyConnection from "express-myconnection";
 import connected from "process";
 import get from "http";
 
@@ -21,10 +26,14 @@ const openai = new OpenAI({
 // REPLICATE API
 import Replicate from "replicate";
 import { render } from "ejs";
+import { log } from "console";
 
 const replicate = new Replicate({
 	auth: process.env.REPLICATE_API_TOKEN,
 });
+
+//**PDF TO WORD */
+app.use(fileUpload());
 
 app.use(
 	session({
@@ -45,8 +54,8 @@ app.set("view engine", "ejs");
 const connection = mysql.createConnection({
 	host: "localhost",
 	user: "root",
-	password: "weakka12",
-	port: 3306,
+	password: "hehez190",
+	port: 3307,
 	database: "askalldb",
 });
 
@@ -71,7 +80,7 @@ const checkIfLogined = (res, path) => {
 		let user_ID = results[0].ID;
 
 		if (user_ID == 0) {
-			res.redirect("http://localhost/");
+			res.redirect("http://localhost:8080/");
 		} else {
 			res.render(path);
 		}
@@ -82,6 +91,89 @@ const checkIfLogined = (res, path) => {
 app.get("/", (req, res) => {
 	checkIfLogined(res, "main-pages/index.ejs");
 });
+
+//ADMIN UPDATES CHENA CHENA
+app.post("/update-admin-profile", (req, res) => {
+	let firstName = req.body.inputFirstName;
+	let lastName = req.body.inputLastName;
+	let email = req.body.inputEmailAddress;
+	let phoneNumber = req.body.inputPhoneNumber;
+
+	let queryFirstName = `first_name = '${firstName}'`;
+	let queryLastName = `last_name = '${lastName}'`;
+	let queryEmail = `email_address = '${email}'`;
+	let queryPhoneNumber = `phone_number = '${phoneNumber}'`;
+
+	connection.query(
+		`UPDATE admin SET ${queryFirstName}, ${queryLastName}, ${queryEmail}, ${queryPhoneNumber}`,
+		(error, results) => {
+			if (!error) {
+				console.log("success");
+			}
+			res.redirect("http://localhost:3000/admin");
+		}
+	);
+});
+
+app.post("/update-admin-password", (req, res) => {
+	let currentPassword = req.body.currentPassword;
+	let newPassword = req.body.newPassword;
+
+	connection.query(
+		`SELECT admin_ID FROM admin WHERE password = md5('${currentPassword}')`,
+		(error, results, fields) => {
+			if (results[0]) {
+				connection.query(
+					`UPDATE admin SET password = md5('${newPassword}')`,
+					(error, results) => {
+						if (!error) {
+							console.log("Success");
+						}
+					}
+				);
+			}
+			res.redirect("http://localhost:3000/admin");
+		}
+	);
+});
+
+//UPDATE AND DELETE users CHENA CHENA
+app.post("/update-user-info", (req, res) => {
+	let userID = req.body.userID;
+	let firstName = req.body.firstName;
+	let lastName = req.body.lastName;
+	let email = req.body.emailAddress;
+	let phoneNumber = req.body.phoneNumber;
+	let button = req.body.button;
+
+	if (button == "update") {
+		let queryFirstName = `firstName = '${firstName}'`;
+		let queryLastName = `lastName = '${lastName}'`;
+		let queryEmail = `email = '${email}'`;
+		let queryPhoneNumber = `phoneNumber = '${phoneNumber}'`;
+
+		connection.query(
+			`UPDATE user SET ${queryFirstName}, ${queryLastName}, ${queryEmail}, ${queryPhoneNumber} WHERE ID = ${userID}`,
+			(error, results) => {
+				if (!error) {
+					console.log("success");
+				}
+				res.redirect("http://localhost:3000/admin-users");
+			}
+		);
+	} else {
+		connection.query(
+			`DELETE FROM user WHERE ID = ${userID}`,
+			(error, results) => {
+				if (!error) {
+					console.log("Deleted");
+				}
+				res.redirect("http://localhost:3000/admin-users");
+			}
+		);
+	}
+});
+//DELETE Users CHENA CHENA
 
 app.get("/about", (req, res) => res.render("main-pages/about.ejs"));
 app.get("/contact", (req, res) => res.render("main-pages/contact.ejs"));
@@ -105,14 +197,14 @@ app.get("/logout", (req, res) => {
 			);
 		}
 	});
-	res.redirect("http://localhost/");
+	res.redirect("http://localhost:8080/");
 });
 
 //**authentication */
-app.get("/login", (req, res) => res.redirect("http://localhost/"));
+app.get("/login", (req, res) => res.redirect("http://localhost:8080/"));
 
 app.get("/register", (req, res) =>
-	res.redirect("http://localhost/register.php")
+	res.redirect("http://localhost:8080/register.php")
 );
 app.get("/forgot-password-get-code", (req, res) =>
 	res.render("authentication/forgotPasswordGetCode.ejs")
@@ -121,7 +213,7 @@ app.get("/forgot-password-last-step", (req, res) =>
 	res.render("authentication/forgotPasswordLastStep.ejs")
 );
 app.get("/admin-login", (req, res) =>
-	res.redirect("http://localhost/adminLogin.php")
+	res.redirect("http://localhost:8080/adminLogin.php")
 );
 
 //**profile */
@@ -227,84 +319,233 @@ app.get("/admin-users", (req, res) => {
 			throw error;
 		}
 
-		res.render("admin/adminHistory.ejs", { adminHistory: results });
+		res.render("admin/adminUsers.ejs", { adminUsers: results });
 	});
 });
 
-app.get("/admin-notification", (req, res) =>
-	res.render("admin/adminNotification.ejs")
-);
-
-// user
-app.put("/user-update:ID", async (req, res) => {
-	const ID = req.params.ID;
-
-	const updatedData = req.body;
-	for (const [key, value] of Object.entries(updatedData)) {
-		const parsedData = JSON.parse(key);
-
-		const { first_name, last_name, email_address, phone_number } = parsedData;
-
-		if (!ID || isNaN(ID)) {
-			res.status(400).send("Invalid user ID");
-			return;
+app.get("/admin-audit-trail", (req, res) => {
+	const sql = "SELECT * FROM user"; // Adjust the query based on your table name
+	connection.query(sql, (error, results, fields) => {
+		if (error) {
+			console.error("Error retrieving admin history:", error);
+			res.status(500).send("Error retrieving admin history");
+			throw error;
 		}
 
-		const sql =
-			"UPDATE user SET firstName=?, lastName=?, email=?, phoneNumber=? WHERE ID = ?";
+		res.render("admin/adminAuditTrail.ejs", { adminUsers: results });
+	});
+});
 
-		connection.query(
-			sql,
-			[first_name, last_name, email_address, phone_number, ID],
-			(error, results, fields) => {
-				if (error) {
-					console.error("Error updating user data:", error);
-					res.status(500).send("Error updating user data");
-				} else {
-					if (results.affectedRows > 0) {
-						res.status(200).send("User data updated successfully");
+// user
+let ID;
+app.put("/user-update:ID", async (req, res) => {
+	connection.query("SELECT ID FROM sessionn", (error, results, fields) => {
+		if (error) {
+			console.error("Error fetching data:", error.message);
+		} else {
+			console.log("Fetched data:", results);
+		}
+
+		ID = results[0].ID;
+
+		const updatedData = req.body;
+		for (const [key, value] of Object.entries(updatedData)) {
+			const parsedData = JSON.parse(key);
+
+			const { first_name, last_name, email_address, phone_number } = parsedData;
+
+			if (!ID || isNaN(ID)) {
+				res.status(400).send("Invalid user ID");
+				return;
+			}
+
+			const sql =
+				"UPDATE user SET firstName=?, lastName=?, email=?, phoneNumber=? WHERE ID = ?";
+
+			connection.query(
+				sql,
+				[first_name, last_name, email_address, phone_number, ID],
+				(error, results, fields) => {
+					if (error) {
+						console.error("Error updating user data:", error);
+						res.status(500).send("Error updating user data");
 					} else {
-						res.status(404).send("User not found or no changes were made");
+						if (results.affectedRows > 0) {
+							res.status(200).send("User data updated successfully");
+						} else {
+							res.status(404).send("User not found or no changes were made");
+						}
 					}
 				}
-			}
-		);
-	}
+			);
+		}
+	});
 });
 
 // password update
 app.put("/user/pass/update:ID", async (req, res) => {
-	const ID = req.params.ID;
-	const confirmPassInput = req.body;
-	console.log(ID, confirmPassInput);
-	for (const [key, value] of Object.entries(confirmPassInput)) {
-		const parsedData = JSON.parse(key);
+	connection.query("SELECT ID FROM sessionn", (error, results, fields) => {
+		if (error) {
+			console.error("Error fetching data:", error.message);
+		} else {
+			console.log("Fetched data:", results);
+		}
 
-		const { confirmPassInput } = parsedData;
-		const sql = "UPDATE user SET passwordd=? WHERE ID = ?";
-		connection.query(sql, [confirmPassInput, ID], (error, results, fields) => {
-			if (error) {
-				console.error("Error updating user data:", error);
-				res.status(500).send("Error updating user data");
-			} else {
-				if (results.affectedRows > 0) {
-					res.status(200).send("User data updated successfully");
-				} else {
-					res.status(404).send("User not found or no changes were made");
+		ID = results[0].ID;
+
+		const confirmPassInput = req.body;
+		console.log(ID, confirmPassInput);
+		for (const [key, value] of Object.entries(confirmPassInput)) {
+			const parsedData = JSON.parse(key);
+
+			const { confirmPassInput } = parsedData;
+			const sql = "UPDATE user SET passwordd=? WHERE ID = ?";
+			connection.query(
+				sql,
+				[confirmPassInput, ID],
+				(error, results, fields) => {
+					if (error) {
+						console.error("Error updating user data:", error);
+						res.status(500).send("Error updating user data");
+					} else {
+						if (results.affectedRows > 0) {
+							res.status(200).send("User data updated successfully");
+						} else {
+							res.status(404).send("User not found or no changes were made");
+						}
+					}
 				}
-			}
-		});
-	}
+			);
+		}
+	});
 });
 
 //**ALL FEATURES START */
 //**quick-information */
-app.get("/todo-list", (req, res) =>
-	checkIfLogined(res, "quick-information/todoList.ejs")
-);
+// app.get("/todo-list", (req, res) =>
+// 	checkIfLogined(res, "quick-information/todoList.ejs")
+// );
+
+const defaultItems = [
+	{ name: "Welcome to your todolist!" },
+	{ name: "Hit the + button to add new item." },
+	{ name: "<-- Hit this to delete an item." },
+];
+
+app.get("/todo-list", (req, res) => {
+	let user_ID;
+
+	connection.query("SELECT ID FROM sessionn", (error, results, fields) => {
+		if (error) {
+			console.error("Error fetching data:", error.message);
+			res.status(500).send("Error fetching data");
+		} else {
+			console.log("Fetched data:", results);
+
+			// Assuming there's only one result
+			user_ID = results.length > 0 ? results[0].ID : null;
+
+			if (user_ID) {
+				const sql = "SELECT * FROM todo_list WHERE user_ID = ?";
+
+				connection.query(sql, [user_ID], (err, rows) => {
+					if (err) {
+						console.error("Error retrieving user data:", err);
+						res.status(500).send("Error retrieving user data");
+					} else {
+						if (rows.length === 0) {
+							connection.query(
+								"INSERT INTO todo_list (user_ID, items) VALUES ?",
+								[defaultItems.map((item) => [user_ID, item.name])],
+								(insertErr) => {
+									if (insertErr) {
+										console.error("Error adding data:", insertErr);
+										res.status(500).send("Error adding data");
+									} else {
+										console.log("Data successfully added!");
+										res.redirect("/todo-list");
+									}
+								}
+							);
+						} else {
+							res.render("quick-information/todoList", {
+								listTitle: "Today",
+								newListItems: rows,
+							});
+						}
+					}
+				});
+			} else {
+				res.status(401).send("Unauthorized");
+			}
+		}
+	});
+});
+
+app.post("/todo-list-add", async (req, res) => {
+	const newItem = req.body.newItem;
+	const listName = req.body.listName; // Assuming you have a form field named 'list'
+
+	console.log(newItem);
+	console.log("List Name:", listName);
+
+	let user_ID;
+
+	connection.query("SELECT ID FROM sessionn", (error, results, fields) => {
+		if (error) {
+			console.error("Error fetching data:", error.message);
+			res.status(500).send("Internal Server Error");
+		} else {
+			console.log("Fetched data:", results);
+
+			user_ID = results[0].ID;
+
+			if (user_ID) {
+				const sql = "INSERT INTO todo_list (user_ID, items) VALUES (?, ?)";
+
+				connection.query(sql, [user_ID, newItem], (err, result) => {
+					if (err) {
+						console.error("Error adding item:", err);
+						res.status(500).send("Internal Server Error");
+					} else {
+						console.log("Item added successfully!");
+						res.redirect("/todo-list"); // Redirect back to the to-do list
+					}
+				});
+			} else {
+				res.status(401).send("Unauthorized");
+			}
+		}
+	});
+});
+
+app.post("/todo-list-delete", (req, res) => {
+	const checkedItemID = req.body.checkbox;
+	const listName = req.body.listName;
+
+	console.log("Checked Item ID:", checkedItemID);
+	console.log("List Name:", listName);
+
+	// Assuming you have a database connection named 'connection'
+	const sql = "DELETE FROM todo_list WHERE todo_ID = ?";
+
+	connection.query(sql, [checkedItemID], (err, result) => {
+		if (err) {
+			console.error("Error deleting item:", err);
+			res.status(500).send("Internal Server Error");
+		} else {
+			console.log("Item deleted successfully!");
+			res.redirect("todo-list"); // Redirect back to the to-do list
+		}
+	});
+});
 
 app.get("/weather", (req, res) =>
 	checkIfLogined(res, "quick-information/weather.ejs")
+);
+
+app.get("/weather-result", (req, res) =>
+	checkIfLogined(res, "quick-information/weatherResult.ejs")
 );
 
 app.get("/calculator", (req, res) =>
@@ -337,13 +578,178 @@ app.get("/word-to-pdf", (req, res) =>
 	checkIfLogined(res, "document-converter/wordToPdf.ejs")
 );
 
+app.post("/convertWordToPdf", (req, res) => {
+	var defaultClient = CloudmersiveConvertApiClient.ApiClient.instance;
+
+	// Configure API key authorization: Apikey
+	var Apikey = defaultClient.authentications["Apikey"];
+	Apikey.apiKey = "3b6bfd19-9a46-44f6-91b6-a5a9b0e7b30c";
+
+	var apiInstance = new CloudmersiveConvertApiClient.ConvertDocumentApi();
+
+	const directoryPath = "";
+	const fileName = "";
+	const filePath = `${directoryPath}\\${fileName}`;
+
+	fs.readFile(filePath, (err, data) => {
+		if (err) {
+			console.error(`Error reading file ${filePath}: ${err}`);
+		} else {
+			const inputFile = Buffer.from(data.buffer);
+
+			var callback = function (error, responseData, response) {
+				if (error) {
+					console.error(error);
+				} else {
+					console.log(
+						"API called successfully. Returned data: " + responseData
+					);
+					// Handle the converted data as needed
+				}
+			};
+
+			apiInstance.convertDocumentDocxToPdf(inputFile, callback);
+		}
+	});
+	// Check if a file was uploaded
+	if (!req.files || !req.files.wordFile) {
+		return res.status(400).send("No Word file uploaded.");
+	}
+
+	// Get the uploaded PDF file from the request
+	const wordFile = req.files.wordFile;
+
+	// Read the contents of the PDF file
+	const inputFile = Buffer.from(wordFile.data.buffer);
+
+	// Call the Cloudmersive API to convert the PDF to Word
+	apiInstance.convertDocumentDocxToPdf(
+		inputFile,
+		(error, responseData, response) => {
+			if (error) {
+				console.error(error);
+				return res.status(500).send("Error converting Word to Pdf.");
+			}
+
+			// Handle the converted data as needed
+			const docxData = Buffer.from(responseData);
+
+			// Set the appropriate headers for download
+			res.setHeader(
+				"Content-Disposition",
+				"attachment; filename=converted-document.pdf"
+			);
+			res.setHeader(
+				"Content-Type",
+				"application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+			);
+
+			// Send the converted DOCX file as the response
+			res.status(200).send(docxData);
+		}
+	);
+});
+
+//**PDF TO WORD */
 app.get("/pdf-to-word", (req, res) =>
 	checkIfLogined(res, "document-converter/pdfToWord.ejs")
 );
 
+app.post("/convertPdfToWord", (req, res) => {
+	var defaultClient = CloudmersiveConvertApiClient.ApiClient.instance;
+
+	// Configure API key authorization: Apikey
+	var Apikey = defaultClient.authentications["Apikey"];
+	Apikey.apiKey = "3b6bfd19-9a46-44f6-91b6-a5a9b0e7b30c";
+
+	var apiInstance = new CloudmersiveConvertApiClient.ConvertDocumentApi();
+
+	const directoryPath = "";
+	const fileName = "";
+	const filePath = `${directoryPath}\\${fileName}`;
+
+	fs.readFile(filePath, (err, data) => {
+		if (err) {
+			console.error(`Error reading file ${filePath}: ${err}`);
+		} else {
+			const inputFile = Buffer.from(data.buffer);
+
+			var callback = function (error, responseData, response) {
+				if (error) {
+					console.error(error);
+				} else {
+					console.log(
+						"API called successfully. Returned data: " + responseData
+					);
+					// Handle the converted data as needed
+				}
+			};
+
+			apiInstance.convertDocumentPdfToDocx(inputFile, callback);
+		}
+	});
+	// Check if a file was uploaded
+	if (!req.files || !req.files.pdfFile) {
+		return res.status(400).send("No PDF file uploaded.");
+	}
+
+	// Get the uploaded PDF file from the request
+	const pdfFile = req.files.pdfFile;
+
+	// Read the contents of the PDF file
+	const inputFile = Buffer.from(pdfFile.data.buffer);
+
+	// Call the Cloudmersive API to convert the PDF to Word
+	apiInstance.convertDocumentPdfToDocx(
+		inputFile,
+		(error, responseData, response) => {
+			if (error) {
+				console.error(error);
+				return res.status(500).send("Error converting PDF to Word.");
+			}
+
+			// Handle the converted data as needed
+			const docxData = Buffer.from(responseData);
+
+			// Set the appropriate headers for download
+			res.setHeader(
+				"Content-Disposition",
+				"attachment; filename=converted-document.docx"
+			);
+			res.setHeader(
+				"Content-Type",
+				"application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+			);
+
+			// Send the converted DOCX file as the response
+			res.status(200).send(docxData);
+		}
+	);
+});
+
 //**unit-converter */
-app.get("/converter", (req, res) =>
-	checkIfLogined(res, "unit-converter/converter.ejs")
+app.get("/area-converter", (req, res) =>
+	checkIfLogined(res, "unit-converter/areaConverter.ejs")
+);
+
+app.get("/length-converter", (req, res) =>
+	checkIfLogined(res, "unit-converter/lengthConverter.ejs")
+);
+
+app.get("/temperature-converter", (req, res) =>
+	checkIfLogined(res, "unit-converter/temperatureConverter.ejs")
+);
+
+app.get("/time-converter", (req, res) =>
+	checkIfLogined(res, "unit-converter/timeConverter.ejs")
+);
+
+app.get("/volume-converter", (req, res) =>
+	checkIfLogined(res, "unit-converter/volumeConverter.ejs")
+);
+
+app.get("/weight-converter", (req, res) =>
+	checkIfLogined(res, "unit-converter/weightConverter.ejs")
 );
 
 //**ALL FEATURES END */
@@ -390,16 +796,22 @@ app.post("/weather", function (req, res) {
 			const icon = weatherData.weather[0].icon;
 			const imgURL = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
 
-			res.write("<p>The weather is currently " + weatherDescription + "</p>");
-			res.write(
-				"<h1>The temperature in " +
-					query +
-					" is " +
-					temp +
-					" degree celsius.</h1>"
-			);
-			res.write("<img src=" + imgURL + ">");
-			res.send();
+			res.render("quick-information/weatherResult", {
+				query,
+				temp,
+				weatherDescription,
+				imgURL,
+			});
+			// res.write("<p>The weather is currently " + weatherDescription + "</p>");
+			// res.write(
+			// 	"<h1>The temperature in " +
+			// 		query +
+			// 		" is " +
+			// 		temp +
+			// 		" degree celsius.</h1>"
+			// );
+			// res.write("<img src=" + imgURL + ">");
+			// res.send();
 		});
 	});
 });
