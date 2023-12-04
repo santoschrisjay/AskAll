@@ -100,24 +100,12 @@
                 <tbody id="adminTable">
                     <% adminUsers.forEach(admin=> { %>
                         <tr class="table-row" data-admin-id="<%= admin.ID %>">
-                            <td>
-                                <%= admin.ID %>
-                            </td>
-                            <td>
-                                <%= admin.firstName %>
-                            </td>
-                            <td>
-                                <%= admin.lastName %>
-                            </td>
-                            <td>
-                                <%= admin.email %>
-                            </td>
-                            <td>
-                                <%= admin.phoneNumber %>
-                            </td>
-                            <td>
-                                <%= admin.accountDateCreated %>
-                            </td>
+                            <td><%=admin.ID%></td>
+                            <td><%=admin.firstName%></td>
+                            <td><%=admin.lastName%></td>
+                            <td><%=admin.email%></td>
+                            <td><%=admin.phoneNumber%></td>
+                            <td><%=admin.accountDateCreated%></td>
                         </tr>
                         <% }); %>
 
@@ -171,15 +159,18 @@
             let lastName = document.querySelector("#lastName")
             let email = document.querySelector("#emailAddress")
             let phoneNumber = document.querySelector("#phoneNumber")
+            let dateCreated = document.querySelector("#dateCreated")
 
             const element = event.target.parentElement.children;
 
 
             ID.value = element[0].lastChild.nodeValue;
+            dateCreated.value = element[5].lastChild.nodeValue;
             firstName.value = element[1].lastChild.nodeValue;
             lastName.value = element[2].lastChild.nodeValue;
             email.value = element[3].lastChild.nodeValue;
             phoneNumber.value = element[4].lastChild.nodeValue;
+
 
 
         }
