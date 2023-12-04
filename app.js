@@ -433,24 +433,88 @@ const defaultItems = [
 ];
 
 app.get("/todo-list", (req, res) => {
-	connection.query("SELECT * FROM todo_list", (err, rows) => {
-		if (err) throw err;
+	let user_ID;
 
-		if (rows.length === 0) {
-			connection.query(
-				"INSERT INTO todo_list (items) VALUES ?",
-				[defaultItems.map((item) => [item.name])],
-				(err) => {
-					if (err) throw err;
-					console.log("Data successfully added!");
-					res.redirect("/todo-list");
-				}
-			);
+	connection.query("SELECT ID FROM sessionn", (error, results, fields) => {
+		if (error) {
+			console.error("Error fetching data:", error.message);
+			res.status(500).send("Error fetching data");
 		} else {
-			res.render("quick-information/todoList", {
-				listTitle: "Today",
-				newListItems: rows,
-			});
+			console.log("Fetched data:", results);
+
+			// Assuming there's only one result
+			user_ID = results.length > 0 ? results[0].ID : null;
+
+			if (user_ID) {
+				const sql = "SELECT * FROM todo_list WHERE user_ID = ?";
+
+				connection.query(sql, [user_ID], (err, rows) => {
+					if (err) {
+						console.error("Error retrieving user data:", err);
+						res.status(500).send("Error retrieving user data");
+					} else {
+						if (rows.length === 0) {
+							connection.query(
+								"INSERT INTO todo_list (user_ID, items) VALUES ?",
+								[defaultItems.map((item) => [user_ID, item.name])],
+								(insertErr) => {
+									if (insertErr) {
+										console.error("Error adding data:", insertErr);
+										res.status(500).send("Error adding data");
+									} else {
+										console.log("Data successfully added!");
+										res.redirect("/todo-list");
+									}
+								}
+							);
+						} else {
+							res.render("quick-information/todoList", {
+								listTitle: "Today",
+								newListItems: rows,
+							});
+						}
+					}
+				});
+			} else {
+				res.status(401).send("Unauthorized");
+			}
+		}
+	});
+});
+
+app.post("/todo-list-add", async (req, res) => {
+	const newItem = req.body.newItem;
+	const listName = req.body.listName; // Assuming you have a form field named 'list'
+
+	console.log(newItem);
+	console.log("List Name:", listName);
+
+	let user_ID;
+
+	connection.query("SELECT ID FROM sessionn", (error, results, fields) => {
+		if (error) {
+			console.error("Error fetching data:", error.message);
+			res.status(500).send("Internal Server Error");
+		} else {
+			console.log("Fetched data:", results);
+
+			user_ID = results[0].ID;
+
+			if (user_ID) {
+				const sql = "INSERT INTO todo_list (user_ID, items) VALUES (?, ?)";
+
+				connection.query(sql, [user_ID, newItem], (err, result) => {
+					if (err) {
+						console.error("Error adding item:", err);
+						res.status(500).send("Internal Server Error");
+					} else {
+						console.log("Item added successfully!");
+						res.redirect("/todo-list"); // Redirect back to the to-do list
+					}
+				});
+			} else {
+				res.status(401).send("Unauthorized");
+			}
 		}
 	});
 });
@@ -466,26 +530,6 @@ app.post("/todo-list-delete", (req, res) => {
 	const sql = "DELETE FROM todo_list WHERE todo_ID = ?";
 
 	connection.query(sql, [checkedItemID], (err, result) => {
-		if (err) {
-			console.error("Error deleting item:", err);
-			res.status(500).send("Internal Server Error");
-		} else {
-			console.log("Item deleted successfully!");
-			res.redirect("todo-list"); // Redirect back to the to-do list
-		}
-	});
-});
-
-app.post("/todo-list-add", async (req, res) => {
-	const newItem = req.body.newItem;
-	const listName = req.body.listName; // Assuming you have a form field named 'list'
-
-	console.log(newItem);
-	console.log("List Name:", listName);
-
-	const sql = "INSERT INTO todo_list (items) VALUES (?)";
-
-	connection.query(sql, [newItem], (err, result) => {
 		if (err) {
 			console.error("Error deleting item:", err);
 			res.status(500).send("Internal Server Error");
