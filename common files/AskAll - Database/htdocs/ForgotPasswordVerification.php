@@ -159,18 +159,22 @@ if ($result_session['ID'] != 0) {
                                             if ($newPassword == $confirmNewPassword) {
                                               $mail = $_SESSION['email'];
 
-                                              $Select_id = $pdo->prepare("SELECT ID FROM user WHERE email = '$mail'");
+                                              $Select_id = $pdo->prepare("SELECT * FROM user WHERE email = '$mail'");
                                               $Select_id->execute();
                                               $result = $Select_id->fetch(PDO::FETCH_ASSOC);
                                               $result_id = $result['ID'];
                                               $update_session = $pdo->prepare("UPDATE sessionn SET ID = '$result_id'");
                                               $update_session->execute();
-
-
                                               $hashedPassword = md5($newPassword);
-
                                               $changePass = $pdo->prepare("UPDATE user SET passwordd = '$hashedPassword' WHERE email = '$mail'");
                                               $changePass->execute();
+                                              
+                                              $firstName = $result["firstName"];
+                                              $lastName = $result["lastName"];
+                                              $email = $result["email"];
+                                              $updateLoginTime = $pdo -> prepare("INSERT INTO auditTrail(userID, firstName, lastName, email, login) VALUES ('$result_id', '$firstName', '$lastName', '$email', NOW())"); 
+                                              $updateLoginTime->execute(); 
+                                              
                                               echo "<script>window.location = 'http://localhost:3000/'</script>";
                                               exit();
                                             } else {

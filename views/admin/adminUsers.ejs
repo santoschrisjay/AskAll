@@ -18,9 +18,10 @@
                     <!-- Form Row-->
                     <div class="col-md-6 mx-auto">
                         <div style="display: none; align-items: center;" id="search-input">
-                        <input type="text" placeholder="Search User" id="inputUser" class="form-control" value="" style="flex:1;" oninput="searchUser(this.value)" >
-                        <i class="fa fa-close" style="padding-left:10px" id="x-button" ></i>
-                    </div>
+                            <input type="text" placeholder="Search User" id="inputUser" class="form-control" value=""
+                                style="flex:1;" oninput="searchUser(this.value)">
+                            <i class="fa fa-close" style="padding-left:10px" id="x-button"></i>
+                        </div>
                         <label class="small mb-1" for="adminId">User ID</label>
                         <input class="form-control" id="adminId" name="userID" type="text" placeholder="User ID"
                             value="" readonly>
@@ -55,7 +56,7 @@
                         </div>
                     </div>
                     <!-- Save changes button-->
-                    <div class="row mx-auto user-button"  >
+                    <div class="row mx-auto user-button">
                         <div class="col-md-4">
                             <button class="btn btn-outline-danger" name="button" value="delete" type="submit">Delete
                                 User</button>
@@ -65,11 +66,12 @@
                                 User</button>
                         </div>
                         <div class="col-md-4">
-                            <button class="btn" name="button" value="update" type="button" id="search-btn" style="background-color: #091E3E; color:white;">Search
+                            <button class="btn" name="button" value="update" type="button" id="search-btn"
+                                style="background-color: #091E3E; color:white;">Search
                                 User</button>
                         </div>
-                 
-                        
+
+
                     </div>
                 </form>
             </div>
@@ -83,17 +85,30 @@
                         <th>Last Name</th>
                         <th>Email</th>
                         <th>Phone Number</th>
+                        <th>Account Date Created</th>
                     </tr>
                 </thead>
                 <tbody id="adminTable">
                     <% adminUsers.forEach(admin=> { %>
-                   
-                        <tr class="table-row" id="row-users" data-admin-id="<%= admin.ID %>">
-                            <td><%= admin.ID %></td>
-                            <td> <%= admin.firstName %></td>
-                            <td><%= admin.lastName %></td> 
-                            <td><%= admin.email %></td>
-                            <td> <%= admin.phoneNumber %></td>
+                        <tr class="table-row" data-admin-id="<%= admin.ID %>">
+                            <td>
+                                <%= admin.ID %>
+                            </td>
+                            <td>
+                                <%= admin.firstName %>
+                            </td>
+                            <td>
+                                <%= admin.lastName %>
+                            </td>
+                            <td>
+                                <%= admin.email %>
+                            </td>
+                            <td>
+                                <%= admin.phoneNumber %>
+                            </td>
+                            <td>
+                                <%= admin.accountDateCreated %>
+                            </td>
                         </tr>
                         <% }); %>
 
@@ -103,78 +118,78 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-      
+
 
         const searchBtn = document.querySelector('#search-btn')
         const searchInput = document.querySelector('#search-input');
-       let inputUser = document.querySelector('#inputUser').value;
-      
-        searchBtn.addEventListener('click', ()=>{
-            searchInput.style.display='flex';
+        let inputUser = document.querySelector('#inputUser').value;
+
+        searchBtn.addEventListener('click', () => {
+            searchInput.style.display = 'flex';
 
             const xButton = document.querySelector('#x-button')
-            xButton.addEventListener('click', ()=>{
-                searchInput.style.display='none';
+            xButton.addEventListener('click', () => {
+                searchInput.style.display = 'none';
             })
         })
 
         const searchUser = async (input) => {
-  
-    try {
-        let response = await  fetch('/admin-users', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body:JSON.stringify({input}),
-        });
 
-       
-        let responseData= await response.json()
-       return updateAdminTable(responseData)
-      
-       
-       
-    } catch (error) {
-        console.error('Error:', error);
-    }
-};
-
-const insertData =(event) =>{
-    
-let ID =  document.querySelector("#adminId")
-let firstName =  document.querySelector("#firstName")
-let lastName =  document.querySelector("#lastName")
-let  email =  document.querySelector("#emailAddress")
-let phoneNumber=  document.querySelector("#phoneNumber")
-
-const element = event.target.parentElement.children;
+            try {
+                let response = await fetch('/admin-users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: JSON.stringify({ input }),
+                });
 
 
-ID.value = element[0].lastChild.nodeValue;
- firstName.value =  element[1].lastChild.nodeValue;
-lastName.value  = element[2].lastChild.nodeValue;
-email.value  =  element[3].lastChild.nodeValue;
- phoneNumber.value  =  element[4].lastChild.nodeValue;
+                let responseData = await response.json()
+                return updateAdminTable(responseData)
 
 
-}
+
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        const insertData = (event) => {
+
+            let ID = document.querySelector("#adminId")
+            let firstName = document.querySelector("#firstName")
+            let lastName = document.querySelector("#lastName")
+            let email = document.querySelector("#emailAddress")
+            let phoneNumber = document.querySelector("#phoneNumber")
+
+            const element = event.target.parentElement.children;
 
 
-function updateAdminTable(adminUsers) {
-        const adminTable = document.getElementById('adminTable');
-        const rowUsers = document.getElementById('row-users');
-        adminTable.innerHTML = ''; 
+            ID.value = element[0].lastChild.nodeValue;
+            firstName.value = element[1].lastChild.nodeValue;
+            lastName.value = element[2].lastChild.nodeValue;
+            email.value = element[3].lastChild.nodeValue;
+            phoneNumber.value = element[4].lastChild.nodeValue;
 
-      adminUsers.forEach(admin => {
-   
-          
-               const row = document.createElement('tr');
-            row.setAttribute('class', 'table-row');
-            row.setAttribute('data-admin-id', admin.ID);
-           row.setAttribute('onclick', 'insertData(event)')
 
-            row.innerHTML = `
+        }
+
+
+        function updateAdminTable(adminUsers) {
+            const adminTable = document.getElementById('adminTable');
+            const rowUsers = document.getElementById('row-users');
+            adminTable.innerHTML = '';
+
+            adminUsers.forEach(admin => {
+
+
+                const row = document.createElement('tr');
+                row.setAttribute('class', 'table-row');
+                row.setAttribute('data-admin-id', admin.ID);
+                row.setAttribute('onclick', 'insertData(event)')
+
+                row.innerHTML = `
                 <td>${admin.ID}</td>
                 <td>${admin.firstName}</td>
                 <td>${admin.lastName}</td>
@@ -182,9 +197,9 @@ function updateAdminTable(adminUsers) {
                 <td>${admin.phoneNumber}</td>
             `;
 
-       adminTable.appendChild(row);
-        });
-    }
+                adminTable.appendChild(row);
+            });
+        }
 
     </script>
 
