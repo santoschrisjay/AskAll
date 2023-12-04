@@ -16,26 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `sessionn`
+-- Table structure for table `todo_list`
 --
 
-DROP TABLE IF EXISTS `sessionn`;
+DROP TABLE IF EXISTS `todo_list`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sessionn` (
-  `ID` int NOT NULL,
-  PRIMARY KEY (`ID`)
+CREATE TABLE `todo_list` (
+  `todo_ID` int NOT NULL AUTO_INCREMENT,
+  `user_ID` int DEFAULT NULL,
+  `items` varchar(60) DEFAULT NULL,
+  PRIMARY KEY (`todo_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `sessionn`
+-- Dumping data for table `todo_list`
 --
 
-LOCK TABLES `sessionn` WRITE;
-/*!40000 ALTER TABLE `sessionn` DISABLE KEYS */;
-INSERT INTO `sessionn` VALUES (0);
-/*!40000 ALTER TABLE `sessionn` ENABLE KEYS */;
+LOCK TABLES `todo_list` WRITE;
+/*!40000 ALTER TABLE `todo_list` DISABLE KEYS */;
+/*!40000 ALTER TABLE `todo_list` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

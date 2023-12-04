@@ -29,9 +29,9 @@ CREATE TABLE `user` (
   `email` varchar(50) NOT NULL,
   `phoneNumber` varchar(50) NOT NULL,
   `passwordd` varchar(250) NOT NULL,
-  `otp` varchar(10) DEFAULT NULL,
+  `accountDateCreated` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-27  2:44:37
+-- Dump completed on 2023-12-04 22:07:55
