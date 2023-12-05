@@ -1,7 +1,6 @@
 <%- include('../partials/pages/headerAdmin') %>
 
     <!-- Profile Start-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <div class="container-xl px-4 mt-4">
 
         <!-- Account page navigation-->
@@ -101,24 +100,12 @@
                 <tbody id="adminTable" style="cursor: pointer;">
                     <% adminUsers.forEach(admin=> { %>
                         <tr class="table-row" data-admin-id="<%= admin.ID %>">
-                            <td>
-                                <%= admin.ID %>
-                            </td>
-                            <td>
-                                <%= admin.firstName %>
-                            </td>
-                            <td>
-                                <%= admin.lastName %>
-                            </td>
-                            <td>
-                                <%= admin.email %>
-                            </td>
-                            <td>
-                                <%= admin.phoneNumber %>
-                            </td>
-                            <td>
-                                <%= admin.accountDateCreated %>
-                            </td>
+                            <td><%= admin.ID %></td>
+                            <td><%= admin.firstName %></td>
+                            <td><%= admin.lastName %></td>
+                            <td><%= admin.email %></td>
+                            <td><%= admin.phoneNumber %></td>
+                            <td><%= admin.accountDateCreated %></td>
                         </tr>
                         <% }); %>
 
@@ -127,6 +114,7 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
     <script>
 
 
