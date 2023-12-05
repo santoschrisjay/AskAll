@@ -13,7 +13,7 @@
         </nav>
         <hr class="mt-0 mb-4">
         <div class="card mb-4">
-            <div class="card-header">User Details</div>
+            <div class="card-header">Archived User Details</div>
             <div class="card-body">
                 <form action="/update-user-info" method="post">
                     <!-- Form Row-->
@@ -68,20 +68,17 @@
                     <!-- Save changes button-->
                     <div class="row mx-auto user-button">
                         <div class="col-md-4">
-                            <button class="btn btn-outline-danger" name="button" value="delete" type="submit">Archive
+                            <button class="btn btn-outline-danger" name="button" value="delete" type="submit">Delete
                                 User</button>
                         </div>
                         <div class="col-md-4">
-                            <button class="btn btn-primary" name="button" value="update" type="submit">Update
-                                User</button>
+                            <button class="btn btn-primary" name="button" value="update" type="submit">Restore User</button>
                         </div>
                         <div class="col-md-4">
                             <button class="btn" name="button" value="update" type="button" id="search-btn"
                                 style="background-color: #091E3E; color:white;">Search
                                 User</button>
                         </div>
-
-
                     </div>
                 </form>
             </div>

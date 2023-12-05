@@ -55,7 +55,7 @@ const connection = mysql.createConnection({
 	host: "localhost",
 	user: "root",
 	password: "hehez190",
-	port: 3306,
+	port: 3307,
 	database: "askalldb",
 });
 
@@ -387,6 +387,21 @@ app.get("/admin-audit-trail", (req, res) => {
 		res.render("admin/adminAuditTrail.ejs", { adminUsers: results });
 	});
 });
+
+app.get("/admin-archived-users", (req, res) => {
+	const sql = "SELECT * FROM archive_user";
+	connection.query(sql, (error, results, fields) => {
+		if (error) {
+			console.error("Error retrieving admin users:", error);
+			res.status(500).send("Error retrieving admin history");
+			throw error;
+		}
+
+		res.render("admin/adminArchivedUsers.ejs", { adminUsers: results });
+	});
+});
+
+
 
 // user
 let ID;
