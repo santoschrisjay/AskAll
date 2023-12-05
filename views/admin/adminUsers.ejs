@@ -97,27 +97,15 @@
                         <th>Account Date Created</th>
                     </tr>
                 </thead>
-                <tbody id="adminTable">
+                <tbody id="adminTable" style="cursor: pointer;">
                     <% adminUsers.forEach(admin=> { %>
                         <tr class="table-row" data-admin-id="<%= admin.ID %>">
-                            <td>
-                                <%= admin.ID %>
-                            </td>
-                            <td>
-                                <%= admin.firstName %>
-                            </td>
-                            <td>
-                                <%= admin.lastName %>
-                            </td>
-                            <td>
-                                <%= admin.email %>
-                            </td>
-                            <td>
-                                <%= admin.phoneNumber %>
-                            </td>
-                            <td>
-                                <%= admin.accountDateCreated %>
-                            </td>
+                            <td> <%= admin.ID %> </td>
+                            <td> <%= admin.firstName %></td>
+                            <td><%= admin.lastName %></td>
+                            <td><%= admin.email %></td>
+                            <td> <%= admin.phoneNumber %></td>
+                            <td> <%= admin.accountDateCreated %></td>
                         </tr>
                         <% }); %>
 
@@ -131,14 +119,16 @@
 
         const searchBtn = document.querySelector('#search-btn')
         const searchInput = document.querySelector('#search-input');
-        let inputUser = document.querySelector('#inputUser').value;
+        let inputUser = document.querySelector('#inputUser');
 
         searchBtn.addEventListener('click', () => {
             searchInput.style.display = 'flex';
 
             const xButton = document.querySelector('#x-button')
             xButton.addEventListener('click', () => {
-                searchInput.style.display = 'none';
+                inputUser.value=''
+                inputUser.focus()
+                searchUser(inputUser.value)
             })
         })
 
@@ -171,7 +161,8 @@
             let lastName = document.querySelector("#lastName")
             let email = document.querySelector("#emailAddress")
             let phoneNumber = document.querySelector("#phoneNumber")
-
+            let dateCreated = document.querySelector("#dateCreated")
+            console.log(event.target.parentElement)
             const element = event.target.parentElement.children;
 
 
@@ -180,6 +171,7 @@
             lastName.value = element[2].lastChild.nodeValue;
             email.value = element[3].lastChild.nodeValue;
             phoneNumber.value = element[4].lastChild.nodeValue;
+           dateCreated.value = element[5].lastChild.nodeValue;
 
 
         }
@@ -204,6 +196,7 @@
                 <td>${admin.lastName}</td>
                 <td>${admin.email}</td>
                 <td>${admin.phoneNumber}</td>
+                <td>${admin.accountDateCreated}</td>
             `;
 
                 adminTable.appendChild(row);

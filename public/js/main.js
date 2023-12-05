@@ -8,12 +8,14 @@
 			const lastName = $(this).find("td:nth-child(3)").text();
 			const emailAddress = $(this).find("td:nth-child(4)").text();
 			const phoneNumber = $(this).find("td:nth-child(5)").text();
+			const dateCreated = $(this).find("td:nth-child(6)").text();
 
 			$("#adminId").val(adminId);
 			$("#firstName").val(firstName);
 			$("#lastName").val(lastName);
 			$("#emailAddress").val(emailAddress);
 			$("#phoneNumber").val(phoneNumber);
+			$("#dateCreated").val(dateCreated);
 		});
 
 

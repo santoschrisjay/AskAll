@@ -3,7 +3,7 @@ $user = "root";
 $password = "hehez190";
 
 try {
-    $pdo = new PDO("mysql:host=localhost:3307;dbname=askalldb", $user, $password);
+    $pdo = new PDO("mysql:host=localhost;dbname=askalldb", $user, $password);
 } catch (PDOException $e) {
     echo $e;
 }
@@ -212,7 +212,8 @@ if ($result_session['ID'] != 0) {
 
                                                 if (empty($result)) {
                                                     if ($passwordd == $confirmPassword) {
-                                                        $queryInsert = "INSERT INTO user(firstName, lastName, email, phoneNumber, passwordd, accountDateCreated) VALUES (:firstName, :lastName, :email, :phoneNumber, :passwordd, NOW())";
+                                                        $currentDate = date("Y-m-d");
+                                                        $queryInsert = "INSERT INTO user(firstName, lastName, email, phoneNumber, passwordd, accountDateCreated) VALUES (:firstName, :lastName, :email, :phoneNumber, :passwordd, DATE_FORMAT(CURDATE(), '%Y-%m-%d'))";
 
                                                         $queryInsertRun = $pdo->prepare($queryInsert);
                                                         $hashedPassword = md5($passwordd);
