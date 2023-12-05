@@ -55,7 +55,7 @@ const connection = mysql.createConnection({
 	host: "localhost",
 	user: "root",
 	password: "hehez190",
-	port: 3307,
+	port: 3306,
 	database: "askalldb",
 });
 
@@ -227,7 +227,7 @@ app.get("/logout", (req, res) => {
 app.get("/login", (req, res) => res.redirect("http://localhost:8080/"));
 
 app.get("/register", (req, res) =>
-	res.redirect("http://localhost:8080:80/register.php")
+res.redirect("http://localhost:80/register.php")
 );
 app.get("/forgot-password-get-code", (req, res) =>
 	res.render("authentication/forgotPasswordGetCode.ejs")
@@ -342,13 +342,13 @@ app.post("/admin-users", (req, res) => {
 		const { input } = parsedData;
 
 		const sql =
-			"SELECT * FROM user WHERE firstName LIKE ? OR lastName LIKE ? OR email LIKE ? OR phoneNumber LIKE ?";
+			"SELECT * FROM user WHERE firstName LIKE ? OR lastName LIKE ? OR email LIKE ? OR phoneNumber LIKE ? OR accountDateCreated LIKE ?";
 		const searchInput = `%${input}%`;
 		console.log(searchInput);
 
 		connection.query(
 			sql,
-			[searchInput, searchInput, searchInput, searchInput],
+			[searchInput, searchInput, searchInput, searchInput, searchInput],
 			(error, results, fields) => {
 				if (error) {
 					console.error("Error retrieving admin history:", error);

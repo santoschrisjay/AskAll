@@ -2,12 +2,12 @@
 session_start();
 $user = "root";
 $password = "hehez190";
-
 try {
-  $pdo = new PDO("mysql:host=localhost:3307;dbname=askalldb", $user, $password);
+  $pdo = new PDO("mysql:host=localhost:3306;dbname=askalldb", $user, $password);
 } catch (PDOException $e) {
   echo $e;
 }
+
 
 //check localhost
 $check_session = $pdo->prepare("SELECT ID FROM sessionn"); //ito?
