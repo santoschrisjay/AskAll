@@ -4,11 +4,10 @@ $user = "root";
 $password = "hehez190";
 
 try {
-  $pdo = new PDO("mysql:host=localhost:3306;dbname=askalldb", $user, $password);
+  $pdo = new PDO("mysql:host=localhost:3307;dbname=askalldb", $user, $password);
 } catch (PDOException $e) {
   echo $e;
 }
-
 
 //check localhost
 $check_session = $pdo->prepare("SELECT ID FROM sessionn"); //ito?
@@ -91,7 +90,7 @@ if ($result_session['ID'] != 0) {
     <!-- Navbar & Carousel Start -->
     <div class="container-fluid position-relative p-0">
       <nav class="navbar navbar-expand-lg navbar-dark px-5 py-5 py-lg-0">
-        <a href="/login" class="navbar-brand p-0">
+        <a href="http://localhost/" class="navbar-brand p-0">
           <h1 class="m-0 py-2"><i class="fa fa-user-tie me-2"></i>AskAll</h1>
         </a>
       </nav>
@@ -178,8 +177,8 @@ if ($result_session['ID'] != 0) {
                                                 $lastName = $result["lastName"];
                                                 $email = $result["email"];
 
-                                                $updateLoginTime = $pdo -> prepare("INSERT INTO auditTrail(userID, firstName, lastName, email, login) VALUES ('$result_id', '$firstName', '$lastName', '$email', NOW())"); 
-                                                $updateLoginTime->execute(); 
+                                                $updateLoginTime = $pdo->prepare("INSERT INTO auditTrail(userID, firstName, lastName, email, login) VALUES ('$result_id', '$firstName', '$lastName', '$email', NOW())");
+                                                $updateLoginTime->execute();
 
                                                 echo "<script>window.location = 'http://localhost:3000/'</script>";
                                                 exit();

@@ -4,12 +4,10 @@ $user = "root";
 $password = "hehez190";
 
 try {
-  $pdo = new PDO("mysql:host=localhost:3306;dbname=askalldb", $user, $password);
+  $pdo = new PDO("mysql:host=localhost:3307;dbname=askalldb", $user, $password);
 } catch (PDOException $e) {
   echo $e;
 }
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -83,7 +81,7 @@ try {
     <!-- Navbar & Carousel Start -->
     <div class="container-fluid position-relative p-0">
       <nav class="navbar navbar-expand-lg navbar-dark px-5 py-5 py-lg-0">
-        <a href="/login" class="navbar-brand p-0">
+        <a href="http://localhost/" class="navbar-brand p-0">
           <h1 class="m-0 py-2"><i class="fa fa-user-tie me-2"></i>AskAll</h1>
         </a>
       </nav>
@@ -164,12 +162,13 @@ try {
       $password = $_POST['password'];
       $passwordHash = md5($password);
 
-      $selectPassword = $pdo->prepare("SELECT password FROM admin WHERE email_address = '$email'");
+      $selectPassword = $pdo->prepare("SELECT * FROM admin WHERE email_address = '$email'");
       $selectPassword->execute();
       $result = $selectPassword->fetch(PDO::FETCH_ASSOC);
 
       if (!empty($result)) {
         if ($passwordHash == $result['password']) {
+
           echo "<script>window.location = 'http://localhost:3000/admin'</script>";
           exit();
         } else {

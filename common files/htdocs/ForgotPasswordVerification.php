@@ -2,12 +2,12 @@
 session_start();
 $user = "root";
 $password = "hehez190";
+
 try {
-  $pdo = new PDO("mysql:host=localhost:3306;dbname=askalldb", $user, $password);
+  $pdo = new PDO("mysql:host=localhost:3307;dbname=askalldb", $user, $password);
 } catch (PDOException $e) {
   echo $e;
 }
-
 
 //check localhost
 $check_session = $pdo->prepare("SELECT ID FROM sessionn"); //ito?
@@ -168,13 +168,13 @@ if ($result_session['ID'] != 0) {
                                               $hashedPassword = md5($newPassword);
                                               $changePass = $pdo->prepare("UPDATE user SET passwordd = '$hashedPassword' WHERE email = '$mail'");
                                               $changePass->execute();
-                                              
+
                                               $firstName = $result["firstName"];
                                               $lastName = $result["lastName"];
                                               $email = $result["email"];
-                                              $updateLoginTime = $pdo -> prepare("INSERT INTO auditTrail(userID, firstName, lastName, email, login) VALUES ('$result_id', '$firstName', '$lastName', '$email', NOW())"); 
-                                              $updateLoginTime->execute(); 
-                                              
+                                              $updateLoginTime = $pdo->prepare("INSERT INTO auditTrail(userID, firstName, lastName, email, login) VALUES ('$result_id', '$firstName', '$lastName', '$email', NOW())");
+                                              $updateLoginTime->execute();
+
                                               echo "<script>window.location = 'http://localhost:3000/'</script>";
                                               exit();
                                             } else {
