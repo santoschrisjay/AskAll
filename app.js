@@ -54,8 +54,8 @@ app.set("view engine", "ejs");
 const connection = mysql.createConnection({
 	host: "localhost",
 	user: "root",
-	password: "weakka12",
-	port: 3306, // palitan mo sa port ng workbench mo if nakarecieve ka ng error about CONNECT ECONNREFUSED
+	password: "hehez190",
+	port: 3307, // palitan mo sa port ng workbench mo if nakarecieve ka ng error about CONNECT ECONNREFUSED
 	database: "askalldb",
 });
 
@@ -80,7 +80,7 @@ const checkIfLogined = (res, path) => {
 		let user_ID = results[0].ID;
 
 		if (user_ID == 0) {
-			res.redirect("http://localhost"); // localhost:8080:8000 if hindi nag wwork sayo
+			res.redirect("http://localhost:8080"); // localhost:8080:8000 if hindi nag wwork sayo
 		} else {
 			res.render(path);
 		}
@@ -185,10 +185,10 @@ app.get("/services", (req, res) => {
 app.get("/team", (req, res) => res.render("main-pages/team.ejs"));
 app.get("/reference", (req, res) => res.render("main-pages/reference.ejs"));
 
-		//LOGOUTS
+//LOGOUTS
 app.get("/admin-logout", (req, res) => {
-	res.redirect("http://localhost:3000/admin-login")
-})
+	res.redirect("http://localhost:3000/admin-login");
+});
 
 app.get("/logout", (req, res) => {
 	connection.query("SELECT ID FROM sessionn", (error, results) => {
@@ -226,14 +226,15 @@ app.get("/logout", (req, res) => {
 			);
 		}
 	});
-	res.redirect("http://localhost/"); // lagyan mo ng :8080 if hindi nag wwork
+	res.redirect("http://localhost:8080/"); // lagyan mo ng :8080 if hindi nag wwork
 });
 
 //**authentication */
-app.get("/login", (req, res) => res.redirect("http://localhost/")); // lagyan mo ng :8080 if hindi nag wwork
+app.get("/login", (req, res) => res.redirect("http://localhost:8080/")); // lagyan mo ng :8080 if hindi nag wwork
 
-app.get("/register", (req, res) =>
-	res.redirect("http://localhost:8080/register.php") //lagyan mo ng :8080 if hindi nag wwork
+app.get(
+	"/register",
+	(req, res) => res.redirect("http://localhost:8080/register.php") //lagyan mo ng :8080 if hindi nag wwork
 );
 app.get("/forgot-password-get-code", (req, res) =>
 	res.render("authentication/forgotPasswordGetCode.ejs")
@@ -243,7 +244,7 @@ app.get("/forgot-password-last-step", (req, res) =>
 );
 app.get(
 	"/admin-login",
-	(req, res) => res.redirect("http://localhost/adminLogin.php") // localhost:8080:8000/adminLogin.php if hindi nag wwork sayo
+	(req, res) => res.redirect("http://localhost:8080/adminLogin.php") // localhost:8080:8000/adminLogin.php if hindi nag wwork sayo
 );
 
 //**profile */
@@ -406,8 +407,6 @@ app.get("/admin-archived-users", (req, res) => {
 		res.render("admin/adminArchivedUsers.ejs", { adminUsers: results });
 	});
 });
-
-
 
 // user
 let ID;
