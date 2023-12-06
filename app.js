@@ -54,7 +54,7 @@ app.set("view engine", "ejs");
 const connection = mysql.createConnection({
 	host: "localhost",
 	user: "root",
-	password: "hehez190",
+	password: "weakka12",
 	port: 3306, // palitan mo sa port ng workbench mo if nakarecieve ka ng error about CONNECT ECONNREFUSED
 	database: "askalldb",
 });
@@ -145,6 +145,7 @@ app.post("/update-user-info", (req, res) => {
 	let email = req.body.emailAddress;
 	let phoneNumber = req.body.phoneNumber;
 	let button = req.body.button;
+	let dateCreated = req.body.dateCreated;
 
 	if (button == "update") {
 		let queryFirstName = `firstName = '${firstName}'`;
@@ -162,11 +163,13 @@ app.post("/update-user-info", (req, res) => {
 			}
 		);
 	} else {
+		
+		let values = `VALUES (${userID}, '${firstName}', '${lastName}', '${email}', '${phoneNumber}', '${dateCreated}')`;
 		connection.query(
-			`DELETE FROM user WHERE ID = ${userID}`,
+			`INSERT INTO archive (ID, firstName, lastName, email, phoneNumber, accountDateCreated) ${values}`,
 			(error, results) => {
-				if (!error) {
-					console.log("Deleted");
+				if(!error){
+					connection.query(`UPDATE user SET inArchive = 'true' WHERE ID = ${userID}`);
 				}
 				res.redirect("http://localhost:3000/admin-users");
 			}
@@ -188,6 +191,7 @@ app.get("/reference", (req, res) => res.render("main-pages/reference.ejs"));
 //LOGOUTS
 app.get("/admin-logout", (req, res) => {
 	res.redirect("http://localhost:3000/admin-login");
+	connection.query("UPDATE admin_session SET ID = 0")
 });
 
 app.get("/logout", (req, res) => {
@@ -308,36 +312,45 @@ app.get("/profile-notification", (req, res) =>
 
 //**admin */
 // app.get("/admin", (req, res) => res.render("admin/admin.ejs"));
-
 app.get("/admin", (req, res) => {
 	// const userId = req.session.userId; bali dapat parang ganto
-	const user_ID = 1;
-	if (user_ID) {
-		const sql =
-			"SELECT first_name, last_name, email_address, phone_number, password FROM admin WHERE admin_ID = ?";
-		connection.query(sql, [user_ID], (error, results, fields) => {
-			if (error) {
-				console.error("Error retrieving user data:", error);
-				res.status(500).send("Error retrieving user data");
-				throw error;
-			}
+		let logined;
+		connection.query("SELECT ID FROM admin_session", (error, results) => {
+		logined = results[0].ID;
 
-			if (results.length > 0) {
-				const { first_name, last_name, email_address, phone_number } =
-					results[0];
-				res.render("admin/admin", {
-					first_name,
-					last_name,
-					email_address,
-					phone_number,
+		if (logined != 0){
+			const user_ID = 1;
+			if (user_ID) {
+				const sql =
+					"SELECT first_name, last_name, email_address, phone_number, password FROM admin WHERE admin_ID = ?";
+				connection.query(sql, [user_ID], (error, results, fields) => {
+					if (error) {
+						console.error("Error retrieving user data:", error);
+						res.status(500).send("Error retrieving user data");
+						throw error;
+					}
+	
+					if (results.length > 0) {
+						const { first_name, last_name, email_address, phone_number } =
+							results[0];
+						res.render("admin/admin", {
+							first_name,
+							last_name,
+							email_address,
+							phone_number,
+						});
+					} else {
+						res.status(404).send("User not found");
+					}
 				});
 			} else {
-				res.status(404).send("User not found");
+				res.status(401).send("Unauthorized");
 			}
-		});
-	} else {
-		res.status(401).send("Unauthorized");
-	}
+		}else{
+			res.redirect("http://localhost/adminLogin.php")
+		}
+	})
+
 });
 
 app.post("/admin-users", (req, res) => {
@@ -349,7 +362,7 @@ app.post("/admin-users", (req, res) => {
 		const { input } = parsedData;
 
 		const sql =
-			"SELECT * FROM user WHERE firstName LIKE ? OR lastName LIKE ? OR email LIKE ? OR phoneNumber LIKE ? OR accountDateCreated LIKE ?";
+			"SELECT * FROM user WHERE firstName LIKE ? OR lastName LIKE ? OR email LIKE ? OR phoneNumber LIKE ? OR accountDateCreated LIKE ? AND inArchive != 'true'";
 		const searchInput = `%${input}%`;
 		console.log(searchInput);
 
@@ -370,7 +383,7 @@ app.post("/admin-users", (req, res) => {
 });
 
 app.get("/admin-users", (req, res) => {
-	const sql = "SELECT * FROM user ";
+	const sql = "SELECT * FROM user WHERE inArchive != 'true' ";
 	connection.query(sql, (error, results, fields) => {
 		if (error) {
 			console.error("Error retrieving admin users:", error);
@@ -394,19 +407,32 @@ app.get("/admin-audit-trail", (req, res) => {
 		res.render("admin/adminAuditTrail.ejs", { adminUsers: results });
 	});
 });
-
-app.get("/admin-archived-users", (req, res) => {
-	const sql = "SELECT * FROM archive_user";
+		//ARCHIVE
+app.get("/admin-archived-users", (req, res) => {	
+	const sql = "SELECT * FROM archive";
 	connection.query(sql, (error, results, fields) => {
 		if (error) {
 			console.error("Error retrieving admin users:", error);
 			res.status(500).send("Error retrieving admin history");
 			throw error;
 		}
-
 		res.render("admin/adminArchivedUsers.ejs", { adminUsers: results });
 	});
 });
+
+app.post('/admin-archived-users', (req, res) => {
+	let userID = req.body.userID;
+	let button = req.body.button;
+
+	if (button == "restore"){
+		connection.query(`UPDATE user SET inArchive = 'false' WHERE ID = ${userID}`)
+		connection.query(`DELETE FROM archive WHERE ID = ${userID}`)
+	}else if(button == "delete"){
+		connection.query(`DELETE FROM archive WHERE ID = ${userID}`)
+		connection.query(`DELETE FROM user WHERE ID = ${userID}`)
+	}
+	res.redirect("http://localhost:3000/admin-archived-users")
+})
 
 // user
 let ID;

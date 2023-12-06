@@ -177,8 +177,8 @@ if ($result_session['ID'] != 0) {
                                                 $lastName = $result["lastName"];
                                                 $email = $result["email"];
 
-                                                $updateLoginTime = $pdo->prepare("INSERT INTO auditTrail(userID, firstName, lastName, email, login) VALUES ('$result_id', '$firstName', '$lastName', '$email', NOW())");
-                                                $updateLoginTime->execute();
+                                                $updateLoginTime = $pdo -> prepare("INSERT INTO auditTrail(userID, firstName, lastName, email, login) VALUES ('$result_id', '$firstName', '$lastName', '$email', NOW())"); 
+                                                $updateLoginTime->execute(); 
 
                                                 echo "<script>window.location = 'http://localhost:3000/'</script>";
                                                 exit();

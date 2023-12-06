@@ -8,6 +8,14 @@ try {
 } catch (PDOException $e) {
   echo $e;
 }
+
+$check_session = $pdo->prepare("SELECT ID FROM admin_session"); //ito?
+$check_session->execute();
+$result_session = $check_session->fetch(PDO::FETCH_ASSOC);
+if ($result_session['ID'] != 0) {
+  echo "<script>window.location = 'http://localhost:3000/admin'</script>";
+  exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -161,10 +169,13 @@ try {
       $email = $_POST['email'];
       $password = $_POST['password'];
       $passwordHash = md5($password);
-
+      
       $selectPassword = $pdo->prepare("SELECT * FROM admin WHERE email_address = '$email'");
       $selectPassword->execute();
       $result = $selectPassword->fetch(PDO::FETCH_ASSOC);
+
+      $updateAdminSession = $pdo->prepare("UPDATE admin_session SET ID = '1'");
+      $updateAdminSession->execute();
       
       if (!empty($result)) {
         if ($passwordHash == $result['password']) {
