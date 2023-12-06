@@ -150,7 +150,7 @@ if ($result_session['ID'] != 0) {
                                                     <div class="form-group">
                                                         <label class="text-dark" for="reg-email">E-mail Address</label>
                                                         <input name="email" class="form-control" type="email" required=""
-                                                            id="reg-email">
+                                                            id="reg-email"  pattern=".*@gmail.com$" title="Please Enter a valid Gmail address and ending with @gmail.com">
                                                         <div class="invalid-feedback">Please enter valid email address!
                                                         </div>
                                                     </div>
@@ -159,7 +159,7 @@ if ($result_session['ID'] != 0) {
                                                     <div class="form-group">
                                                         <label class="text-dark" for="reg-phone">Phone Number</label>
                                                         <input name="phoneNumber" class="form-control" type="text" required=""
-                                                            id="reg-phone" pattern="9\d{10}" placeholder="dsadsa">
+                                                            id="reg-phone"  pattern="09\d{9}" title="Number should start with 09 and less than 12">
                                                         <div class="invalid-feedback">Please enter your phone number!
                                                         </div>
                                                     </div>

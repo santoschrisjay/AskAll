@@ -50,13 +50,13 @@
                                     <div class="col-md-6">
                                         <label class="small mb-1" for="inputOrgName">Email Address</label>
                                         <input class="form-control" id="inputOrgName" required="" type="text"
-                                            placeholder="Email Address" value="<%= email %>">
+                                        pattern=".*@gmail.com$" title="Please Enter a valid Gmail address and ending with @gmail.com"  placeholder="Email Address" value="<%= email %>" >
                                     </div>
                                     <!-- Form Group (Phone Number)-->
                                     <div class="col-md-6">
                                         <label class="small mb-1" for="inputLocation">Phone Number</label>
                                         <input class="form-control" id="inputLocation" required="" type="text"
-                                            placeholder="Phone Number" value="<%= phoneNumber %>">
+                                        pattern="09\d{9}" title="Number should start with 09 and less than 12"   placeholder="Phone Number" value="<%= phoneNumber %>" >
                                     </div>
                                 </div>
                                 <!-- Save changes button-->
