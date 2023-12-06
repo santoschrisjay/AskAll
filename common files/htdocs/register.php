@@ -159,7 +159,7 @@ if ($result_session['ID'] != 0) {
                                                     <div class="form-group">
                                                         <label class="text-dark" for="reg-phone">Phone Number</label>
                                                         <input name="phoneNumber" class="form-control" type="text" required=""
-                                                            id="reg-phone">
+                                                            id="reg-phone" pattern="9\d{10}" placeholder="dsadsa">
                                                         <div class="invalid-feedback">Please enter your phone number!
                                                         </div>
                                                     </div>

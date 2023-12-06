@@ -116,7 +116,7 @@ try {
                                                 <div class="input-group-prepend"><span class="input-group-text"><i
                                                             class="fa fa-envelope input-icon"></i></span></div>
                                                 <input name="email" class="form-control" type="email" placeholder="Email"
-                                                    required="">
+                                                    required=""  pattern=".*@gmail.com$" title="Please Enter a valid Gmail address and ending with @gmail.com">
                                                 <div class="invalid-feedback">Please enter valid email address!</div>
                                             </div>
                                             <!--Password-->
