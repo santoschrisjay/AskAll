@@ -42,7 +42,7 @@
                                     <label class="small mb-1" for="inputEmailAddress">Email Address</label>
                                     <input class="form-control" id="inputEmailAddress" required=""
                                         name="inputEmailAddress" type="email" placeholder="Email Address"
-                                        value="<%= email_address %>">
+                                        value="<%= email_address %>" readonly>
                                 </div>
                                 <!-- Form Group (Phone Number)-->
                                 <div class="col-md-6">
@@ -61,8 +61,7 @@
                     <div class="card-header">Change Password</div>
                     <div class="card-body">
                         <div class="col-md-6">
-                            <h3 id="notifPass" style="text-align: center; color: rgb(199, 54, 54);" class="small mb-1">
-                            </h3>
+                                <h3 id="notifPass" style="text-align: center; color: rgb(199, 54, 54);" class="small mb-1"></h3>
                         </div>
                         <form action="/update-admin-password" method="POST" onsubmit="return notEqual()">
                             <!-- Form Group (current password)-->

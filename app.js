@@ -93,6 +93,7 @@ app.get("/", (req, res) => {
 });
 
 //ADMIN UPDATES CHENA CHENA
+
 app.post("/update-admin-profile", (req, res) => {
 	let firstName = req.body.inputFirstName;
 	let lastName = req.body.inputLastName;
@@ -103,7 +104,6 @@ app.post("/update-admin-profile", (req, res) => {
 	let queryLastName = `last_name = '${lastName}'`;
 	let queryEmail = `email_address = '${email}'`;
 	let queryPhoneNumber = `phone_number = '${phoneNumber}'`;
-
 	connection.query(
 		`UPDATE admin SET ${queryFirstName}, ${queryLastName}, ${queryEmail}, ${queryPhoneNumber}`,
 		(error, results) => {
@@ -153,15 +153,26 @@ app.post("/update-user-info", (req, res) => {
 		let queryEmail = `email = '${email}'`;
 		let queryPhoneNumber = `phoneNumber = '${phoneNumber}'`;
 
-		connection.query(
-			`UPDATE user SET ${queryFirstName}, ${queryLastName}, ${queryEmail}, ${queryPhoneNumber} WHERE ID = ${userID}`,
-			(error, results) => {
-				if (!error) {
-					console.log("success");
+		if(queryEmail != ""){
+			connection.query(`SELECT email FROM user WHERE email = "${email}"`, (error, results) => {
+				if (!results[0]){
+					connection.query(
+						`UPDATE user SET ${queryFirstName}, ${queryLastName}, ${queryEmail}, ${queryPhoneNumber} WHERE ID = ${userID}`,
+						(error, results) => {
+							if (!error) {
+								console.log("success");
+							}
+							res.redirect("/admin-users");
+						}
+					);		
+				}else{ //kapag exists
+					connection.query(`UPDATE user SET notif = "The email already exists"`)
+					res.redirect("/admin-users");
 				}
-				res.redirect("http://localhost:3000/admin-users");
-			}
-		);
+			});
+		}else{
+			res.redirect("/admin-users");
+		}
 	} else {
 		
 		let values = `VALUES (${userID}, '${firstName}', '${lastName}', '${email}', '${phoneNumber}', '${dateCreated}')`;
@@ -282,7 +293,7 @@ app.get("/profile", (req, res) => {
 				}
 
 				if (results.length > 0) {
-					const { firstName, lastName, email, phoneNumber, passwordd } =
+					const { firstName, lastName, email, phoneNumber, passwordd, notif } =
 						results[0];
 					// const formattedFirstName = capitalizeWords(first_name);
 					// const formattedLastName = capitalizeWords(last_name);
@@ -292,6 +303,7 @@ app.get("/profile", (req, res) => {
 						email,
 						phoneNumber,
 						passwordd,
+						notif,
 					});
 				} else {
 					res.status(404).send("User not found");
@@ -436,6 +448,8 @@ app.post('/admin-archived-users', (req, res) => {
 
 // user
 let ID;
+
+
 app.put("/user-update:ID", async (req, res) => {
 	connection.query("SELECT ID FROM sessionn", (error, results, fields) => {
 		if (error) {
@@ -445,7 +459,7 @@ app.put("/user-update:ID", async (req, res) => {
 		}
 
 		ID = results[0].ID;
-
+		
 		const updatedData = req.body;
 		for (const [key, value] of Object.entries(updatedData)) {
 			const parsedData = JSON.parse(key);
@@ -456,26 +470,34 @@ app.put("/user-update:ID", async (req, res) => {
 				res.status(400).send("Invalid user ID");
 				return;
 			}
+			
+			connection.query(`SELECT email FROM user WHERE email = "${email_address}"`, (error, results) => {
+				if(!results[0]){
+					const sql =
+						"UPDATE user SET firstName=?, lastName=?, email=?, phoneNumber=? WHERE ID = ?";
 
-			const sql =
-				"UPDATE user SET firstName=?, lastName=?, email=?, phoneNumber=? WHERE ID = ?";
-
-			connection.query(
-				sql,
-				[first_name, last_name, email_address, phone_number, ID],
-				(error, results, fields) => {
-					if (error) {
-						console.error("Error updating user data:", error);
-						res.status(500).send("Error updating user data");
-					} else {
-						if (results.affectedRows > 0) {
-							res.status(200).send("User data updated successfully");
-						} else {
-							res.status(404).send("User not found or no changes were made");
+					connection.query(
+						sql,
+						[first_name, last_name, email_address, phone_number, ID],
+						(error, results, fields) => {
+							if (error) {
+								console.error("Error updating user data:", error);
+								res.status(500).send("Error updating user data");
+							} else {
+								if (results.affectedRows > 0) {
+									res.status(200).send("User data updated successfully");
+								} else {
+									res.status(404).send("User not found or no changes were made");
+								}
+							}
 						}
-					}
+					);
+				}else{
+					
+					connection.query(`UPDATE user SET notif = "The email already exists"`)
+					
 				}
-			);
+			});
 		}
 	});
 });

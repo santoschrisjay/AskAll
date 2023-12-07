@@ -28,6 +28,9 @@
                     <div class="card mb-4">
                         <div class="card-header">Account Details</div>
                         <div class="card-body">
+                            <div class="col-md-6">
+                                <h3 id="notif" style="text-align: center; color: rgb(199, 54, 54);" class="small mb-1"><%= notif %></h3>
+                            </div>
                             <form onsubmit="handleSubmitName(event)">
                                 <!-- Form Row-->
                                 <div class="row gx-3 mb-3">
@@ -60,14 +63,14 @@
                                     </div>
                                 </div>
                                 <!-- Save changes button-->
-                                <button class="btn btn-primary" type="submit">Save changes</button>
+                                <button class="btn btn-primary" id="button-user" type="submit">Save changes</button>
                             </form>
                         </div>
                     </div>
                     <div class="card mb-4">
                         <div class="card-header">Change Password</div>
                         <div class="card-body">
-                            <form onsubmit="handleSubmitPass(event)">
+                            <form onsubmit="handleSubmitPass(event)" action="/check" method="POST">
                                 <!-- Form Group (current password)-->
                                 <div class="mb-3">
                                     <label class="small mb-1" for="currentPassword">Current Password</label>
@@ -140,11 +143,23 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 <script>
 
+let currentEmail = document.getElementById("inputOrgName").value;
+
+document.getElementById("button-user").addEventListener("click", () => {
+    let emailCheck = document.getElementById("inputOrgName").value;
+    if (currentEmail != emailCheck){
+        document.getElementById("notif").innerHTML = "";
+    }else{
+        document.getElementById("notif").innerHTML = "The email already exists";
+    }
+})
+
 function hashPassword(password) {
   return CryptoJS.MD5(password).toString();
 }
 
 const handleSubmitName= async (event) => {
+    document.getElementById("notif").innerHTML = "The email already exists";
     event.preventDefault();
 const ID =1 ; // to be change to dynamic
     const updatedData = {
@@ -152,17 +167,20 @@ const ID =1 ; // to be change to dynamic
         last_name: document.getElementById('inputLastName').value,
         email_address: document.getElementById('inputOrgName').value,
         phone_number: document.getElementById("inputLocation").value,
-
       };
 
-     const response =  await axios.put(`/user-update${ID}`,JSON.stringify(updatedData));
 
+     const response =  await axios.put(`/user-update${ID}`,JSON.stringify(updatedData));
+     
+     
     if(response.status===200){
         location.reload();
     }
     else{
         return;
     }
+    
+
 }
 
 let eyeIcon = document.getElementById('togglePasswordCurrent');
@@ -179,6 +197,7 @@ eyeIcon.addEventListener('click', function(){
         eyeIcon.classList.add('fa-eye');
     }
 });
+
 const handleNewPass = () =>{
         let newPassword= document.getElementById('newPassword')
         const type =  newPassword.getAttribute('type') === 'password' ? 'text' : 'password';
