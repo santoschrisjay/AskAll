@@ -137,14 +137,15 @@
                     ><i class="fa fa-send"></i
                   ></span>
                 </button>
-                <input
+                <textarea
                   type="text"
                   class="form-control"
                   id="textInput"
                   placeholder="Enter text here..."
                   style="width:100%"
-                />
+                ></textarea>
                  </form>
+                 <button id="mic" style="border:none" type="button">Mic</button>
               </div>
             </div>
           </div>
@@ -155,6 +156,34 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/openai"></script>
 <script>
+voiceToText = () => {
+    let speech = true
+
+    document.getElementById("textInput").value = "";
+    window.SpeechRecognition = window.webkitSpeechRecognition
+
+    const recognition = new SpeechRecognition()
+    recognition.interimResults = true
+
+    recognition.addEventListener('result', e => {
+        const transcript = Array.from(e.results)
+            .map(result => result[0])
+            .map(result => result.transcript)
+            .join('')
+
+        document.getElementById("textInput").value = transcript;
+    });
+    
+    if (speech == true) {
+        recognition.start()
+    }
+}
+
+  document.getElementById("mic").addEventListener("click", () => {
+      voiceToText()
+  })
+
+
 
 function handleSubmit(event) {
     event.preventDefault();
