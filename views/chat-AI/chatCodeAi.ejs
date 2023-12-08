@@ -99,13 +99,22 @@
                 </div>
                 <div class="chat-message clearfix">
                   <div class="input-group mb-0">
-                    <form id="myForm" style="display:flex; width:100%" onsubmit="handleSubmit(event)">
-                      <button class="input-group-prepend" style="border:none" type="submit">
-                        <span class="input-group-text"><i class="fa fa-send"></i></span>
+                    <form id="myForm" style="display:flex; width:100%; gap: 7px;" onsubmit="handleSubmit(event)">
+                      <button id="mute" class="input-group-prepend" style="border:none; background-color: white;" type="button"><i class='fas fa-volume-mute' style=" width:25px;"></i></button>
+                      <button id="mic" style="border:none; background-color:white;" type="button"> <i class='fas fa-microphone-slash'></i> </button>
+                      <textarea
+                      type="text"
+                      class="form-control"
+                      id="textInput"
+                      placeholder="Enter text here..."
+                      style="width:100%"
+                      > </textarea> 
+                      <button class="input-group-prepend" style="border:none; background-color: white;" type="submit">
+                        <span class="input-group-text"
+                          ><i class="fa fa-send"></i
+                        ></span>
                       </button>
-                      <input type="text" class="form-control" id="textInput" placeholder="Enter text here..."
-                        style="width:100%" />                    
-                    </form>
+                     </form>
                   </div>
                 </div>
               </div>
@@ -117,15 +126,68 @@
     <script src="https://cdn.jsdelivr.net/npm/openai"></script>
     <script src="https://unpkg.com/turndown/dist/turndown.js"></script>
     <script>
-    textToVoice = (data) => {
-      let virtualMouth = new SpeechSynthesisUtterance();
+   
+   function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-      virtualMouth.text = data;
-      virtualMouth.rate = 0.8;
 
-      window.speechSynthesis.speak(virtualMouth);
-    }
+ let mic = document.getElementById("mic")
+ 
+ mic.addEventListener("click", () => {
+   sleep(1000)
+ window.SpeechRecognition = window.webkitSpeechRecognition
+
+ const recognition = new SpeechRecognition()
+ recognition.interimResults = true
+
+ recognition.addEventListener('result', e => {
+     const transcript = Array.from(e.results)
+         .map(result => result[0])
+         .map(result => result.transcript)
+         .join('')
+
+     document.getElementById("textInput").value = transcript;
+ });
+   
+      
+      mic.innerHTML = `<i class='fas fa-microphone'></i>`
+        recognition.start()
+      
     
+
+   recognition.onend = function () {
+    mic.innerHTML = `<i class='fas fa-microphone-slash'></i>`;
+   }
+ });
+
+  let muteButton = document.getElementById("mute");
+
+ 
+  
+  let virtualMouth = new SpeechSynthesisUtterance();
+   const textToVoice = (data) => {
+    
+   
+       virtualMouth.text = data;
+       console.log(virtualMouth, 'this')
+
+      muteButton.addEventListener('click', () =>{
+        speechSynthesis.speak(virtualMouth);
+    
+        virtualMouth.onstart = function(event){
+          muteButton.innerHTML = `<i class='fas fa-volume-up' style=" width:25px;"></i>`;
+        }
+
+        virtualMouth.onend = function(event){
+          speechSynthesis.cancel()
+          muteButton.innerHTML = `<i class='fas fa-volume-mute' style=" width:25px;"></i>`;
+        }
+
+      })
+    }
+
+
     function handleSubmit(event) {
         event.preventDefault();
 
@@ -177,33 +239,7 @@
         //voice to text and text to voice
 
 
-    voiceToText = () => {
-    let speech = true
-    window.SpeechRecognition = window.webkitSpeechRecognition
-
-    const recognition = new SpeechRecognition()
-    recognition.interimResults = true
-
-    recognition.addEventListener('result', e => {
-        const transcript = Array.from(e.results)
-            .map(result => result[0])
-            .map(result => result.transcript)
-            .join('')
-
-        document.getElementById("textInput").innerHTML = transcript;
-        console.log(transcript);
-    });
     
-      if (speech == true) {
-          recognition.start()
-      }
-    }
-
-  const button_mic = document.getElementById("click_me")
-
-  button_mic.addEventListener('click',() => {
-      voiceToText()
-  })
 
 
 </script>

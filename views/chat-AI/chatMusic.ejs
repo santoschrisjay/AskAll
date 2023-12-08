@@ -131,19 +131,21 @@
             </div>
             <div class="chat-message clearfix" >
               <div class="input-group mb-0">
-                <form id="myForm" style="display:flex; width:100%" onsubmit="handleSubmit(event)">
-                <button class="input-group-prepend" style="border:none" type="submit">
-                  <span class="input-group-text"
-                    ><i class="fa fa-send"></i
-                  ></span>
-                </button>
-                <input
+                <form id="myForm" style="display:flex; width:100%; gap: 7px;" onsubmit="handleSubmit(event)">
+               
+                  <button id="mic" style="border:none; background-color:white;" type="button"> <i class='fas fa-microphone-slash'></i> </button>
+                  <textarea
                   type="text"
                   class="form-control"
                   id="textInput"
                   placeholder="Enter text here..."
                   style="width:100%"
-                />
+                  > </textarea> 
+                  <button class="input-group-prepend" style="border:none; background-color: white;" type="submit">
+                    <span class="input-group-text"
+                      ><i class="fa fa-send"></i
+                    ></span>
+                  </button>
                  </form>
               </div>
             </div>
@@ -155,6 +157,45 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/openai"></script>
 <script>
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+ let mic = document.getElementById("mic")
+ 
+ mic.addEventListener("click", () => {
+   sleep(1000)
+ window.SpeechRecognition = window.webkitSpeechRecognition
+
+ const recognition = new SpeechRecognition()
+ recognition.interimResults = true
+
+ recognition.addEventListener('result', e => {
+     const transcript = Array.from(e.results)
+         .map(result => result[0])
+         .map(result => result.transcript)
+         .join('')
+
+     document.getElementById("textInput").value = transcript;
+ });
+   
+      
+      mic.innerHTML = `<i class='fas fa-microphone'></i>`
+        recognition.start()
+      
+    
+
+   recognition.onend = function () {
+    mic.innerHTML = `<i class='fas fa-microphone-slash'></i>`;
+   }
+ });
+
+  let muteButton = document.getElementById("mute");
+
+
+
+
 function handleSubmit(event) {
     event.preventDefault();
    let botChat = document.querySelector('#botChat');

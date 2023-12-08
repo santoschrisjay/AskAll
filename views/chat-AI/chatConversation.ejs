@@ -163,26 +163,7 @@
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
-// voiceToText = () => {
-//     sleep(1000)
-//     window.SpeechRecognition = window.webkitSpeechRecognition
 
-//     const recognition = new SpeechRecognition()
-//     recognition.interimResults = true
-
-//     recognition.addEventListener('result', e => {
-//         const transcript = Array.from(e.results)
-//             .map(result => result[0])
-//             .map(result => result.transcript)
-//             .join('')
-
-//         document.getElementById("textInput").value = transcript;
-//     });
-    
-    
-//         recognition.start()
-    
-// }
 
  let mic = document.getElementById("mic")
  
@@ -217,6 +198,27 @@ function sleep(ms) {
 
  
   
+  let virtualMouth = new SpeechSynthesisUtterance();
+   const textToVoice = (data) => {
+    
+   
+       virtualMouth.text = data;
+       console.log(virtualMouth, 'this')
+
+      muteButton.addEventListener('click', () =>{
+        speechSynthesis.speak(virtualMouth);
+    
+        virtualMouth.onstart = function(event){
+          muteButton.innerHTML = `<i class='fas fa-volume-up' style=" width:25px;"></i>`;
+        }
+
+        virtualMouth.onend = function(event){
+          speechSynthesis.cancel()
+          muteButton.innerHTML = `<i class='fas fa-volume-mute' style=" width:25px;"></i>`;
+        }
+
+      })
+    }
 
 function handleSubmit(event) {
     event.preventDefault();
@@ -256,27 +258,7 @@ function handleSubmit(event) {
   }
 
 
-  let virtualMouth = new SpeechSynthesisUtterance();
-   const textToVoice = (data) => {
-    
-   
-       virtualMouth.text = data;
-       console.log(virtualMouth, 'this')
 
-      muteButton.addEventListener('click', () =>{
-        speechSynthesis.speak(virtualMouth);
-    
-        virtualMouth.onstart = function(event){
-          muteButton.innerHTML = `<i class='fas fa-volume-up' style=" width:25px;"></i>`;
-        }
-
-        virtualMouth.onend = function(event){
-          speechSynthesis.cancel()
-          muteButton.innerHTML = `<i class='fas fa-volume-mute' style=" width:25px;"></i>`;
-        }
-
-      })
-    }
 
 
    const handleCodePage =() => window.location.href="/chatCode";
