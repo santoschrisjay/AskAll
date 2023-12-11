@@ -1,4 +1,3 @@
-
 <%- include('../partials/header') %>
 
 <%- include('../partials/features/headerChatAI') %>
@@ -140,8 +139,9 @@
                   id="textInput"
                   placeholder="Enter text here..."
                   style="width:100%"
+                  oninput="handleEnter(event)"
                   > </textarea> 
-                  <button class="input-group-prepend" style="border:none; background-color: white;" type="submit">
+                  <button class="input-group-prepend" style="border:none; background-color: white;" type="submit" id="submit-btn">
                     <span class="input-group-text"
                       ><i class="fa fa-send"></i
                     ></span>
@@ -163,7 +163,15 @@
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
+const handleEnter = (event) =>{
+  const input = document.getElementById('textInput').value
+  if(event.keyCode===13){
+    event.preventDefault()
+    let submit = document.getElementById('submit-btn')
+    submit.click()
+  }
 
+}
 
  let mic = document.getElementById("mic")
  
@@ -197,28 +205,38 @@ function sleep(ms) {
   let muteButton = document.getElementById("mute");
 
  
-  
   let virtualMouth = new SpeechSynthesisUtterance();
-   const textToVoice = (data) => {
+  const textToVoice = (data) => {
+     let isSpeak = true;
     
    
        virtualMouth.text = data;
        console.log(virtualMouth, 'this')
-
+      
       muteButton.addEventListener('click', () =>{
-        speechSynthesis.speak(virtualMouth);
-    
-        virtualMouth.onstart = function(event){
-          muteButton.innerHTML = `<i class='fas fa-volume-up' style=" width:25px;"></i>`;
+        if(isSpeak === true){
+          speechSynthesis.speak(virtualMouth);
+          isSpeak = false
         }
-
-        virtualMouth.onend = function(event){
-          speechSynthesis.cancel()
+        else{
+          window.speechSynthesis.cancel()
           muteButton.innerHTML = `<i class='fas fa-volume-mute' style=" width:25px;"></i>`;
+          isSpeak = true
         }
 
+      
+          virtualMouth.onstart = function(event){
+            muteButton.innerHTML = `<i class='fas fa-volume-up' style=" width:25px;"></i>`;
+          }
+  
+          virtualMouth.onend = function(event){
+            speechSynthesis.cancel()
+            muteButton.innerHTML = `<i class='fas fa-volume-mute' style=" width:25px;"></i>`;
+          }
+          console.log(isSpeak)
       })
     }
+    
 
 function handleSubmit(event) {
     event.preventDefault();

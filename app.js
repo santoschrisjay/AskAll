@@ -43,7 +43,7 @@ app.use(
 	})
 );
 
-const port = 3000;
+const port = 3001;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -54,10 +54,11 @@ app.set("view engine", "ejs");
 const connection = mysql.createConnection({
 	host: "localhost",
 	user: "root",
-	password: "weakka12",
-	port: 3306, // palitan mo sa port ng workbench mo if nakarecieve ka ng error about CONNECT ECONNREFUSED
+	password: "hehez190",
+	port: 3306,
 	database: "askalldb",
 });
+
 
 connection.connect((err) => {
 	if (err) {
