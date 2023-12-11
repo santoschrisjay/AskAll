@@ -1,10 +1,10 @@
 <?php
 session_start();
 $user = "root";
-$password = "weakka12";
+$password = "hehez190";
 
 try {
-  $pdo = new PDO("mysql:host=localhost;dbname=askalldb", $user, $password);
+  $pdo = new PDO("mysql:host=localhost:3307;dbname=askalldb", $user, $password);
 } catch (PDOException $e) {
   echo $e;
 }
@@ -29,7 +29,7 @@ if ($result_session['ID'] != 0) {
   <meta content="Free HTML Templates" name="description">
 
   <!-- Favicon -->
-  <link href="img/favicon.ico" rel="icon">
+	<link rel="icon" type="image/svg+xml" href="favicon.png">
 
   <!-- Google Web Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -90,7 +90,7 @@ if ($result_session['ID'] != 0) {
     <!-- Navbar & Carousel Start -->
     <div class="container-fluid position-relative p-0">
       <nav class="navbar navbar-expand-lg navbar-dark px-5 py-5 py-lg-0">
-        <a href="http://localhost/" class="navbar-brand p-0">
+        <a href="http://localhost:8080/" class="navbar-brand p-0">
           <h1 class="m-0 py-2"><i class="fa fa-user-tie me-2"></i>AskAll</h1>
         </a>
       </nav>
@@ -177,8 +177,8 @@ if ($result_session['ID'] != 0) {
                                                 $lastName = $result["lastName"];
                                                 $email = $result["email"];
 
-                                                $updateLoginTime = $pdo -> prepare("INSERT INTO auditTrail(userID, firstName, lastName, email, login) VALUES ('$result_id', '$firstName', '$lastName', '$email', NOW())"); 
-                                                $updateLoginTime->execute(); 
+                                                $updateLoginTime = $pdo->prepare("INSERT INTO auditTrail(userID, firstName, lastName, email, login) VALUES ('$result_id', '$firstName', '$lastName', '$email', NOW())");
+                                                $updateLoginTime->execute();
 
                                                 echo "<script>window.location = 'http://localhost:3000/'</script>";
                                                 exit();
@@ -205,7 +205,7 @@ if ($result_session['ID'] != 0) {
         <div class="row justify-content-end">
           <div class="col-lg-8 col-md-6">
             <div class="d-flex align-items-center justify-content-center" style="height: 75px;">
-              <p class="mb-0">&copy; <a class="text-white border-bottom" href="http://localhost/adminLogin.php">AskAll</a>. All Rights Reserved.
+              <p class="mb-0">&copy; <a class="text-white border-bottom" href="http://localhost:8080/adminLogin.php">AskAll</a>. All Rights Reserved.
     
                 Special Thanks To <a class="text-white border-bottom" href="#">References</a>
               </p>

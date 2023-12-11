@@ -3,10 +3,10 @@ session_start();
 $_SESSION["otp"] = "";
 
 $user = "root";
-$password = "weakka12";
+$password = "hehez190";
 
 try {
-    $pdo = new PDO("mysql:host=localhost;dbname=askalldb", $user, $password);
+    $pdo = new PDO("mysql:host=localhost:3307;dbname=askalldb", $user, $password);
 } catch (PDOException $e) {
     echo $e;
 }

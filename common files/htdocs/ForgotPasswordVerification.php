@@ -1,10 +1,10 @@
 <?php
 session_start();
 $user = "root";
-$password = "weakka12";
+$password = "hehez190";
 
 try {
-  $pdo = new PDO("mysql:host=localhost;dbname=askalldb", $user, $password);
+  $pdo = new PDO("mysql:host=localhost:3307;dbname=askalldb", $user, $password);
 } catch (PDOException $e) {
   echo $e;
 }
@@ -29,7 +29,7 @@ if ($result_session['ID'] != 0) {
   <meta content="Free HTML Templates" name="description">
 
   <!-- Favicon -->
-  <link href="img/favicon.ico" rel="icon">
+	<link rel="icon" type="image/svg+xml" href="favicon.png">
 
   <!-- Google Web Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -168,13 +168,13 @@ if ($result_session['ID'] != 0) {
                                               $hashedPassword = md5($newPassword);
                                               $changePass = $pdo->prepare("UPDATE user SET passwordd = '$hashedPassword' WHERE email = '$mail'");
                                               $changePass->execute();
-                                              
+
                                               $firstName = $result["firstName"];
                                               $lastName = $result["lastName"];
                                               $email = $result["email"];
-                                              $updateLoginTime = $pdo -> prepare("INSERT INTO auditTrail(userID, firstName, lastName, email, login) VALUES ('$result_id', '$firstName', '$lastName', '$email', NOW())"); 
-                                              $updateLoginTime->execute(); 
-                                              
+                                              $updateLoginTime = $pdo->prepare("INSERT INTO auditTrail(userID, firstName, lastName, email, login) VALUES ('$result_id', '$firstName', '$lastName', '$email', NOW())");
+                                              $updateLoginTime->execute();
+
                                               echo "<script>window.location = 'http://localhost:3000/'</script>";
                                               exit();
                                             } else {
