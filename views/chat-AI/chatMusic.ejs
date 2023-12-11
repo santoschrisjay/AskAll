@@ -1,250 +1,215 @@
-
-
 <%- include('../partials/header') %>
 
-<%- include('../partials/features/headerChatAI') %>
-<!-- Team Start -->
-<div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
-  <div class="container py-5">
-    <div
-      class="section-title text-center position-relative pb-3 mb-5 mx-auto"
-      style="max-width: 600px"
-    >
-      <h5 class="fw-bold text-primary text-uppercase">Title</h5>
-      <h1 class="mb-0">MUSIC GENERATOR</h1>
-    </div>
-  </div>
-  <!-- CONVO BOX HERE -->
-  <link
-    href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-    rel="stylesheet"
-  />
-  <link rel="stylesheet" href="css/chatAi.css" />
+  <%- include('../partials/features/headerChatAI') %>
+    <!-- Team Start -->
+    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+      <div class="container py-5">
+        <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px">
+          <h5 class="fw-bold text-primary text-uppercase">Need Music?</h5>
+          <h1 class="mb-0">AI Music Generator</h1>
+        </div>
+      </div>
+      <!-- CONVO BOX HERE -->
+      <link rel="stylesheet" href="css/chatAi.css" />
 
-  <div class="container">
-    <div class="row clearfix">
-      <div class="col-lg-12">
-        <div class="card chat-app">
-          <div id="plist" class="people-list">
-            <div class="input-group">
-              <div class="input-group-prepend">
+      <div class="container">
+        <div class="row clearfix">
+          <div class="col-lg-12">
+            <div class="card chat-app">
+              <div id="plist" class="people-list">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                  </div>
+                  <!-- <input type="text" class="form-control" placeholder="Search..." /> -->
+                  <h3>Ai Generator</h3>
+                </div>
+                <ul class="list-unstyled chat-list mt-2 mb-0">
+                  <li class="clearfix" onclick="handleCodePage()">
+                    <img src="img/bot-icon.png" alt="avatar" />
+                    <div class="about">
+                      <div class="name">Code Generator</div>
+                    </div>
+                  </li>
+                  <li class="clearfix" onclick="handleConversationPage()">
+                    <img src="img/conversation-icon.png" alt="avatar" />
+                    <div class="about">
+                      <div class="name">Conversation</div>
+                    </div>
+                  </li>
+                  <li class="clearfix" onclick="handleImagePage()">
+                    <img src="img/image-bot-icon.png" alt="avatar" />
+                    <div class="about">
+                      <div class="name">Image Generator</div>
+
+                    </div>
+                  </li>
+
+                  <li class="clearfix active">
+                    <img src="img/music-bot-icon.png" alt="avatar" />
+                    <div class="about">
+                      <div class="name">Music Generator</div>
+
+                    </div>
+                  </li>
+
+                  <li class="clearfix " onclick="handleRantBuddyPage()">
+                    <img src="img/rant.png" alt="avatar" />
+                    <div class="about">
+                      <div class="name">Rant Buddy</div>
+
+                    </div>
+                  </li>
+
+                </ul>
               </div>
-              <!-- <input type="text" class="form-control" placeholder="Search..." /> -->
-              <h3>Ai Generator</h3>
-            </div>
-            <ul class="list-unstyled chat-list mt-2 mb-0">
-              <li class="clearfix" onclick="handleCodePage()">
-                <img
-                src="img/bot-icon.png"
-                alt="avatar"
-              />
-                <div class="about">
-                  <div class="name">Code Generator</div>
-                </div>
-              </li>
-              <li class="clearfix" onclick="handleConversationPage()">
-                <img
-                  src="img/conversation-icon.png"
-                  alt="avatar"
-                />
-                <div class="about">
-                  <div class="name">Conversation</div>
-                </div>
-              </li>
-              <li class="clearfix"  onclick="handleImagePage()">
-                <img
-                src="img/image-bot-icon.png"
-                  alt="avatar"
-                />
-                <div class="about">
-                  <div class="name">Image Generator</div>
-                 
-                </div>
-              </li>
+              <div class="chat">
+                <div class="chat-header clearfix">
+                  <div class="row">
+                    <div class="col-lg-6">
 
-              <li class="clearfix active">
-                <img
-                src="img/music-bot-icon.png"
-                  alt="avatar"
-                />
-                <div class="about">
-                  <div class="name">Music Generator</div>
-                 
-                </div>
-              </li>
-          
-              <li class="clearfix "  onclick="handleRantBuddyPage()">
-                <img
-                src="img/rant.png"
-                  alt="avatar"
-         
-                />
-                <div class="about">
-                  <div class="name">Rant Buddy</div>
-                 
-                </div>
-              </li>
+                      <img src="img/music-bot-icon.png" alt="avatar" style="width:50px;" />
 
-            </ul>
-          </div>
-          <div class="chat">
-            <div class="chat-header clearfix">
-              <div class="row">
-                <div class="col-lg-6">
-                
-                  <img
-                  src="img/music-bot-icon.png"
-                    alt="avatar"
-                    style="width:50px;"
-                  />
-          
-                  <div class="chat-about" style="display: flex; flex-direction: column;">
-                    <h6 >Music Generator</h6>
-                    <small  style="white-space: nowrap;">I make music</small>
+                      <div class="chat-about" style="display: flex; flex-direction: column;">
+                        <h6>Music Generator</h6>
+                        <small style="white-space: nowrap;">I make music</small>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
-             
-              </div>
-            </div>
-            <div class="chat-history" style="margin-top:40px; padding-bottom:50px">
-              <ul class="m-b-0">
-                <li class="clearfix">
-                  <div class="message-data text-right">
-            
-                    <!-- <img
+                <div class="chat-history" style="margin-top:40px; padding-bottom:50px">
+                  <ul class="m-b-0">
+                    <li class="clearfix">
+                      <div class="message-data text-right">
+
+                        <!-- <img
                       src="https://bootdey.com/img/Content/avatar/avatar7.png"
                       alt="avatar"
                     /> -->
+                      </div>
+                      <div class="message other-message float-right" id="userChat">
+                      </div>
+                    </li>
+                    <li class="clearfix">
+                      <div class="message my-message" style="display:flex; width:fit-content">
+                        <span id="botChatLoading"></span>
+                        <audio controls id="botAudioSource" style="display: none;">
+                          <source id="botChat" src="" style="display: none;" />
+                        </audio>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="chat-message clearfix">
+                  <div class="input-group mb-0">
+                    <form id="myForm" style="display:flex; width:100%; gap: 7px;" onsubmit="handleSubmit(event)">
+
+                      <button id="mic" style="border:none; background-color:white;" type="button"> <i
+                          class='fas fa-microphone-slash'></i> </button>
+                      <textarea type="text" class="form-control" id="textInput" placeholder="Enter text here..."
+                        style="width:100%"> </textarea>
+                      <button class="input-group-prepend" style="border:none; background-color: white;" type="submit">
+                        <span class="input-group-text"><i class="fa fa-send"></i></span>
+                      </button>
+                    </form>
+                    <button id="mic" style="border:none" type="button">Mic</button>
                   </div>
-                  <div class="message other-message float-right" id="userChat" >
-                  </div>
-                </li>
-                <li class="clearfix">
-                  <div class="message my-message" style="display:flex; width:fit-content">
-                    <span id="botChatLoading"></span>
-                    <audio controls id="botAudioSource" style="display: none;">
-                      <source id="botChat" src="" style="display: none;"/>
-                    </audio>
-                    </div>
-                </li>
-              </ul>
-            </div>
-            <div class="chat-message clearfix" >
-              <div class="input-group mb-0">
-                <form id="myForm" style="display:flex; width:100%; gap: 7px;" onsubmit="handleSubmit(event)">
-               
-                  <button id="mic" style="border:none; background-color:white;" type="button"> <i class='fas fa-microphone-slash'></i> </button>
-                  <textarea
-                  type="text"
-                  class="form-control"
-                  id="textInput"
-                  placeholder="Enter text here..."
-                  style="width:100%"
-                  > </textarea> 
-                  <button class="input-group-prepend" style="border:none; background-color: white;" type="submit">
-                    <span class="input-group-text"
-                      ><i class="fa fa-send"></i
-                    ></span>
-                  </button>
-                 </form>
-                 <button id="mic" style="border:none" type="button">Mic</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/openai"></script>
-<script>
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+    <script src="https://cdn.jsdelivr.net/npm/openai"></script>
+    <script>
+      function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
 
 
- let mic = document.getElementById("mic")
- 
- mic.addEventListener("click", () => {
-   sleep(1000)
- window.SpeechRecognition = window.webkitSpeechRecognition
+      let mic = document.getElementById("mic")
 
- const recognition = new SpeechRecognition()
- recognition.interimResults = true
+      mic.addEventListener("click", () => {
+        sleep(1000)
+        window.SpeechRecognition = window.webkitSpeechRecognition
 
- recognition.addEventListener('result', e => {
-     const transcript = Array.from(e.results)
-         .map(result => result[0])
-         .map(result => result.transcript)
-         .join('')
+        const recognition = new SpeechRecognition()
+        recognition.interimResults = true
 
-     document.getElementById("textInput").value = transcript;
- });
-   
-      
-      mic.innerHTML = `<i class='fas fa-microphone'></i>`
+        recognition.addEventListener('result', e => {
+          const transcript = Array.from(e.results)
+            .map(result => result[0])
+            .map(result => result.transcript)
+            .join('')
+
+          document.getElementById("textInput").value = transcript;
+        });
+
+
+        mic.innerHTML = `<i class='fas fa-microphone'></i>`
         recognition.start()
-      
-    
-
-   recognition.onend = function () {
-    mic.innerHTML = `<i class='fas fa-microphone-slash'></i>`;
-   }
- });
-
-  let muteButton = document.getElementById("mute");
 
 
 
+        recognition.onend = function () {
+          mic.innerHTML = `<i class='fas fa-microphone-slash'></i>`;
+        }
+      });
 
-function handleSubmit(event) {
-    event.preventDefault();
-   let botChat = document.querySelector('#botChat');
-   let source = document.getElementsByTagName("source")
-  let botChatLoading = document.querySelector('#botChatLoading');
-  let botAudioSource = document.querySelector('#botAudioSource');
-  botChatLoading.innerText="Loading...";
-   botChat.style.display="none";
-   botAudioSource.style.display="none"
-    const inputValue = document.getElementById('textInput').value
-    document.querySelector('#userChat').innerText = inputValue;
-      console.log(inputValue)
-      const userMessage =[{
-        role:"user",
-        content:inputValue,
-      },
-   ]
-  fetch('/music', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body:JSON.stringify({inputValue})
-})
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok.');
-    }
-   return response.json()
-  })
-  .then(data => {
-   
-      
-        return botChat.setAttribute('src', `${data}`), botAudioSource.load(), botAudioSource.play(),botAudioSource.style.display="block",botChat.style.display="block",botChatLoading.innerText="", console.log(data);
-  })
-  .catch(error => {
-   
-    console.error('Error:', error);
-  });
+      let muteButton = document.getElementById("mute");
 
 
-  }
-   const handleCodePage =() => window.location.href="/chatCode";
-   const handleImagePage =() => window.location.href="/chatImage";
-   const handleConversationPage =() => window.location.href="/chatConversation";
-   const handleRantBuddyPage = () => window.location.href="/chatRantBuddy"
 
-</script>
-<!-- Team End -->
 
-<%- include('../partials/footer') %>
+      function handleSubmit(event) {
+        event.preventDefault();
+        let botChat = document.querySelector('#botChat');
+        let source = document.getElementsByTagName("source")
+        let botChatLoading = document.querySelector('#botChatLoading');
+        let botAudioSource = document.querySelector('#botAudioSource');
+        botChatLoading.innerText = "Loading...";
+        botChat.style.display = "none";
+        botAudioSource.style.display = "none"
+        const inputValue = document.getElementById('textInput').value
+        document.querySelector('#userChat').innerText = inputValue;
+        console.log(inputValue)
+        const userMessage = [{
+          role: "user",
+          content: inputValue,
+        },
+        ]
+        fetch('/music', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ inputValue })
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok.');
+            }
+            return response.json()
+          })
+          .then(data => {
+
+
+            return botChat.setAttribute('src', `${data}`), botAudioSource.load(), botAudioSource.play(), botAudioSource.style.display = "block", botChat.style.display = "block", botChatLoading.innerText = "", console.log(data);
+          })
+          .catch(error => {
+
+            console.error('Error:', error);
+          });
+
+
+      }
+      const handleCodePage = () => window.location.href = "/chatCode";
+      const handleImagePage = () => window.location.href = "/chatImage";
+      const handleConversationPage = () => window.location.href = "/chatConversation";
+      const handleRantBuddyPage = () => window.location.href = "/chatRantBuddy"
+
+    </script>
+    <!-- Team End -->
+
+    <%- include('../partials/footer') %>

@@ -54,8 +54,8 @@ app.set("view engine", "ejs");
 const connection = mysql.createConnection({
 	host: "localhost",
 	user: "root",
-	password: "weakka12",
-	port: 3306, // palitan mo sa port ng workbench mo if nakarecieve ka ng error about CONNECT ECONNREFUSED
+	password: "hehez190",
+	port: 3307, // palitan mo sa port ng workbench mo if nakarecieve ka ng error about CONNECT ECONNREFUSED
 	database: "askalldb",
 });
 
@@ -80,7 +80,7 @@ const checkIfLogined = (res, path) => {
 		let user_ID = results[0].ID;
 
 		if (user_ID == 0) {
-			res.redirect("http://localhost"); // localhost:8080:8000 if hindi nag wwork sayo
+			res.redirect("http://localhost:8080"); // localhost:8080:8000 if hindi nag wwork sayo
 		} else {
 			res.render(path);
 		}
@@ -153,34 +153,41 @@ app.post("/update-user-info", (req, res) => {
 		let queryEmail = `email = '${email}'`;
 		let queryPhoneNumber = `phoneNumber = '${phoneNumber}'`;
 
-		if(queryEmail != ""){
-			connection.query(`SELECT email FROM user WHERE email = "${email}"`, (error, results) => {
-				if (!results[0]){
-					connection.query(
-						`UPDATE user SET ${queryFirstName}, ${queryLastName}, ${queryEmail}, ${queryPhoneNumber} WHERE ID = ${userID}`,
-						(error, results) => {
-							if (!error) {
-								console.log("success");
+		if (queryEmail != "") {
+			connection.query(
+				`SELECT * FROM user WHERE email = "${email}"`,
+				(error, results) => {
+					if (!results[0] || results[0] && results[0].ID == userID) {
+						connection.query(
+							`UPDATE user SET ${queryFirstName}, ${queryLastName}, ${queryEmail}, ${queryPhoneNumber} WHERE ID = ${userID}`,
+							(error, results) => {
+								if (!error) {
+									console.log("success");
+								}
+								res.redirect("/admin-users");
 							}
-							res.redirect("/admin-users");
-						}
-					);		
-				}else{ //kapag exists
-					connection.query(`UPDATE user SET notif = "The email already exists"`)
-					res.redirect("/admin-users");
+						);
+					} else {
+						//kapag exists
+						connection.query(
+							`UPDATE user SET notif = "The email already exists"`
+						);
+						res.redirect("/admin-users");
+					}
 				}
-			});
-		}else{
+			);
+		} else {
 			res.redirect("/admin-users");
 		}
 	} else {
-		
 		let values = `VALUES (${userID}, '${firstName}', '${lastName}', '${email}', '${phoneNumber}', '${dateCreated}')`;
 		connection.query(
 			`INSERT INTO archive (ID, firstName, lastName, email, phoneNumber, accountDateCreated) ${values}`,
 			(error, results) => {
-				if(!error){
-					connection.query(`UPDATE user SET inArchive = 'true' WHERE ID = ${userID}`);
+				if (!error) {
+					connection.query(
+						`UPDATE user SET inArchive = 'true' WHERE ID = ${userID}`
+					);
 				}
 				res.redirect("http://localhost:3000/admin-users");
 			}
@@ -202,7 +209,7 @@ app.get("/reference", (req, res) => res.render("main-pages/reference.ejs"));
 //LOGOUTS
 app.get("/admin-logout", (req, res) => {
 	res.redirect("http://localhost:3000/admin-login");
-	connection.query("UPDATE admin_session SET ID = 0")
+	connection.query("UPDATE admin_session SET ID = 0");
 });
 
 app.get("/logout", (req, res) => {
@@ -241,15 +248,15 @@ app.get("/logout", (req, res) => {
 			);
 		}
 	});
-	res.redirect("http://localhost/"); // lagyan mo ng :8080 if hindi nag wwork
+	res.redirect("http://localhost:8080/"); // lagyan mo ng :8080 if hindi nag wwork
 });
 
 //**authentication */
-app.get("/login", (req, res) => res.redirect("http://localhost/")); // lagyan mo ng :8080 if hindi nag wwork
+app.get("/login", (req, res) => res.redirect("http://localhost:8080/")); // lagyan mo ng :8080 if hindi nag wwork
 
 app.get(
 	"/register",
-	(req, res) => res.redirect("http://localhost/register.php") //lagyan mo ng :8080 if hindi nag wwork
+	(req, res) => res.redirect("http://localhost:8080/register.php") //lagyan mo ng :8080 if hindi nag wwork
 );
 app.get("/forgot-password-get-code", (req, res) =>
 	res.render("authentication/forgotPasswordGetCode.ejs")
@@ -259,7 +266,7 @@ app.get("/forgot-password-last-step", (req, res) =>
 );
 app.get(
 	"/admin-login",
-	(req, res) => res.redirect("http://localhost/adminLogin.php") // localhost:8080:8000/adminLogin.php if hindi nag wwork sayo
+	(req, res) => res.redirect("http://localhost:8080/adminLogin.php") // localhost:8080:8000/adminLogin.php if hindi nag wwork sayo
 );
 
 //**profile */
@@ -315,22 +322,15 @@ app.get("/profile", (req, res) => {
 	});
 });
 
-app.get("/profile-history", (req, res) =>
-	res.render("profile/profileHistory.ejs")
-);
-app.get("/profile-notification", (req, res) =>
-	res.render("profile/profileNotification.ejs")
-);
-
 //**admin */
 // app.get("/admin", (req, res) => res.render("admin/admin.ejs"));
 app.get("/admin", (req, res) => {
 	// const userId = req.session.userId; bali dapat parang ganto
-		let logined;
-		connection.query("SELECT ID FROM admin_session", (error, results) => {
+	let logined;
+	connection.query("SELECT ID FROM admin_session", (error, results) => {
 		logined = results[0].ID;
 
-		if (logined != 0){
+		if (logined != 0) {
 			const user_ID = 1;
 			if (user_ID) {
 				const sql =
@@ -341,7 +341,7 @@ app.get("/admin", (req, res) => {
 						res.status(500).send("Error retrieving user data");
 						throw error;
 					}
-	
+
 					if (results.length > 0) {
 						const { first_name, last_name, email_address, phone_number } =
 							results[0];
@@ -358,11 +358,10 @@ app.get("/admin", (req, res) => {
 			} else {
 				res.status(401).send("Unauthorized");
 			}
-		}else{
-			res.redirect("http://localhost/adminLogin.php")
+		} else {
+			res.redirect("http://localhost:8080/adminLogin.php");
 		}
-	})
-
+	});
 });
 
 app.post("/admin-users", (req, res) => {
@@ -419,8 +418,8 @@ app.get("/admin-audit-trail", (req, res) => {
 		res.render("admin/adminAuditTrail.ejs", { adminUsers: results });
 	});
 });
-		//ARCHIVE
-app.get("/admin-archived-users", (req, res) => {	
+//ARCHIVE
+app.get("/admin-archived-users", (req, res) => {
 	const sql = "SELECT * FROM archive";
 	connection.query(sql, (error, results, fields) => {
 		if (error) {
@@ -432,26 +431,27 @@ app.get("/admin-archived-users", (req, res) => {
 	});
 });
 
-app.post('/admin-archived-users', (req, res) => {
+app.post("/admin-archived-users", (req, res) => {
 	let userID = req.body.userID;
 	let button = req.body.button;
 
-	if (button == "restore"){
-		connection.query(`UPDATE user SET inArchive = 'false' WHERE ID = ${userID}`)
-		connection.query(`DELETE FROM archive WHERE ID = ${userID}`)
-	}else if(button == "delete"){
-		connection.query(`DELETE FROM archive WHERE ID = ${userID}`)
-		connection.query(`DELETE FROM user WHERE ID = ${userID}`)
+	if (button == "restore") {
+		connection.query(
+			`UPDATE user SET inArchive = 'false' WHERE ID = ${userID}`
+		);
+		connection.query(`DELETE FROM archive WHERE ID = ${userID}`);
+	} else if (button == "delete") {
+		connection.query(`DELETE FROM archive WHERE ID = ${userID}`);
+		connection.query(`DELETE FROM user WHERE ID = ${userID}`);
 	}
-	res.redirect("http://localhost:3000/admin-archived-users")
-})
+	res.redirect("http://localhost:3000/admin-archived-users");
+});
 
 // user
 let ID;
 
-
 app.put("/user-update:ID", async (req, res) => {
-	connection.query("SELECT ID FROM sessionn", (error, results, fields) => {
+	connection.query("SELECT * FROM sessionn", (error, results, fields) => {
 		if (error) {
 			console.error("Error fetching data:", error.message);
 		} else {
@@ -459,7 +459,7 @@ app.put("/user-update:ID", async (req, res) => {
 		}
 
 		ID = results[0].ID;
-		
+
 		const updatedData = req.body;
 		for (const [key, value] of Object.entries(updatedData)) {
 			const parsedData = JSON.parse(key);
@@ -470,9 +470,14 @@ app.put("/user-update:ID", async (req, res) => {
 				res.status(400).send("Invalid user ID");
 				return;
 			}
-			
-			connection.query(`SELECT email FROM user WHERE email = "${email_address}"`, (error, results) => {
-				if(!results[0]){
+
+			let currentEmail
+			connection.query(`SELECT email FROM user WHERE ID = ${ID}`, (error, results) =>{
+				currentEmail = results[0].email
+			})
+			console.log(currentEmail)
+			connection.query(`SELECT * FROM user WHERE email = "${email_address}"`, (error, results) => {
+				if(!results[0] || results[0] && currentEmail == email_address){
 					const sql =
 						"UPDATE user SET firstName=?, lastName=?, email=?, phoneNumber=? WHERE ID = ?";
 

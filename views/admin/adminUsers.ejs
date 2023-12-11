@@ -14,9 +14,12 @@
         <div class="card mb-4">
             <div class="card-header">User Details</div>
             <div class="card-body">
-                <div class="col-md-6">
-                    <h3 id="notif" style="text-align: center; color: rgb(199, 54, 54);" class="small mb-1"><%=adminUsers[0].notif%></h3>
-                </div>
+                <div class="col-md-6">                                                               
+                    <% if (adminUsers[0]) { %>
+                        <h3 id="notif" style="text-align: center; color: rgb(199, 54, 54);" class="small mb-1"><%= adminUsers[0].notif %></h3>
+                    <% }%>
+                </div>                                                                               
+
                 <form action="/update-user-info" method="post">
                     <!-- Form Row-->
                     <div class="col-md-6 mx-auto">
@@ -88,8 +91,8 @@
                 </form>
             </div>
         </div>
-        <div class="container mt-5" >
-            <table class="table table-hover pb-3" ">
+        <div class="container mt-5">
+            <table class="table table-hover">
                 <thead>
                     <tr>
                         <th>ID</th>

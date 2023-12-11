@@ -6,7 +6,7 @@
             <div class="container pt-5">
                 <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
                     <h5 class="fw-bold text-primary text-uppercase">Welcome</h5>
-                    <h1 class="mb-0">WHOLE NAME</h1>
+                    <h1 class="mb-0">Our Dear User</h1>
                 </div>
 
             </div>
@@ -15,13 +15,6 @@
 
         <!-- Profile Start-->
         <div class="container-xl px-4 mt-4">
-            <!-- Account page navigation-->
-            <nav class="nav nav-borders">
-                <p><a class="nav-link active ms-0" href="profile">Profile</a></p>
-                <p><a class="nav-link" href="profile-history">History</a></p>
-                <p><a class="nav-link" href="profile-notification">Notifications</a></p>
-            </nav>
-            <hr class="mt-0 mb-4">
             <div class="row">
                 <div class="col-xl-8">
                     <!-- Account details card-->
@@ -29,7 +22,9 @@
                         <div class="card-header">Account Details</div>
                         <div class="card-body">
                             <div class="col-md-6">
-                                <h3 id="notif" style="text-align: center; color: rgb(199, 54, 54);" class="small mb-1"><%= notif %></h3>
+                                <h3 id="notif" style="text-align: center; color: rgb(199, 54, 54);" class="small mb-1">
+                                    <%= notif %>
+                                </h3>
                             </div>
                             <form onsubmit="handleSubmitName(event)">
                                 <!-- Form Row-->
@@ -53,13 +48,16 @@
                                     <div class="col-md-6">
                                         <label class="small mb-1" for="inputOrgName">Email Address</label>
                                         <input class="form-control" id="inputOrgName" required="" type="text"
-                                        pattern=".*@gmail.com$" title="Please Enter a valid Gmail address and ending with @gmail.com"  placeholder="Email Address" value="<%= email %>" >
+                                            pattern=".*@gmail.com$"
+                                            title="Please Enter a valid Gmail address and ending with @gmail.com"
+                                            placeholder="Email Address" value="<%= email %>">
                                     </div>
                                     <!-- Form Group (Phone Number)-->
                                     <div class="col-md-6">
                                         <label class="small mb-1" for="inputLocation">Phone Number</label>
                                         <input class="form-control" id="inputLocation" required="" type="text"
-                                        pattern="09\d{9}" title="Number should start with 09 and less than 12"   placeholder="Phone Number" value="<%= phoneNumber %>" >
+                                            pattern="09\d{9}" title="Number should start with 09 and less than 12"
+                                            placeholder="Phone Number" value="<%= phoneNumber %>">
                                     </div>
                                 </div>
                                 <!-- Save changes button-->
@@ -74,31 +72,34 @@
                                 <!-- Form Group (current password)-->
                                 <div class="mb-3">
                                     <label class="small mb-1" for="currentPassword">Current Password</label>
-                                    <div style="display: flex; align-items: center;">  
-                                    <input class="form-control"  required="" id="currentPassword" type="password"
-                                        placeholder="Enter current password" >
-                                        <i class="far fa-eye-slash" id="togglePasswordCurrent" ="handleCurrentPass()" style="margin-left: -30px;" ></i>
+                                    <div style="display: flex; align-items: center;">
+                                        <input class="form-control" required="" id="currentPassword" type="password"
+                                            placeholder="Enter current password">
+                                        <i class="far fa-eye-slash" id="togglePasswordCurrent"="handleCurrentPass()"
+                                            style="margin-left: -30px;"></i>
                                     </div>
                                     <span id="errorCurrent" style="color: rgb(167, 11, 11);"></span>
                                 </div>
                                 <!-- Form Group (new password)-->
                                 <div class="mb-3">
                                     <label class="small mb-1" for="newPassword">New Password</label>
-                                    <div style="display: flex; align-items: center;">  
-                                    <input  class="form-control" id="newPassword" required="" type="password"
-                                        placeholder="Enter new password">
-                                        <i class="far fa-eye-slash" id="togglePasswordNew" onclick="handleNewPass()" style="margin-left: -30px;" ></i>
-                                        </div>
+                                    <div style="display: flex; align-items: center;">
+                                        <input class="form-control" id="newPassword" required="" type="password"
+                                            placeholder="Enter new password">
+                                        <i class="far fa-eye-slash" id="togglePasswordNew" onclick="handleNewPass()"
+                                            style="margin-left: -30px;"></i>
+                                    </div>
                                 </div>
                                 <!-- Form Group (confirm password)-->
                                 <div class="mb-3">
                                     <label class="small mb-1" for="confirmPassword">Confirm Password</label>
-                                    <div style="display: flex; align-items: center;">  
-                                    <input class="form-control" required="" id="confirmPassword" type="password"
-                                        placeholder="Confirm new password">
-                                        <i class="far fa-eye-slash"  id="togglePasswordConfirm" onclick="handleConfirmPass()" style="margin-left: -30px;" ></i>
-                                        </div>
-                                        <span id="errorNew" style="color: rgb(167, 11, 11);"></span>
+                                    <div style="display: flex; align-items: center;">
+                                        <input class="form-control" required="" id="confirmPassword" type="password"
+                                            placeholder="Confirm new password">
+                                        <i class="far fa-eye-slash" id="togglePasswordConfirm"
+                                            onclick="handleConfirmPass()" style="margin-left: -30px;"></i>
+                                    </div>
+                                    <span id="errorNew" style="color: rgb(167, 11, 11);"></span>
                                 </div>
                                 <button class="btn btn-primary" type="submit">Save changes</button>
                             </form>
@@ -107,25 +108,6 @@
                 </div>
                 <div class="col-lg-4">
                     <!-- Two factor authentication card-->
-                    <div class="card mb-4">
-                        <div class="card-header">Two-Factor Authentication</div>
-                        <div class="card-body">
-                            <p>Add another level of security to your account by enabling two-factor authentication. We
-                                will send you a text message to verify your login attempts on unrecognized devices and
-                                browsers.</p>
-                            <form>
-                                <div class="form-check">
-                                    <input class="form-check-input" id="twoFactorOn" type="radio" name="twoFactor"
-                                        checked="">
-                                    <label class="form-check-label" for="twoFactorOn">On</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" id="twoFactorOff"  type="radio" name="twoFactor">
-                                    <label class="form-check-label" for="twoFactorOff">Off</label>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
                     <!-- Delete account card-->
                     <div class="card mb-4">
                         <div class="card-header">Delete Account</div>
@@ -139,124 +121,124 @@
                 </div>
             </div>
         </div>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-<script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+        <script>
 
-let currentEmail = document.getElementById("inputOrgName").value;
+            let currentEmail = document.getElementById("inputOrgName").value;
 
-document.getElementById("button-user").addEventListener("click", () => {
-    let emailCheck = document.getElementById("inputOrgName").value;
-    if (currentEmail != emailCheck){
-        document.getElementById("notif").innerHTML = "";
-    }else{
-        document.getElementById("notif").innerHTML = "The email already exists";
-    }
-})
+            document.getElementById("button-user").addEventListener("click", () => {
+                let emailCheck = document.getElementById("inputOrgName").value;
+                if (currentEmail != emailCheck) {
+                    document.getElementById("notif").innerHTML = "";
+                } else {
+                    document.getElementById("notif").innerHTML = "The email already exists";
+                }
+            })
 
-function hashPassword(password) {
-  return CryptoJS.MD5(password).toString();
-}
+            function hashPassword(password) {
+                return CryptoJS.MD5(password).toString();
+            }
 
-const handleSubmitName= async (event) => {
-    document.getElementById("notif").innerHTML = "The email already exists";
-    event.preventDefault();
-const ID =1 ; // to be change to dynamic
-    const updatedData = {
-        first_name: document.getElementById('inputFirstName').value,
-        last_name: document.getElementById('inputLastName').value,
-        email_address: document.getElementById('inputOrgName').value,
-        phone_number: document.getElementById("inputLocation").value,
-      };
-
-
-     const response =  await axios.put(`/user-update${ID}`,JSON.stringify(updatedData));
-     
-     
-    if(response.status===200){
-        location.reload();
-    }
-    else{
-        return;
-    }
-    
-
-}
-
-let eyeIcon = document.getElementById('togglePasswordCurrent');
-eyeIcon.addEventListener('click', function(){
-      
-        let currentPass = document.getElementById('currentPassword')
-        const type =  currentPass.getAttribute('type') === 'password' ? 'text' : 'password';
-        currentPass.setAttribute('type', type);
-        if (type === 'password') {
-        eyeIcon.classList.remove('fa-eye');
-        eyeIcon.classList.add('fa-eye-slash');
-    } else {
-        eyeIcon.classList.remove('fa-eye-slash');
-        eyeIcon.classList.add('fa-eye');
-    }
-});
-
-const handleNewPass = () =>{
-        let newPassword= document.getElementById('newPassword')
-        const type =  newPassword.getAttribute('type') === 'password' ? 'text' : 'password';
-        newPassword.setAttribute('type', type);
-        let eyeIcon = document.getElementById('togglePasswordNew');
-        if (type === 'password') {
-        eyeIcon.classList.remove('fa-eye');
-        eyeIcon.classList.add('fa-eye-slash');
-    } else {
-        eyeIcon.classList.remove('fa-eye-slash');
-        eyeIcon.classList.add('fa-eye');
-    }
-}
-const handleConfirmPass = () =>{
-        let ConfirmPass = document.getElementById('confirmPassword')
-        const type =  ConfirmPass.getAttribute('type') === 'password' ? 'text' : 'password';
-        ConfirmPass.setAttribute('type', type);
-        let eyeIcon = document.getElementById('togglePasswordConfirm');
-        if (type === 'password') {
-        eyeIcon.classList.remove('fa-eye');
-        eyeIcon.classList.add('fa-eye-slash');
-    } else {
-        eyeIcon.classList.remove('fa-eye-slash');
-        eyeIcon.classList.add('fa-eye');
-    }
-}
-// wait lang 
+            const handleSubmitName = async (event) => {
+                document.getElementById("notif").innerHTML = "The email already exists";
+                event.preventDefault();
+                const ID = 1; // to be change to dynamic
+                const updatedData = {
+                    first_name: document.getElementById('inputFirstName').value,
+                    last_name: document.getElementById('inputLastName').value,
+                    email_address: document.getElementById('inputOrgName').value,
+                    phone_number: document.getElementById("inputLocation").value,
+                };
 
 
+                const response = await axios.put(`/user-update${ID}`, JSON.stringify(updatedData));
 
-const handleSubmitPass = async (event) => {
-event.preventDefault()
-const ID = 1;
-let errorCurrent = document.getElementById('errorCurrent')
-errorCurrent.innerText="";
-const currentPass ='<%= passwordd %>';
-let currentPassInput = document.getElementById('currentPassword').value
-let newPassInput = document.getElementById('newPassword').value
-let errorNew  = document.getElementById('errorNew')
-let confirmPassInput = document.getElementById('confirmPassword').value
-currentPassInput =hashPassword(currentPassInput)
-if(currentPass !== currentPassInput){
-return errorCurrent.innerText="Password not match"
-}
-if(confirmPassInput!==newPassInput){
-    return errorNew.innerText="Confirm and Current password doesn't match"
-}
-confirmPassInput = hashPassword(confirmPassInput);
 
-const response =  await axios.put(`/user/pass/update${ID}`,JSON.stringify({confirmPassInput}));
+                if (response.status === 200) {
+                    location.reload();
+                }
+                else {
+                    return;
+                }
 
-if(response.status===200){
-        location.reload();
-    }
-    else{
-        return;
-    }
 
-}
+            }
 
-</script>
+            let eyeIcon = document.getElementById('togglePasswordCurrent');
+            eyeIcon.addEventListener('click', function () {
+
+                let currentPass = document.getElementById('currentPassword')
+                const type = currentPass.getAttribute('type') === 'password' ? 'text' : 'password';
+                currentPass.setAttribute('type', type);
+                if (type === 'password') {
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                } else {
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                }
+            });
+
+            const handleNewPass = () => {
+                let newPassword = document.getElementById('newPassword')
+                const type = newPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+                newPassword.setAttribute('type', type);
+                let eyeIcon = document.getElementById('togglePasswordNew');
+                if (type === 'password') {
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                } else {
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                }
+            }
+            const handleConfirmPass = () => {
+                let ConfirmPass = document.getElementById('confirmPassword')
+                const type = ConfirmPass.getAttribute('type') === 'password' ? 'text' : 'password';
+                ConfirmPass.setAttribute('type', type);
+                let eyeIcon = document.getElementById('togglePasswordConfirm');
+                if (type === 'password') {
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                } else {
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                }
+            }
+            // wait lang 
+
+
+
+            const handleSubmitPass = async (event) => {
+                event.preventDefault()
+                const ID = 1;
+                let errorCurrent = document.getElementById('errorCurrent')
+                errorCurrent.innerText = "";
+                const currentPass = '<%= passwordd %>';
+                let currentPassInput = document.getElementById('currentPassword').value
+                let newPassInput = document.getElementById('newPassword').value
+                let errorNew = document.getElementById('errorNew')
+                let confirmPassInput = document.getElementById('confirmPassword').value
+                currentPassInput = hashPassword(currentPassInput)
+                if (currentPass !== currentPassInput) {
+                    return errorCurrent.innerText = "Password not match"
+                }
+                if (confirmPassInput !== newPassInput) {
+                    return errorNew.innerText = "Confirm and Current password doesn't match"
+                }
+                confirmPassInput = hashPassword(confirmPassInput);
+
+                const response = await axios.put(`/user/pass/update${ID}`, JSON.stringify({ confirmPassInput }));
+
+                if (response.status === 200) {
+                    location.reload();
+                }
+                else {
+                    return;
+                }
+
+            }
+
+        </script>
         <%- include('../partials/footer') %>

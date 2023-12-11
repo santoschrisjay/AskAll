@@ -122,7 +122,7 @@ if ($result_session['ID'] != 0) {
                                                 <div class="input-group-prepend"><span class="input-group-text"><i
                                                             class="fa fa-envelope input-icon"></i></span></div>
                                                 <input name="email" class="form-control" type="email" placeholder="Email"
-                                                    required=""  pattern=".*@gmail.com$" title="Please Enter a valid Gmail address and ending with @gmail.com">
+                                                    required="">
                                                 <div class="invalid-feedback">Please enter valid email address!</div>
                                             </div>
                                             <!--Password-->
@@ -139,32 +139,7 @@ if ($result_session['ID'] != 0) {
                                                     data-wow-delay="0.9s" type="submit">Sign In</button>
                                             </div>
                                         </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container-fluid text-white" style="background: #061429;">
-      <div class="container text-center">
-        <div class="row justify-content-end">
-          <div class="col-lg-8 col-md-6">
-            <div class="d-flex align-items-center justify-content-center" style="height: 75px;">
-              <p class="mb-0">&copy; <a class="text-white border-bottom" href="#">AskAll</a>. All Rights Reserved.
-    
-                Special Thanks To <a class="text-white border-bottom" href="#">References</a>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <?php
+                                        <?php
     if (isset($_POST['signIn'])) {
       $email = $_POST['email'];
       $password = $_POST['password'];
@@ -190,6 +165,32 @@ if ($result_session['ID'] != 0) {
       }
     }
     ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid text-white" style="background: #061429;">
+      <div class="container text-center">
+        <div class="row justify-content-end">
+          <div class="col-lg-8 col-md-6">
+            <div class="d-flex align-items-center justify-content-center" style="height: 75px;">
+              <p class="mb-0">&copy; <a class="text-white border-bottom" href="#">AskAll</a>. All Rights Reserved.
+    
+                Special Thanks To <a class="text-white border-bottom" href="#">References</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

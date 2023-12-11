@@ -160,12 +160,12 @@ if ($result_session['ID'] != 0) {
                                           $passwordd = $_POST['passwordd'];
 
                                           if (!empty($email) || !empty($passwordd)) {
-                                            $Select_email = $pdo->prepare("SELECT passwordd FROM user WHERE email = '$email'");
+                                            $Select_email = $pdo->prepare("SELECT * FROM user WHERE email = '$email'");
                                             $Select_email->execute();
                                             $result = $Select_email->fetch(PDO::FETCH_ASSOC);
                                             if (!empty($result)) {
                                               $passwordHash = md5($passwordd);
-                                              if ($passwordHash == $result['passwordd']) {
+                                              if ($passwordHash == $result['passwordd'] && $result["inArchive"] == "false") {
                                                 $Select_id = $pdo->prepare("SELECT * FROM user WHERE email = '$email'");
                                                 $Select_id->execute();
                                                 $result = $Select_id->fetch(PDO::FETCH_ASSOC);
