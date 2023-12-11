@@ -54,8 +54,8 @@ app.set("view engine", "ejs");
 const connection = mysql.createConnection({
 	host: "localhost",
 	user: "root",
-	password: "hehez190",
-	port: 3307, // palitan mo sa port ng workbench mo if nakarecieve ka ng error about CONNECT ECONNREFUSED
+	password: "weakka12",
+	port: 3306, // palitan mo sa port ng workbench mo if nakarecieve ka ng error about CONNECT ECONNREFUSED
 	database: "askalldb",
 });
 
@@ -80,7 +80,7 @@ const checkIfLogined = (res, path) => {
 		let user_ID = results[0].ID;
 
 		if (user_ID == 0) {
-			res.redirect("http://localhost:8080"); // localhost:8080:8000 if hindi nag wwork sayo
+			res.redirect("http://localhost"); // localhost:8080:8000 if hindi nag wwork sayo
 		} else {
 			res.render(path);
 		}
@@ -248,15 +248,15 @@ app.get("/logout", (req, res) => {
 			);
 		}
 	});
-	res.redirect("http://localhost:8080/"); // lagyan mo ng :8080 if hindi nag wwork
+	res.redirect("http://localhost/"); // lagyan mo ng :8080 if hindi nag wwork
 });
 
 //**authentication */
-app.get("/login", (req, res) => res.redirect("http://localhost:8080/")); // lagyan mo ng :8080 if hindi nag wwork
+app.get("/login", (req, res) => res.redirect("http://localhost/")); // lagyan mo ng :8080 if hindi nag wwork
 
 app.get(
 	"/register",
-	(req, res) => res.redirect("http://localhost:8080/register.php") //lagyan mo ng :8080 if hindi nag wwork
+	(req, res) => res.redirect("http://localhost/register.php") //lagyan mo ng :8080 if hindi nag wwork
 );
 app.get("/forgot-password-get-code", (req, res) =>
 	res.render("authentication/forgotPasswordGetCode.ejs")
@@ -266,7 +266,7 @@ app.get("/forgot-password-last-step", (req, res) =>
 );
 app.get(
 	"/admin-login",
-	(req, res) => res.redirect("http://localhost:8080/adminLogin.php") // localhost:8080:8000/adminLogin.php if hindi nag wwork sayo
+	(req, res) => res.redirect("http://localhost/adminLogin.php") // localhost:8080:8000/adminLogin.php if hindi nag wwork sayo
 );
 
 //**profile */
@@ -359,7 +359,7 @@ app.get("/admin", (req, res) => {
 				res.status(401).send("Unauthorized");
 			}
 		} else {
-			res.redirect("http://localhost:8080/adminLogin.php");
+			res.redirect("http://localhost/adminLogin.php");
 		}
 	});
 });
@@ -447,8 +447,24 @@ app.post("/admin-archived-users", (req, res) => {
 	res.redirect("http://localhost:3000/admin-archived-users");
 });
 
+
 // user
 let ID;
+app.post("/delete-account", (req, res) => {
+	connection.query("SELECT * FROM sessionn", (error, results) => {
+		connection.query(`SELECT * FROM user WHERE ID = ${results[0].ID}`, (error, results) => {
+			connection.query(`UPDATE user SET inArchive = 'true' WHERE ID = ${results[0].ID}`)
+			let values = `VALUES (${results[0].ID}, '${results[0].firstName}', '${results[0].lastName}', '${results[0].email}', '${results[0].phoneNumber}', '${results[0].accountDateCreated}')`;
+			connection.query(`INSERT INTO archive (ID, firstName, lastName, email, phoneNumber, accountDateCreated) ${values}`, (error, results) => {
+				if (!error){
+					connection.query("UPDATE sessionn SET ID = 0")
+				}
+			})
+		})
+	})
+	res.redirect("http://localhost/")
+})
+
 
 app.put("/user-update:ID", async (req, res) => {
 	connection.query("SELECT * FROM sessionn", (error, results, fields) => {

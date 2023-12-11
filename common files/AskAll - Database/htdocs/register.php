@@ -1,9 +1,9 @@
 <?php
 $user = "root";
-$password = "hehez190";
+$password = "weakka12";
 
 try {
-    $pdo = new PDO("mysql:host=localhost:3307;dbname=askalldb", $user, $password);
+    $pdo = new PDO("mysql:host=localhost;dbname=askalldb", $user, $password);
 } catch (PDOException $e) {
     echo $e;
 }
@@ -28,7 +28,7 @@ if ($result_session['ID'] != 0) {
   <meta content="Free HTML Templates" name="description">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="favicon.png">
+  <link href="img/favicon.ico" rel="icon">
 
   <!-- Google Web Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -92,7 +92,7 @@ if ($result_session['ID'] != 0) {
     <!-- Navbar & Carousel Start -->
     <div class="container-fluid position-relative p-0">
       <nav class="navbar navbar-expand-lg navbar-dark px-5 py-5 py-lg-0">
-        <a href="http://localhost:8080/" class="navbar-brand p-0">
+        <a href="/login" class="navbar-brand p-0">
           <h1 class="m-0 py-2"><i class="fa fa-user-tie me-2"></i>AskAll</h1>
         </a>
       </nav>
@@ -150,7 +150,7 @@ if ($result_session['ID'] != 0) {
                                                     <div class="form-group">
                                                         <label class="text-dark" for="reg-email">E-mail Address</label>
                                                         <input name="email" class="form-control" type="email" required=""
-                                                            id="reg-email"  pattern=".*@gmail.com$" title="Please Enter a valid Gmail address and ending with @gmail.com">
+                                                            id="reg-email">
                                                         <div class="invalid-feedback">Please enter valid email address!
                                                         </div>
                                                     </div>
@@ -159,7 +159,7 @@ if ($result_session['ID'] != 0) {
                                                     <div class="form-group">
                                                         <label class="text-dark" for="reg-phone">Phone Number</label>
                                                         <input name="phoneNumber" class="form-control" type="text" required=""
-                                                            id="reg-phone"  pattern="09\d{9}" title="Number should start with 09 and less than 12">
+                                                            id="reg-phone">
                                                         <div class="invalid-feedback">Please enter your phone number!
                                                         </div>
                                                     </div>

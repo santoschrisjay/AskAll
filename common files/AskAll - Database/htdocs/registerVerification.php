@@ -1,10 +1,10 @@
 <?php
 session_start();
 $user = "root";
-$password = "hehez190";
+$password = "weakka12";
 
 try {
-  $pdo = new PDO("mysql:host=localhost:3307;dbname=askalldb", $user, $password);
+  $pdo = new PDO("mysql:host=localhost;dbname=askalldb", $user, $password);
 } catch (PDOException $e) {
   echo $e;
 }
@@ -29,7 +29,7 @@ if ($result_session['ID'] != 0) {
   <meta content="Free HTML Templates" name="description">
 
   <!-- Favicon -->
-	<link rel="icon" type="image/svg+xml" href="favicon.png">
+  <link href="img/favicon.ico" rel="icon">
 
   <!-- Google Web Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -108,12 +108,9 @@ if ($result_session['ID'] != 0) {
                             <div class="col-md-6 pt-sm-3 mx-auto mb-5">
                                 <div class="card">
                                     <div class="card-body p-5">
-                                        <h1 class="section-title text-center position-relative pb-3 mb-2">Forgot
-                                            Password?</h1>
-                                        <h3 class="h6 font-weight-semibold opacity-70 pt-4 pb-2">Please enter your email
-                                            address, and we'll send you a verification code to proceed to the next step.
-                                        </h3>
-                                        <form class="needs-validation" act="" method="POST">
+                                        <h1 class="section-title text-center position-relative pb-3 mb-2">Verification Code?</h1>
+              
+                                        <form class="needs-validation" act="verification" method="POST">
                                             <!--Email-->
                                             <div class="input-group form-group my-4">
                                                 <div class="input-group-prepend"><span class="input-group-text"><i
@@ -123,63 +120,18 @@ if ($result_session['ID'] != 0) {
                                                     required="">
                                                 <div class="invalid-feedback">Please enter valid email address!</div>
                                             </div>
-                                            <!--Password-->
-                                            <div class="input-group form-group mb-3">
-                                                <div class="input-group-prepend"><span class="input-group-text"><i
-                                                            class="fa fa-lock input-icon"></i></span>
-                                                </div>
-
-                                                <input name="newPassword" class="form-control" type="password" placeholder="New Password"
-                                                    required="">
-                                                <div class="invalid-feedback">Please enter valid password!</div>
-                                            </div>
-                                            <!--Re-Enter Password-->
-                                            <div class="input-group form-group mb-3">
-                                                <div class="input-group-prepend"><span class="input-group-text"><i
-                                                            class="fa fa-lock input-icon"></i></span>
-                                                </div>
-
-                                                <input name="confirmNewPassword" class="form-control" type="password"
-                                                    placeholder="Confirm Password" required="">
-                                                <div class="invalid-feedback">Please enter valid password!</div>
-                                            </div>
                                             <hr class="text-dark my-2">
                                             <div class="text-right pt-4">
                                                 <button name="signIn" class="btn btn-primary py-3 px-5 wow zoomIn"
-                                                    data-wow-delay="0.9s" type="submit">Sign In</button>
+                                                    data-wow-delay="0.9s" type="submit">Submit</button>
                                             </div>
                                         </form>
                                         <?php
                                         if (isset($_POST['signIn'])) {
                                           $verificationCode = $_POST['verificationCode'];
-                                          $newPassword = $_POST['newPassword'];
-                                          $confirmNewPassword = $_POST['confirmNewPassword'];
-
                                           if ($_SESSION['otp'] == $verificationCode) {
-                                            if ($newPassword == $confirmNewPassword) {
-                                              $mail = $_SESSION['email'];
-
-                                              $Select_id = $pdo->prepare("SELECT * FROM user WHERE email = '$mail'");
-                                              $Select_id->execute();
-                                              $result = $Select_id->fetch(PDO::FETCH_ASSOC);
-                                              $result_id = $result['ID'];
-                                              $update_session = $pdo->prepare("UPDATE sessionn SET ID = '$result_id'");
-                                              $update_session->execute();
-                                              $hashedPassword = md5($newPassword);
-                                              $changePass = $pdo->prepare("UPDATE user SET passwordd = '$hashedPassword' WHERE email = '$mail'");
-                                              $changePass->execute();
-
-                                              $firstName = $result["firstName"];
-                                              $lastName = $result["lastName"];
-                                              $email = $result["email"];
-                                              $updateLoginTime = $pdo->prepare("INSERT INTO auditTrail(userID, firstName, lastName, email, login) VALUES ('$result_id', '$firstName', '$lastName', '$email', NOW())");
-                                              $updateLoginTime->execute();
-
-                                              echo "<script>window.location = 'http://localhost:3000/'</script>";
-                                              exit();
-                                            } else {
-                                              echo "<h6>Password and confirm password must be the same</h6>";
-                                            }
+                                            
+                                              
                                           } else {
                                             echo "<h6>Invalid Verification Code</h6>";
                                           }
