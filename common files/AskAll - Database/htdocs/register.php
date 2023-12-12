@@ -1,6 +1,6 @@
 <?php
 $user = "root";
-$password = "weakka12";
+$password = "hehez190";
 
 try {
     $pdo = new PDO("mysql:host=localhost;dbname=askalldb", $user, $password);

@@ -12,9 +12,9 @@
         </nav>
         <hr class="mt-0 mb-4">
 
-        <div class="container mt-5">
-            <table class="table table-hover">
-                <thead>
+        <div class="container mt-5"  style="height:30vh; overflow-y: scroll;" >
+            <table class="table table-hover" >
+                <thead >
                     <tr>
                         <th>ID</th>
                         <th>First Name</th>
@@ -24,6 +24,7 @@
                         <th>Logout</th>
                     </tr>
                 </thead>
+                
                 <tbody>
                     <% adminUsers.forEach(admin=> { %>
                         <tr class="table-row" data-admin-id="<%= admin.ID %>">
@@ -47,12 +48,13 @@
                             </td>
                         </tr>
                         <% }); %>
-                </tbody>
+                    </tbody>
+          
             </table>
         </div>
         
     </div>
-    <div style="position: absolute; bottom: 0; width:100%;">
+    <div style="position: absolute; bottom: 0; width:100%; ">
 
         <%- include('../partials/pages/footerLogin') %>
     </div>
