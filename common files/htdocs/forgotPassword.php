@@ -1,22 +1,5 @@
-<?php
-session_start();
-$user = "root";
-$password = "weakka12";
-
-try {
-  $pdo = new PDO("mysql:host=localhost;dbname=askalldb", $user, $password);
-} catch (PDOException $e) {
-  echo $e;
-}
-
-//check localhost
-$check_session = $pdo->prepare("SELECT ID FROM sessionn"); //ito?
-$check_session->execute();
-$result_session = $check_session->fetch(PDO::FETCH_ASSOC);
-if ($result_session['ID'] != 0) {
-  echo "<script>window.location = 'http://localhost:3000/'</script>";
-  exit();
-}
+<?php 
+    include './database.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,8 +12,8 @@ if ($result_session['ID'] != 0) {
   <meta content="Free HTML Templates" name="description">
 
   <!-- Favicon -->
-  <link href="img/favicon.ico" rel="icon">
-
+	<link rel="icon" type="image/svg+xml" href="favicon.png">
+  
   <!-- Google Web Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -95,8 +78,8 @@ if ($result_session['ID'] != 0) {
       </a>
     </nav>
 
-   <!-- Navbar Continuation -->
-   <div id="header-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+    <!-- Navbar Continuation -->
+    <div id="header-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <img class="w-100" src="img/dhvsu-background.png" alt="Image">
@@ -117,73 +100,80 @@ if ($result_session['ID'] != 0) {
                                             <!--Email-->
                                             <div class="input-group form-group my-4">
                                                 <div class="input-group-prepend"><span class="input-group-text"><i
-                                                            class="fa fa-envelope input-icon"></i></span>
-                                                </div>
-                                                <input name="verificationCode" class="form-control" type="text" placeholder="Verification Code"
+                                                    class="fa fa-envelope input-icon"></i></span></div>
+                                                <input name="email" class="form-control" type="email" placeholder="Email"
                                                     required="">
                                                 <div class="invalid-feedback">Please enter valid email address!</div>
                                             </div>
-                                            <!--Password-->
-                                            <div class="input-group form-group mb-3">
-                                                <div class="input-group-prepend"><span class="input-group-text"><i
-                                                            class="fa fa-lock input-icon"></i></span>
-                                                </div>
-
-                                                <input name="newPassword" class="form-control" type="password" placeholder="New Password"
-                                                    required="">
-                                                <div class="invalid-feedback">Please enter valid password!</div>
+                                            <div class="d-flex flex-wrap justify-content-between">
+                                                <p class="text-dark">Wrong button?
+                                                    <a class="nav-link-inline font-size-sm mx-3" href="./index.php">Sign
+                                                        In</a>
+                                                    <a class="nav-link-inline font-size-sm mx-3"
+                                                        href="./register.php">Register</a>
+                                                </p>
                                             </div>
-                                            <!--Re-Enter Password-->
-                                            <div class="input-group form-group mb-3">
-                                                <div class="input-group-prepend"><span class="input-group-text"><i
-                                                            class="fa fa-lock input-icon"></i></span>
-                                                </div>
-
-                                                <input name="confirmNewPassword" class="form-control" type="password"
-                                                    placeholder="Confirm Password" required="">
-                                                <div class="invalid-feedback">Please enter valid password!</div>
-                                            </div>
-                                            <hr class="text-dark my-2">
+                                            <hr class="text-dark">
                                             <div class="text-right pt-4">
-                                                <button name="signIn" class="btn btn-primary py-3 px-5 wow zoomIn"
-                                                    data-wow-delay="0.9s" type="submit">Sign In</button>
+                                                <button name="sendCode" class="btn btn-primary py-3 px-5 wow zoomIn"
+                                                    data-wow-delay="0.9s" type="submit">Send Code</button>
                                             </div>
                                         </form>
-                                        <?php
-                                        if (isset($_POST['signIn'])) {
-                                          $verificationCode = $_POST['verificationCode'];
-                                          $newPassword = $_POST['newPassword'];
-                                          $confirmNewPassword = $_POST['confirmNewPassword'];
+                                        <?php 
+                                            use PHPMailer\PHPMailer\PHPMailer;
+                                            use PHPMailer\PHPMailer\Exception;
 
-                                          if ($_SESSION['otp'] == $verificationCode) {
-                                            if ($newPassword == $confirmNewPassword) {
-                                              $mail = $_SESSION['email'];
+                                            require './vendor/autoload.php';
 
-                                              $Select_id = $pdo->prepare("SELECT * FROM user WHERE email = '$mail'");
-                                              $Select_id->execute();
-                                              $result = $Select_id->fetch(PDO::FETCH_ASSOC);
-                                              $result_id = $result['ID'];
-                                              $update_session = $pdo->prepare("UPDATE sessionn SET ID = '$result_id'");
-                                              $update_session->execute();
-                                              $hashedPassword = md5($newPassword);
-                                              $changePass = $pdo->prepare("UPDATE user SET passwordd = '$hashedPassword' WHERE email = '$mail'");
-                                              $changePass->execute();
-                                              
-                                              $firstName = $result["firstName"];
-                                              $lastName = $result["lastName"];
-                                              $email = $result["email"];
-                                              $updateLoginTime = $pdo -> prepare("INSERT INTO auditTrail(userID, firstName, lastName, email, login) VALUES ('$result_id', '$firstName', '$lastName', '$email', NOW())"); 
-                                              $updateLoginTime->execute(); 
-                                              
-                                              echo "<script>window.location = 'http://localhost:3000/'</script>";
-                                              exit();
-                                            } else {
-                                              echo "<h6>Password and confirm password must be the same</h6>";
+                                            function generateOTP($length = 6) {
+                                                $characters = '0123456789';
+                                                $otp = '';
+                                                for ($i = 0; $i < $length; $i++) {
+                                                    $otp .= $characters[rand(0, strlen($characters) - 1)];
+                                                }
+                                                return $otp;
                                             }
-                                          } else {
-                                            echo "<h6>Invalid Verification Code</h6>";
-                                          }
-                                        }
+                                            $otp = "";
+
+                                            $mail = new PHPMailer(true);
+                                            if(isset($_POST['sendCode'])){
+                                                $email = $_POST['email'];
+                                                
+                                                $check_email = $pdo->prepare("SELECT email FROM user WHERE email = '$email'");
+                                                $check_email->execute();
+                                                $result = $check_email->fetch(PDO::FETCH_ASSOC);
+                                                if(!empty($result)){
+                                                    $_SESSION['otp'] = generateOTP();
+                                                    $_SESSION['email'] = $email;
+                                                    try {
+                                                        $mail->SMTPDebug = 0;
+                                                        $mail->isSMTP();
+                                                        $mail->Host = 'smtp.gmail.com';
+                                                        $mail->SMTPAuth = true; 
+                                                        $mail->Username = 'askall.web@gmail.com'; 
+                                                        $mail->Password = 'qasx ndsv wrht hdwu'; 
+                                                        $mail->SMTPSecure = 'tls'; 
+                                                        $mail->Port = 587;
+                                                    
+                                                        $mail->setFrom('askall.web@gmail.com', 'ASK ALL');
+                                                        $mail->addAddress($email); 
+                                                        $mail->addReplyTo('askall.web@gmail.com', 'ASK ALL');
+                                                    
+                                                        $mail->isHTML(true);
+                                                        $mail->Subject = 'Your OTP for Verification';
+                                                        $mail->Body = "Your OTP is: ".$_SESSION['otp']; 
+                                                    
+                                                        $mail->send();
+
+                                                        echo "<script>window.location = './ForgotPasswordVerification.php'</script>";
+                                                        exit();
+                                                    } catch (Exception $e) {
+                                                        echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
+                                                    }
+                                                }else{
+                                                    echo "<h6>Account doesn't exist. Please check your email and try again</h6>";
+                                                }
+                                            }
                                         ?>
                                     </div>
                                 </div>
@@ -209,9 +199,6 @@ if ($result_session['ID'] != 0) {
     </div>
   </div>
 </div>
-
-
-
 <!-- JavaScript Libraries -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -1,19 +1,20 @@
 <?php
 session_start();
 $user = "root";
-$password = "weakka12";
+$password = "hehez190";
 
 try {
-  $pdo = new PDO("mysql:host=localhost;dbname=askalldb", $user, $password);
+  $pdo = new PDO("mysql:host=localhost:3307;dbname=askalldb", $user, $password);
 } catch (PDOException $e) {
   echo $e;
 }
 
-$check_session = $pdo->prepare("SELECT ID FROM admin_session"); //ito?
+//check localhost
+$check_session = $pdo->prepare("SELECT ID FROM sessionn"); //ito?
 $check_session->execute();
 $result_session = $check_session->fetch(PDO::FETCH_ASSOC);
 if ($result_session['ID'] != 0) {
-  echo "<script>window.location = 'http://localhost:3000/admin'</script>";
+  echo "<script>window.location = 'http://localhost:3000/'</script>";
   exit();
 }
 ?>
@@ -28,7 +29,7 @@ if ($result_session['ID'] != 0) {
   <meta content="Free HTML Templates" name="description">
 
   <!-- Favicon -->
-  <link href="img/favicon.ico" rel="icon">
+	<link rel="icon" type="image/svg+xml" href="favicon.png">
 
   <!-- Google Web Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -89,15 +90,15 @@ if ($result_session['ID'] != 0) {
     <!-- Navbar & Carousel Start -->
     <div class="container-fluid position-relative p-0">
       <nav class="navbar navbar-expand-lg navbar-dark px-5 py-5 py-lg-0">
-        <a href="http://localhost/" class="navbar-brand p-0">
+        <a href="http://localhost:8080/" class="navbar-brand p-0">
           <h1 class="m-0 py-2"><i class="fa fa-user-tie me-2"></i>AskAll</h1>
         </a>
       </nav>
-  <!-- Navbar Continuation -->
-  <div id="header-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+    </div>
+      <div id="header-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img class="w-100" src="img/dhvsu-background.png" alt="Image">
+                <img class="w-100" src="./img/dhvsu-background.png" alt="Image">
                 <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
 
                     <!--LOGIN START-->
@@ -106,21 +107,27 @@ if ($result_session['ID'] != 0) {
                             <div class="col-md-6 pt-sm-3 mx-auto mb-5">
                                 <div class="card">
                                     <div class="card-body p-5">
-                                        <h1 class="section-title text-center position-relative pb-3 mb-2">Admin Sign In
-                                        </h1>
-                                        <div class="d-sm-flex align-items-center py-3 mx-auto">
-                                            <h3 class="h4 font-weight-semibold opacity-70 mb-3 mb-sm-2 mr-sm-3 mx-auto">
-                                                Welcome
-                                                Admin
+                                        <h1 class="section-title text-center position-relative pb-3 mb-2">Sign
+                                            in</h1>
+                                        <div class="d-sm-flex align-items-center py-3">
+                                            <h3 class="h4 font-weight-semibold opacity-70 mb-3 mb-sm-2 mr-sm-3">Sign in
+                                                with:
                                             </h3>
-
+                                            <div>
+                                                <a class="btn btn-md btn-outline-dark rounded-circle me-2 mx-2 mb-1"
+                                                    href=""><i class="fab fa-facebook-f fw-normal fa-lg"></i></a>
+                                                <a class="btn btn-md btn-outline-dark rounded-circle me-2 mx-1 mb-1"
+                                                    href=""><i class="fab fa-google fw-normal fa-md"></i></a>
+                                            </div>
                                         </div>
                                         <hr class="text-dark">
+                                        <h3 class="h6 font-weight-semibold opacity-70 pt-4 pb-2">Or using form below
+                                        </h3>
                                         <form class="needs-validation" act="" method="POST">
                                             <!--Email-->
                                             <div class="input-group form-group my-4">
                                                 <div class="input-group-prepend"><span class="input-group-text"><i
-                                                            class="fa fa-envelope input-icon"></i></span></div>
+                                                    class="fa fa-envelope input-icon"></i></span></div>
                                                 <input name="email" class="form-control" type="email" placeholder="Email"
                                                     required="">
                                                 <div class="invalid-feedback">Please enter valid email address!</div>
@@ -128,10 +135,18 @@ if ($result_session['ID'] != 0) {
                                             <!--Password-->
                                             <div class="input-group form-group mb-3">
                                                 <div class="input-group-prepend"><span class="input-group-text"><i
-                                                            class="fa fa-lock input-icon"></i></span></div>
-                                                <input name="password" class="form-control" type="password" placeholder="Password"
+                                                    class="fa fa-lock input-icon"></i></span></div>
+                                                <input name="passwordd" class="form-control" type="password" placeholder="Password"
                                                     required="">
                                                 <div class="invalid-feedback">Please enter valid password!</div>
+                                            </div>
+                                            <div class="d-flex flex-wrap justify-content-between">
+                                                <p class="text-dark">Don't have an Account?
+                                                    <a class="nav-link-inline font-size-sm" href="./register.php">
+                                                        Register</a>
+                                                </p>
+                                                <a class="nav-link-inline font-size-sm" href="./forgotPassword.php">Forgot
+                                                    password?</a>
                                             </div>
                                             <hr class="text-dark">
                                             <div class="text-right pt-4">
@@ -140,31 +155,42 @@ if ($result_session['ID'] != 0) {
                                             </div>
                                         </form>
                                         <?php
-    if (isset($_POST['signIn'])) {
-      $email = $_POST['email'];
-      $password = $_POST['password'];
-      $passwordHash = md5($password);
-      
-      $selectPassword = $pdo->prepare("SELECT * FROM admin WHERE email_address = '$email'");
-      $selectPassword->execute();
-      $result = $selectPassword->fetch(PDO::FETCH_ASSOC);
+                                        if (isset($_POST['signIn'])) {
+                                          $email = $_POST['email'];
+                                          $passwordd = $_POST['passwordd'];
 
-      $updateAdminSession = $pdo->prepare("UPDATE admin_session SET ID = '1'");
-      $updateAdminSession->execute();
-      
-      if (!empty($result)) {
-        if ($passwordHash == $result['password']) {
+                                          if (!empty($email) || !empty($passwordd)) {
+                                            $Select_email = $pdo->prepare("SELECT * FROM user WHERE email = '$email'");
+                                            $Select_email->execute();
+                                            $result = $Select_email->fetch(PDO::FETCH_ASSOC);
+                                            if (!empty($result)) {
+                                              $passwordHash = md5($passwordd);
+                                              if ($passwordHash == $result['passwordd'] && $result["inArchive"] == "false") {
+                                                $Select_id = $pdo->prepare("SELECT * FROM user WHERE email = '$email'");
+                                                $Select_id->execute();
+                                                $result = $Select_id->fetch(PDO::FETCH_ASSOC);
+                                                $result_id = $result['ID'];
+                                                $update_session = $pdo->prepare("UPDATE sessionn SET ID = '$result_id'");
+                                                $update_session->execute();
 
-          echo "<script>window.location = 'http://localhost:3000/admin'</script>";
-          exit();
-        } else {
-          echo "<h6>Invalid Email or Password</h6>";
-        }
-      } else {
-        echo "<h6>Invalid Email or Password</h6>";
-      }
-    }
-    ?>
+                                                $firstName = $result["firstName"];
+                                                $lastName = $result["lastName"];
+                                                $email = $result["email"];
+
+                                                $updateLoginTime = $pdo->prepare("INSERT INTO auditTrail(userID, firstName, lastName, email, login) VALUES ('$result_id', '$firstName', '$lastName', '$email', NOW())");
+                                                $updateLoginTime->execute();
+
+                                                echo "<script>window.location = 'http://localhost:3000/'</script>";
+                                                exit();
+                                              } else {
+                                                echo "<h6>Invalid Email or Password</h6>";
+                                              }
+                                            } else {
+                                              echo "<h6>Invalid Email or Password</h6>";
+                                            }
+                                          }
+                                        }
+                                        ?>
                                     </div>
                                 </div>
                             </div>
@@ -174,13 +200,12 @@ if ($result_session['ID'] != 0) {
             </div>
         </div>
     </div>
-
     <div class="container-fluid text-white" style="background: #061429;">
       <div class="container text-center">
         <div class="row justify-content-end">
           <div class="col-lg-8 col-md-6">
             <div class="d-flex align-items-center justify-content-center" style="height: 75px;">
-              <p class="mb-0">&copy; <a class="text-white border-bottom" href="#">AskAll</a>. All Rights Reserved.
+              <p class="mb-0">&copy; <a class="text-white border-bottom" href="http://localhost:8080/adminLogin.php">AskAll</a>. All Rights Reserved.
     
                 Special Thanks To <a class="text-white border-bottom" href="#">References</a>
               </p>
@@ -189,9 +214,6 @@ if ($result_session['ID'] != 0) {
         </div>
       </div>
     </div>
-
-
-
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>

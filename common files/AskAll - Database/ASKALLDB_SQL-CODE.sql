@@ -16,11 +16,9 @@ CREATE TABLE user(
 );
 ALTER TABLE user AUTO_INCREMENT = 100;
 
-
 CREATE EVENT update_every_5_seconds
 ON SCHEDULE EVERY 5 SECOND
 DO UPDATE user SET notif = "";
-
 
 CREATE TABLE archive(
     ID INT NULL,
@@ -62,16 +60,11 @@ CREATE TABLE admin_session(
 INSERT INTO sessionn (ID) VALUES (0);
 INSERT INTO admin_session (ID) VALUES (0);
 
-
 CREATE TABLE askalldb.todo_list (
   todo_ID INT NOT NULL AUTO_INCREMENT,
   user_ID INT NULL,
   items VARCHAR(60) NULL,
   PRIMARY KEY (todo_ID));
-
-CREATE TABLE archive_user LIKE user;
-
-
 
 INSERT INTO admin(first_name, last_name, email_address, phone_number, password) 
 VALUES ("Ask", "All", "askall.web@gmail.com", "09086050160", MD5('123'));
