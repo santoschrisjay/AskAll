@@ -729,6 +729,8 @@ app.get("/chatRantBuddy", (req, res) =>
 );
 
 //**document-converter */
+const documentApiKey = process.env.DOCUMENT_API_KEY;
+
 app.get("/word-to-pdf", (req, res) =>
 	checkIfLogined(res, "document-converter/wordToPdf.ejs")
 );
@@ -738,7 +740,7 @@ app.post("/convertWordToPdf", (req, res) => {
 
 	// Configure API key authorization: Apikey
 	var Apikey = defaultClient.authentications["Apikey"];
-	Apikey.apiKey = "3b6bfd19-9a46-44f6-91b6-a5a9b0e7b30c";
+	Apikey.apiKey = documentApiKey;
 
 	var apiInstance = new CloudmersiveConvertApiClient.ConvertDocumentApi();
 
@@ -815,7 +817,7 @@ app.post("/convertPdfToWord", (req, res) => {
 
 	// Configure API key authorization: Apikey
 	var Apikey = defaultClient.authentications["Apikey"];
-	Apikey.apiKey = "3b6bfd19-9a46-44f6-91b6-a5a9b0e7b30c";
+	Apikey.apiKey = documentApiKey;
 
 	var apiInstance = new CloudmersiveConvertApiClient.ConvertDocumentApi();
 
@@ -929,15 +931,16 @@ app.get("/resume-zapanta", (req, res) =>
 //*TODO: FEATURES START */
 
 //**WEATHER START */
+const weatherApiKey = process.env.WEATHER_API_KEY;
+
 app.post("/weather", function (req, res) {
 	const query = req.body.cityName;
-	const apiKey = "5acdcc6fb7aabb8e9d762027922eaf96";
 	const unit = "metric";
 	const url =
 		"https://api.openweathermap.org/data/2.5/weather?q=" +
 		query +
 		"&appid=" +
-		apiKey +
+		weatherApiKey +
 		"&units=" +
 		unit;
 
