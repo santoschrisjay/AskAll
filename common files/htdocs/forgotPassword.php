@@ -1,5 +1,27 @@
+<<<<<<<<< Temporary merge branch 1:common files/AskAll - Database/htdocs/registerVerification.php
 <?php
-include './database.php';
+session_start();
+$user = "root";
+$password = "hehez190";
+
+try {
+  $pdo = new PDO("mysql:host=localhost;dbname=askalldb", $user, $password);
+} catch (PDOException $e) {
+  echo $e;
+}
+
+//check localhost
+$check_session = $pdo->prepare("SELECT ID FROM sessionn"); //ito?
+$check_session->execute();
+$result_session = $check_session->fetch(PDO::FETCH_ASSOC);
+if ($result_session['ID'] != 0) {
+  echo "<script>window.location = 'http://localhost:3000/'</script>";
+  exit();
+}
+=========
+<?php 
+    include './database.php';
+>>>>>>>>> Temporary merge branch 2:common files/htdocs/forgotPassword.php
 ?>
 <!DOCTYPE html>
 <html lang="en">

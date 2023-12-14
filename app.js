@@ -377,7 +377,7 @@ app.post("/admin-users", (req, res) => {
 		const { input } = parsedData;
 
 		const sql =
-			"SELECT * FROM user WHERE firstName LIKE ? OR lastName LIKE ? OR email LIKE ? OR phoneNumber LIKE ? OR accountDateCreated LIKE ? AND inArchive != 'true'";
+			"SELECT * FROM user WHERE (inArchive = 'false' AND firstName LIKE ?) OR (inArchive = 'false' AND lastName LIKE ?) OR (inArchive = 'false' AND email LIKE ?) OR (inArchive = 'false' AND phoneNumber LIKE ?) OR (inArchive = 'false' AND accountDateCreated LIKE ?)";
 		const searchInput = `%${input}%`;
 		console.log(searchInput);
 
@@ -424,6 +424,7 @@ app.get("/admin-audit-trail", (req, res) => {
 });
 //ARCHIVE
 app.get("/admin-archived-users", (req, res) => {
+	
 	const sql = "SELECT * FROM archive";
 	connection.query(sql, (error, results, fields) => {
 		if (error) {
@@ -434,6 +435,36 @@ app.get("/admin-archived-users", (req, res) => {
 		res.render("admin/adminArchivedUsers.ejs", { adminUsers: results });
 	});
 });
+
+app.post("/admin-archived-search", (req, res) => {
+	const input = req.body;
+	const resultData = [];
+	for (const [key, value] of Object.entries(input)) {
+		const parsedData = JSON.parse(key);
+
+		const { input } = parsedData;
+
+		const sql =
+		"SELECT * FROM user WHERE (inArchive = 'true' AND firstName LIKE ?) OR (inArchive = 'true' AND lastName LIKE ?) OR (inArchive = 'true' AND email LIKE ?) OR (inArchive = 'true' AND phoneNumber LIKE ?) OR (inArchive = 'true' AND accountDateCreated LIKE ?)";
+		const searchInput = `%${input}%`;
+		console.log(searchInput);
+
+		connection.query(
+			sql,
+			[searchInput, searchInput, searchInput, searchInput, searchInput],
+			(error, results, fields) => {
+				if (error) {
+					console.error("Error retrieving admin history:", error);
+					res.status(500).send("Error retrieving admin history");
+					throw error;
+				}
+				console.log(results);
+				res.status(200).json(results);
+			}
+		);
+	}
+});
+
 
 app.post("/admin-archived-users", (req, res) => {
 	let userID = req.body.userID;
@@ -930,75 +961,149 @@ app.get("/pdf-to-word", (req, res) =>
 );
 
 app.post("/convertPdfToWord", (req, res) => {
-	var defaultClient = CloudmersiveConvertApiClient.ApiClient.instance;
+	let convertTo = req.body.converTo;
 
 	// Configure API key authorization: Apikey
 	var Apikey = defaultClient.authentications["Apikey"];
 	Apikey.apiKey = documentApiKey;
 
-	var apiInstance = new CloudmersiveConvertApiClient.ConvertDocumentApi();
-
-	const directoryPath = "";
-	const fileName = "";
-	const filePath = `${directoryPath}\\${fileName}`;
-
-	fs.readFile(filePath, (err, data) => {
-		if (err) {
-			console.error(`Error reading file ${filePath}: ${err}`);
-		} else {
-			const inputFile = Buffer.from(data.buffer);
-
-			var callback = function (error, responseData, response) {
+		// Configure API key authorization: Apikey
+		var Apikey = defaultClient.authentications["Apikey"];
+		Apikey.apiKey = "3b6bfd19-9a46-44f6-91b6-a5a9b0e7b30c";
+	
+		var apiInstance = new CloudmersiveConvertApiClient.ConvertDocumentApi();
+	
+		const directoryPath = "";
+		const fileName = "";
+		const filePath = `${directoryPath}\\${fileName}`;
+	
+		fs.readFile(filePath, (err, data) => {
+			if (err) {
+				console.error(`Error reading file ${filePath}: ${err}`);
+			} else {
+				const inputFile = Buffer.from(data.buffer);
+	
+				var callback = function (error, responseData, response) {
+					if (error) {
+						console.error(error);
+					} else {
+						console.log(
+							"API called successfully. Returned data: " + responseData
+						);
+						// Handle the converted data as needed
+					}
+				};
+	
+				apiInstance.convertDocumentDocxToPdf(inputFile, callback);
+			}
+		});
+		// Check if a file was uploaded
+		if (!req.files || !req.files.pdfFile) {
+			return res.status(400).send("No Word file uploaded.");
+		}
+	
+		// Get the uploaded PDF file from the request
+		const pdfFile = req.files.pdfFile;
+	
+		// Read the contents of the PDF file
+		const inputFile = Buffer.from(pdfFile.data.buffer);
+	
+		// Call the Cloudmersive API to convert the PDF to Word
+		apiInstance.convertDocumentDocxToPdf(
+			inputFile,
+			(error, responseData, response) => {
 				if (error) {
 					console.error(error);
-				} else {
-					console.log(
-						"API called successfully. Returned data: " + responseData
-					);
-					// Handle the converted data as needed
+					return res.status(500).send("Error converting Word to Pdf.");
 				}
-			};
-
-			apiInstance.convertDocumentPdfToDocx(inputFile, callback);
-		}
-	});
-	// Check if a file was uploaded
-	if (!req.files || !req.files.pdfFile) {
-		return res.status(400).send("No PDF file uploaded.");
-	}
-
-	// Get the uploaded PDF file from the request
-	const pdfFile = req.files.pdfFile;
-
-	// Read the contents of the PDF file
-	const inputFile = Buffer.from(pdfFile.data.buffer);
-
-	// Call the Cloudmersive API to convert the PDF to Word
-	apiInstance.convertDocumentPdfToDocx(
-		inputFile,
-		(error, responseData, response) => {
-			if (error) {
-				console.error(error);
-				return res.status(500).send("Error converting PDF to Word.");
+	
+				// Handle the converted data as needed
+				const docxData = Buffer.from(responseData);
+	
+				// Set the appropriate headers for download
+				res.setHeader(
+					"Content-Disposition",
+					"attachment; filename=converted-document.pdf"
+				);
+				res.setHeader(
+					"Content-Type",
+					"application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+				);
+	
+				// Send the converted DOCX file as the response
+				res.status(200).send(docxData);
 			}
+		);
+	}else{
+			var defaultClient = CloudmersiveConvertApiClient.ApiClient.instance;
+		// Configure API key authorization: Apikey
+		var Apikey = defaultClient.authentications["Apikey"];
+		Apikey.apiKey = "3b6bfd19-9a46-44f6-91b6-a5a9b0e7b30c";
 
-			// Handle the converted data as needed
-			const docxData = Buffer.from(responseData);
+		var apiInstance = new CloudmersiveConvertApiClient.ConvertDocumentApi();
 
-			// Set the appropriate headers for download
-			res.setHeader(
-				"Content-Disposition",
-				"attachment; filename=converted-document.docx"
-			);
-			res.setHeader(
-				"Content-Type",
-				"application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-			);
+		const directoryPath = "";
+		const fileName = "";
+		const filePath = `${directoryPath}\\${fileName}`;
 
-			// Send the converted DOCX file as the response
-			res.status(200).send(docxData);
+		fs.readFile(filePath, (err, data) => {
+			if (err) {
+				console.error(`Error reading file ${filePath}: ${err}`);
+			} else {
+				const inputFile = Buffer.from(data.buffer);
+
+				var callback = function (error, responseData, response) {
+					if (error) {
+						console.error(error);
+					} else {
+						console.log(
+							"API called successfully. Returned data: " + responseData
+						);
+						// Handle the converted data as needed
+					}
+				};
+
+				apiInstance.convertDocumentPdfToDocx(inputFile, callback);
+			}
+		});
+		// Check if a file was uploaded
+		if (!req.files || !req.files.pdfFile) {
+			return res.status(400).send("No PDF file uploaded.");
 		}
-	);
+
+		// Get the uploaded PDF file from the request
+		const pdfFile = req.files.pdfFile;
+
+		// Read the contents of the PDF file
+		const inputFile = Buffer.from(pdfFile.data.buffer);
+
+		// Call the Cloudmersive API to convert the PDF to Word
+		apiInstance.convertDocumentPdfToDocx(
+			inputFile,
+			(error, responseData, response) => {
+				if (error) {
+					console.error(error);
+					return res.status(500).send("Error converting PDF to Word.");
+				}
+
+				// Handle the converted data as needed
+				const docxData = Buffer.from(responseData);
+
+				// Set the appropriate headers for download
+				res.setHeader(
+					"Content-Disposition",
+					"attachment; filename=converted-document.docx"
+				);
+				res.setHeader(
+					"Content-Type",
+					"application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+				);
+
+				// Send the converted DOCX file as the response
+				res.status(200).send(docxData);
+			}
+		);
+	}
 });
 
 //**unit-converter */

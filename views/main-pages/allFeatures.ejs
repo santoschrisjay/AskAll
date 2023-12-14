@@ -582,6 +582,12 @@ rel="stylesheet">
         const handleMusicPage = () => window.location.href = "/chatMusic";
         const handleRantBuddyPage = () => window.location.href = "/chatRantBuddy";
   
+
+
+        //converter
+        let radioFunction = (value) => {
+          document.getElementById("converterTittle").innerHTML = value;
+        }
       </script>
    </div>
 
@@ -642,7 +648,7 @@ rel="stylesheet">
         <div class="container pt-5">
             <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
                 <h5 class="fw-bold text-primary text-uppercase">Document Converter</h5>
-                <h1 class="mb-0">PDF Document to <br>Word Document</h1>
+                <h1 id="converterTittle" class="mb-0">PDF Document to <br>Word Document</h1>
             </div>
         </div>
     </div>
@@ -651,8 +657,14 @@ rel="stylesheet">
         <div class="bg-light text-center py-5">
             <p>Upload your file here to convert the PDF document to Word format.</p>
             <form action="/convertPdfToWord" method="post" enctype="multipart/form-data">
-                <input class="" type="file" name="pdfFile" accept=".pdf" required>
+                <input class="" type="file" name="pdfFile" required>
                 <button class="btn btn-primary py-2 px-4" type="submit">Convert And Download</button>
+                <label>
+                  <input type="radio" name="converTo" value="PDF to Word" onclick="radioFunction('PDF to Word')">PDF to Word
+              </label>
+              <label>
+                  <input type="radio" name="converTo" value="Word to pdf" onclick="radioFunction('Word to pdf')">Word to pdf
+              </label>
             </form>
         </div>
         <div class="container-fluid py-1 text-center wow fadeInUp" data-wow-delay="0.1s ">
