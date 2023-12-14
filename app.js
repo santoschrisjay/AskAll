@@ -54,8 +54,8 @@ app.set("view engine", "ejs");
 const connection = mysql.createConnection({
 	host: "localhost",
 	user: "root",
-	password: "hehez190",
-	port: 3307, // palitan mo sa port ng workbench mo if nakarecieve ka ng error about CONNECT ECONNREFUSED
+	password: "weakka12",
+	port: 3306, // palitan mo sa port ng workbench mo if nakarecieve ka ng error about CONNECT ECONNREFUSED
 	database: "askalldb",
 });
 
@@ -373,7 +373,7 @@ app.post("/admin-users", (req, res) => {
 		const { input } = parsedData;
 
 		const sql =
-			"SELECT * FROM user WHERE firstName LIKE ? OR lastName LIKE ? OR email LIKE ? OR phoneNumber LIKE ? OR accountDateCreated LIKE ? AND inArchive != 'true'";
+			"SELECT * FROM user WHERE (inArchive = 'false' AND firstName LIKE ?) OR (inArchive = 'false' AND lastName LIKE ?) OR (inArchive = 'false' AND email LIKE ?) OR (inArchive = 'false' AND phoneNumber LIKE ?) OR (inArchive = 'false' AND accountDateCreated LIKE ?)";
 		const searchInput = `%${input}%`;
 		console.log(searchInput);
 
@@ -420,6 +420,7 @@ app.get("/admin-audit-trail", (req, res) => {
 });
 //ARCHIVE
 app.get("/admin-archived-users", (req, res) => {
+	
 	const sql = "SELECT * FROM archive";
 	connection.query(sql, (error, results, fields) => {
 		if (error) {
@@ -430,6 +431,36 @@ app.get("/admin-archived-users", (req, res) => {
 		res.render("admin/adminArchivedUsers.ejs", { adminUsers: results });
 	});
 });
+
+app.post("/admin-archived-search", (req, res) => {
+	const input = req.body;
+	const resultData = [];
+	for (const [key, value] of Object.entries(input)) {
+		const parsedData = JSON.parse(key);
+
+		const { input } = parsedData;
+
+		const sql =
+		"SELECT * FROM user WHERE (inArchive = 'true' AND firstName LIKE ?) OR (inArchive = 'true' AND lastName LIKE ?) OR (inArchive = 'true' AND email LIKE ?) OR (inArchive = 'true' AND phoneNumber LIKE ?) OR (inArchive = 'true' AND accountDateCreated LIKE ?)";
+		const searchInput = `%${input}%`;
+		console.log(searchInput);
+
+		connection.query(
+			sql,
+			[searchInput, searchInput, searchInput, searchInput, searchInput],
+			(error, results, fields) => {
+				if (error) {
+					console.error("Error retrieving admin history:", error);
+					res.status(500).send("Error retrieving admin history");
+					throw error;
+				}
+				console.log(results);
+				res.status(200).json(results);
+			}
+		);
+	}
+});
+
 
 app.post("/admin-archived-users", (req, res) => {
 	let userID = req.body.userID;
