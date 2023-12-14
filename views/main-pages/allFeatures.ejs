@@ -1,128 +1,671 @@
-<%- include('../partials/header') %>
-    <%- include('../partials/pages/headerService') %>
-        <!-- Testimonial Start -->
-        <div class="container-fluid py-1 wow fadeInUp" data-wow-delay="0.1s">
-            <div class="container py-1">
-                <!-- Images -->
-                <div class="owl-carousel testimonial-carousel wow fadeInUp" data-wow-delay="0.6s">
-                    <div class="testimonial-item bg-light my-5">
-                        <div class="d-flex align-items-center border-bottom py-3 px-3">
-                            <img class="img-fluid rounded" src="img/team.png" style="width: 416px; height: 270px;">
-                        </div>
-                    </div>
-                    <div class="testimonial-item bg-light my-5">
-                        <div class="d-flex align-items-center border-bottom py-3 px-3">
-                            <img class="img-fluid rounded" src="img/dhvsu-background.png"
-                                style="width: 416px; height: 270px;">
-                        </div>
-                    </div>
-                    <div class="testimonial-item bg-light my-5">
-                        <div class="d-flex align-items-center border-bottom py-3 px-3">
-                            <img class="img-fluid rounded" src="img/ccs-background.png"
-                                style="width: 416px; height: 270px;">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Testimonial End -->
+<div style="width:100%; height: 100%; padding: 0; margin: 0;">
 
-        <!-- Service Start -->
+<div style="display:grid; grid-template-columns: 30vw auto 35vw;  width: 100%; height: 100%; row-gap: 0; grid-column-gap: 0px; grid-template-rows: 25vw auto 28vw ;">
+    <!-- todo List -->
+    <div style="margin: 0; padding: 0;">
+      
+<link href="img/favicon.ico" rel="icon">
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="img/favicon.png">
+
+<!-- Google Web Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap"
+rel="stylesheet">
+
+<!-- Icon Font Stylesheet -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+<!-- Libraries Stylesheet -->
+<link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+<link href="lib/animate/animate.min.css" rel="stylesheet">
+
+<!-- Customized Bootstrap Stylesheet -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Template Stylesheet -->
+<link href="css/style.css" rel="stylesheet">
+
+<link rel="stylesheet" href="css/todoList.css">
+<div  class="wow fadeInUp" data-wow-delay="0.1s" style="height: 20px; margin: 0px; padding: 0px; width: 500px;"  >
+
+      <div class="box form-check p-5 w-100" style="padding: 0; margin:0;">
+          <% newListItems.forEach(function (item) { %>
+              <form action="/todo-list-delete-feature" method="post">
+                  <div class="item">
+                      <input class="form-check-input" type="checkbox" name="checkbox"
+                          value="<%= item.todo_ID %>" onchange="this.form.submit()">
+                      <p class="p-item">
+                          <%= item.items %>
+                      </p>
+                  </div>
+                  <input class="form-check-input" type="hidden" name="listName" value="<%= listTitle %>">
+              </form>
+              <% }) %>
+
+                  <form class="item" action="/todo-list-add-feature" method="post">
+                      <input class="input-text-item input-text-item-steady form-check-input" type="text" name="newItem" placeholder="New Item"
+                          autocomplete="off">
+                      <button class="btn btn-dark" type="submit" name="list"
+                          value="<%= listTitle %>">+</button>
+                  </form>
+      </div>
+
+  </div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="lib/wow/wow.min.js"></script>
+<script src="lib/easing/easing.min.js"></script>
+<script src="lib/waypoints/waypoints.min.js"></script>
+<script src="lib/counterup/counterup.min.js"></script>
+<script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    </div>
+<!-- calculator -->
+    <div style="height: 11vw;">
         <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+            <link rel="stylesheet" href="css/calculator.css">
             <div class="container py-5">
                 <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
-                    <h5 class="fw-bold text-primary text-uppercase">Our Services</h5>
-                    <h1 class="mb-0">Custom IT Solutions for Your Successful Business</h1>
+                    <h5 class="fw-bold text-primary text-uppercase">Solve any math problems</h5>
+                    <h1 class="mb-0">Simple Scientific Calculator</h1>
+
                 </div>
-                <div class="row g-5">
-                    <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.3s">
-                        <div
-                            class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
-                            <div class="service-icon">
-                                <i class="fa fa-user-tie text-white"></i>
-                            </div>
-                            <h4 class="mb-3">Chat AI</h4>
-                            <p class="m-0"> Engage in dynamic and personalized conversations with our intelligent AI.
-                            </p>
-                            <a class="btn btn-lg btn-primary rounded" href="chatConversation">
-                                <i class="bi bi-arrow-right"></i>
-                            </a>
+
+                <div class="calculator" style="width:30vw; height: 25vh;">
+                    <input type="text" id="screen" maxlength="20">
+                    <div class="calc-buttons">
+
+                        <div class="functions-one">
+                            <button class="button triggers">C</button>
+                            <button class="button basic-stuff">(</button>
+                            <button class="button basic-stuff">)</button>
+                            <button class="button numbers">7</button>
+                            <button class="button numbers">8</button>
+                            <button class="button numbers">9</button>
+                            <button class="button numbers">4</button>
+                            <button class="button numbers">5</button>
+                            <button class="button numbers">6</button>
+                            <button class="button numbers">1</button>
+                            <button class="button numbers">2</button>
+                            <button class="button numbers">3</button>
+                            <button class="button basic-stuff">±</button>
+                            <button class="button numbers">0</button>
+                            <button class="button basic-stuff">.</button>
+                        </div>
+
+                        <div class="functions-two">
+                            <button class="button triggers">
+                                <=< /button>
+                                    <button class="button complex-stuff">%</button>
+                                    <button class="button complex-stuff">x !</button>
+                                    <button class="button complex-stuff">x^</button>
+                                    <button class="button basic-stuff">*</button>
+                                    <button class="button basic-stuff">/</button>
+                                    <button class="button complex-stuff">ln</button>
+                                    <button class="button complex-stuff">e</button>
+                                    <button class="button basic-stuff">+</button>
+                                    <button class="button complex-stuff">x ²</button>
+                                    <button class="button complex-stuff">log</button>
+                                    <button class="button complex-stuff">cos</button>
+                                    <button class="button basic-stuff">-</button>
+                                    <button class="button complex-stuff">√</button>
+                                    <button class="button complex-stuff">sin</button>
+                                    <button class="button complex-stuff">tan</button>
+                                    <button class="button triggers">=</button>
+                                    <button class="button complex-stuff">π</button>
+                                    <button class="button complex-stuff">∘</button>
+                                    <button class="button complex-stuff">rad</button>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.6s">
-                        <div
-                            class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
-                            <div class="service-icon">
-                                <i class="fa fa-calculator text-white"></i>
-                            </div>
-                            <h4 class="mb-3">Calculator</h4>
-                            <p class="m-0">Perform quick and precise calculations effortlessly with our user-friendly
-                                Calculator.
-                            </p>
-                            <a class="btn btn-lg btn-primary rounded" href="calculator">
-                                <i class="bi bi-arrow-right"></i>
-                            </a>
-                        </div>
+                </div>
+
+            </div>
+        </div>
+        <script>
+            var display = document.getElementById("screen");
+            var buttons = document.getElementsByClassName("button");
+
+            Array.prototype.forEach.call(buttons, function (button) {
+                button.addEventListener("click", function () {
+                    if (button.textContent != "=" &&
+                        button.textContent != "C" &&
+                        button.textContent != "x" &&
+                        button.textContent != "÷" &&
+                        button.textContent != "√" &&
+                        button.textContent != "x ²" &&
+                        button.textContent != "%" &&
+                        button.textContent != "<=" &&
+                        button.textContent != "±" &&
+                        button.textContent != "sin" &&
+                        button.textContent != "cos" &&
+                        button.textContent != "tan" &&
+                        button.textContent != "log" &&
+                        button.textContent != "ln" &&
+                        button.textContent != "x^" &&
+                        button.textContent != "x !" &&
+                        button.textContent != "π" &&
+                        button.textContent != "e" &&
+                        button.textContent != "rad"
+                        && button.textContent != "∘") {
+                        display.value += button.textContent;
+                    } else if (button.textContent === "=") {
+                        equals();
+                    } else if (button.textContent === "C") {
+                        clear();
+                    } else if (button.textContent === "x") {
+                        multiply();
+                    } else if (button.textContent === "÷") {
+                        divide();
+                    } else if (button.textContent === "±") {
+                        plusMinus();
+                    } else if (button.textContent === "<=") {
+                        backspace();
+                    } else if (button.textContent === "%") {
+                        percent();
+                    } else if (button.textContent === "π") {
+                        pi();
+                    } else if (button.textContent === "x ²") {
+                        square();
+                    } else if (button.textContent === "√") {
+                        squareRoot();
+                    } else if (button.textContent === "sin") {
+                        sin();
+                    } else if (button.textContent === "cos") {
+                        cos();
+                    } else if (button.textContent === "tan") {
+                        tan();
+                    } else if (button.textContent === "log") {
+                        log();
+                    } else if (button.textContent === "ln") {
+                        ln();
+                    } else if (button.textContent === "x^") {
+                        exponent();
+                    } else if (button.textContent === "x !") {
+                        factorial();
+                    } else if (button.textContent === "e") {
+                        exp();
+                    } else if (button.textContent === "rad") {
+                        radians();
+                    } else if (button.textContent === "∘") {
+                        degrees();
+                    }
+                });
+            });
+
+
+            function syntaxError() {
+                if (eval(display.value) == SyntaxError || eval(display.value) == ReferenceError || eval(display.value) == TypeError) {
+                    display.value == "Syntax Error";
+                }
+            }
+
+
+            function equals() {
+                if ((display.value).indexOf("^") > -1) {
+                    var base = (display.value).slice(0, (display.value).indexOf("^"));
+                    var exponent = (display.value).slice((display.value).indexOf("^") + 1);
+                    display.value = eval("Math.pow(" + base + "," + exponent + ")");
+                } else {
+                    display.value = eval(display.value)
+                    checkLength()
+                    syntaxError()
+                }
+            }
+
+            function clear() {
+                display.value = "";
+            }
+
+            function backspace() {
+                display.value = display.value.substring(0, display.value.length - 1);
+            }
+
+            function multiply() {
+                display.value += "*";
+            }
+
+            function divide() {
+                display.value += "/";
+            }
+
+            function plusMinus() {
+                if (display.value.charAt(0) === "-") {
+                    display.value = display.value.slice(1);
+                } else {
+                    display.value = "-" + display.value;
+                }
+            }
+
+            function factorial() {
+                var number = 1;
+                if (display.value === 0) {
+                    display.value = "1";
+                } else if (display.value < 0) {
+                    display.value = "undefined";
+                } else {
+                    var number = 1;
+                    for (var i = display.value; i > 0; i--) {
+                        number *= i;
+                    }
+                    display.value = number;
+                }
+            }
+
+            function pi() {
+                display.value = (display.value * Math.PI);
+            }
+
+            function square() {
+                display.value = eval(display.value * display.value);
+            }
+
+            function squareRoot() {
+                display.value = Math.sqrt(display.value);
+            }
+
+            function percent() {
+                display.value = display.value / 100;
+            }
+
+            function sin() {
+                display.value = Math.sin(display.value);
+            }
+
+            function cos() {
+                display.value = Math.cos(display.value);
+            }
+
+            function tan() {
+                display.value = Math.tan(display.value);
+            }
+
+            function log() {
+                display.value = Math.log10(display.value);
+            }
+
+            function ln() {
+                display.value = Math.log(display.value);
+            }
+
+            function exponent() {
+                display.value += "^";
+            }
+
+            function exp() {
+                display.value = Math.exp(display.value);
+            }
+
+            function radians() {
+                display.value = display.value * (Math.PI / 180);
+            }
+
+            function degrees() {
+                display.value = display.value * (180 / Math.PI);
+            }
+
+
+        </script>
+</div>
+
+   <!-- weather -->
+   <div style="width:40vw;">
+    <div class="container-fluid pt-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container pt-5">
+            <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
+                <h5 class="fw-bold text-primary text-uppercase">Get Weather Anywhere</h5>
+                <h1 class="mb-0">What's the Weather?</h1>
+            </div>
+
+        </div>
+    </div>
+    <!-- Team End -->
+    <div class="container-xl w-50" >
+        <div class="bg-light rounded p-5"  style="padding: 0px; height: 400px; width: 500px;">
+            <div class="section-title section-title-sm position-relative pb-3 mb-4">
+                <h5 class="mb-0">Type the country or city you want to check the weather.</h5>
+            </div>
+            <form action="/weather" method="post" >
+                <div class="row g-3">
+                    <div class="col-12">
+                        <input id="cityName" name="cityName" type="text" class="form-control bg-white border-0"
+                            placeholder="Country or City Name" style="height: 55px;">
                     </div>
-                    <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.9s">
-                        <div
-                            class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
-                            <div class="service-icon">
-                                <i class="fa fa-ruler text-white"></i>
-                            </div>
-                            <h4 class="mb-3">Unit Converter</h4>
-                            <p class="m-0">Seamlessly convert between units for hassle-free comparisons.
-                            </p>
-                            <a class="btn btn-lg btn-primary rounded" href="temperature-converter">
-                                <i class="bi bi-arrow-right"></i>
-                            </a>
-                        </div>
+                    <div class="col-12 text-center">
+                        <button class="btn btn-primary w-50 py-3" type="submit">Get The Weather</button>
                     </div>
-                    <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.3s">
-                        <div
-                            class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
-                            <div class="service-icon">
-                                <i class="fa fa-book text-white"></i>
-                            </div>
-                            <h4 class="mb-3">Word to PDF</h4>
-                            <p class="m-0">Effortlessly transform your documents from Word to PDF format.
-                            </p>
-                            <a class="btn btn-lg btn-primary rounded" href="word-to-pdf">
-                                <i class="bi bi-arrow-right"></i>
-                            </a>
-                        </div>
+                </div>
+            </form>
+        </div>
+    </div>
+   </div>
+
+
+<!-- chatAi -->
+   <div style="width:38vw">
+    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s" >
+      
+        <!-- CONVO BOX HERE -->
+        <link rel="stylesheet" href="css/chatAi.css" />
+  
+        <div class="container">
+          <div class="row clearfix">
+            <div class="col-lg-12">
+              <div class="card chat-app" ">
+                <div id="plist" class="people-list">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
                     </div>
-                    <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.6s">
-                        <div
-                            class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
-                            <div class="service-icon">
-                                <i class="fa fa-file text-white"></i>
-                            </div>
-                            <h4 class="mb-3">PDF to Word</h4>
-                            <p class="m-0">Instantly convert PDFs back into editable Word documents.
-                            </p>
-                            <a class="btn btn-lg btn-primary rounded" href="pdf-to-word">
-                                <i class="bi bi-arrow-right"></i>
-                            </a>
+                    <!-- <input type="text" class="form-control" placeholder="Search..." /> -->
+                    <h3>Ai Generator</h3>
+                  </div>
+                  <ul class="list-unstyled chat-list mt-2 mb-0">
+                    <li class="clearfix" onclick="handleCodePage()">
+                      <img src="img/bot-icon.png" alt="avatar" />
+                      <div class="about">
+                        <div class="name">Code Generator</div>
+                      </div>
+                    </li>
+                    <li class="clearfix active">
+                      <img src="img/conversation-icon.png" alt="avatar" />
+                      <div class="about">
+                        <div class="name">Conversation</div>
+                      </div>
+                    </li>
+                    <li class="clearfix" onclick="handleImagePage()">
+                      <img src="img/image-bot-icon.png" alt="avatar" />
+                      <div class="about">
+                        <div class="name">Image Generator</div>
+  
+                      </div>
+                    </li>
+  
+                    <li class="clearfix" onclick="handleMusicPage()">
+                      <img src="img/music-bot-icon.png" alt="avatar" />
+                      <div class="about">
+                        <div class="name">Music Generator</div>
+  
+                      </div>
+                    </li>
+  
+                    <li class="clearfix" onclick="handleRantBuddyPage()">
+                      <img src="img/rant.png" alt="avatar" />
+                      <div class="about">
+                        <div class="name">Rant Buddy</div>
+  
+                      </div>
+                    </li>
+  
+                  </ul>
+                </div>
+                <div class="chat">
+                  <div class="chat-header clearfix">
+                    <div class="row">
+                      <div class="col-lg-6" style="display: flex;">
+  
+                        <img src="img/conversation-icon.png" alt="avatar" style="width:50px;" />
+                        </a>
+                        <div class="chat-about" style="display: flex; flex-direction: column;">
+                          <h6>Conversation Bot</h6>
+                          <small style="white-space: nowrap;">Ask me anything and your secrets is safe with me</small>
                         </div>
+                      </div>
+  
                     </div>
-                    <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.9s">
-                        <div
-                            class="position-relative bg-primary rounded h-100 d-flex flex-column align-items-center justify-content-center text-center p-5">
-                            <h3 class="text-white mb-3">Contact Us</h3>
-                            <p class="text-white mb-3">Facing errors or have inquiries? Reach out to us! We're here
-                                to help and resolve any questions you may have.</p>
-                            <a href="contact" class="btn btn-outline-light py-md-3 px-md-5 animated slideInRight">Reach
-                                Us</a>
+                  </div>
+                  <div class="chat-history" style="margin-top:40px; padding-bottom:50px">
+                    <ul class="m-b-0">
+                      <li class="clearfix">
+                        <div class="message-data text-right">
+  
+                          <!-- <img
+                        src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                        alt="avatar"
+                      /> -->
                         </div>
+                        <div class="message other-message float-right" id="userChat">
+                        </div>
+                      </li>
+                      <li class="clearfix">
+  
+                        <div class="message my-message" id="botChat">
+  
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="chat-message clearfix" ">
+                <div class=" input-group mb-0">
+                    <form id="myForm" style="display:flex; width:100%; gap: 7px;" onsubmit="handleSubmit(event)">
+                      <button id="mute" class="input-group-prepend" style="border:none; background-color: white;"
+                        type="button"><i class='fas fa-volume-mute' style=" width:25px;"></i></button>
+                      <button id="mic" style="border:none; background-color:white;" type="button"> <i
+                          class='fas fa-microphone-slash'></i> </button>
+                      <textarea type="text" class="form-control" id="textInput" placeholder="Enter text here..."
+                        style="width:100%"> </textarea>
+                      <button class="input-group-prepend" style="border:none; background-color: white;" type="submit">
+                        <span class="input-group-text"><i class="fa fa-paper-plane"></i></span>
+                      </button>
+                    </form>
+  
+                  </div>
+  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+
+
+      <script src="https://cdn.jsdelivr.net/npm/openai"></script>
+      <script>
+  
+        function sleep(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
+        }
+  
+  
+        let mic = document.getElementById("mic")
+  
+        mic.addEventListener("click", () => {
+          sleep(1000)
+          window.SpeechRecognition = window.webkitSpeechRecognition
+  
+          const recognition = new SpeechRecognition()
+          recognition.interimResults = true
+  
+          recognition.addEventListener('result', e => {
+            const transcript = Array.from(e.results)
+              .map(result => result[0])
+              .map(result => result.transcript)
+              .join('')
+  
+            document.getElementById("textInput").value = transcript;
+          });
+  
+  
+          mic.innerHTML = `<i class='fas fa-microphone'></i>`
+          recognition.start()
+  
+  
+  
+          recognition.onend = function () {
+            mic.innerHTML = `<i class='fas fa-microphone-slash'></i>`;
+          }
+        });
+  
+        let muteButton = document.getElementById("mute");
+  
+  
+  
+        let virtualMouth = new SpeechSynthesisUtterance();
+        const textToVoice = (data) => {
+          let isSpeak = true;
+  
+          virtualMouth.text = data;
+          console.log(virtualMouth, 'this')
+  
+          muteButton.addEventListener('click', () => {
+            if (isSpeak) {
+              speechSynthesis.speak(virtualMouth);
+              isSpeak = false
+            }
+            else {
+              window.speechSynthesis.cancel()
+              muteButton.innerHTML = `<i class='fas fa-volume-mute' style=" width:25px;"></i>`;
+              isSpeak = true;
+            }
+  
+  
+  
+            virtualMouth.onstart = function (event) {
+              muteButton.innerHTML = `<i class='fas fa-volume-up' style=" width:25px;"></i>`;
+            }
+  
+            virtualMouth.onend = function (event) {
+              speechSynthesis.cancel()
+              muteButton.innerHTML = `<i class='fas fa-volume-mute' style=" width:25px;"></i>`;
+            }
+  
+          })
+        }
+  
+        function handleSubmit(event) {
+          event.preventDefault();
+          let botChat = document.querySelector('#botChat');
+          botChat.innerText = "Loading...";
+          const inputValue = document.getElementById('textInput').value
+          document.querySelector('#userChat').innerText = inputValue;
+          console.log(inputValue)
+          const userMessage = [{
+            role: "user",
+            content: inputValue,
+          },
+          ]
+          fetch('/conversation', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userMessage)
+          })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok.');
+              }
+              return response.json()
+            })
+            .then(data => {
+  
+              return botChat.innerText = JSON.stringify(data.content), textToVoice(data.content);
+  
+  
+            })
+            .catch(error => {
+  
+              console.error('Error:', error);
+            });
+        }
+  
+  
+  
+  
+  
+        const handleCodePage = () => window.location.href = "/chatCode";
+        const handleImagePage = () => window.location.href = "/chatImage";
+        const handleMusicPage = () => window.location.href = "/chatMusic";
+        const handleRantBuddyPage = () => window.location.href = "/chatRantBuddy";
+  
+      </script>
+   </div>
+
+   <!-- temperature converter -->
+   <div >
+    <div class="container-xl" style="width:400px; height:400px">
+        <div class="col-lg-6 mx-auto" style="width:600px">
+            <a href="area-converter" class="btn btn-light m-1">Area</a>
+            <a href="length-converter" class="btn btn-light m-1">Length</a>
+            <a href="temperature-converter" class="btn btn-light m-1">Temperature</a>
+            <a href="time-converter" class="btn btn-light m-1">Time</a>
+            <a href="volume-converter" class="btn btn-light m-1">Volume</a>
+            <a href="weight-converter" class="btn btn-light m-1">Weight</a>
+        </div>
+        <div class="col-lg-6 my-5 mx-auto" style="width:500px; height:350px;">
+            <div class="bg-primary rounded h-100 d-flex align-items-center p-5 wow zoomIn" data-wow-delay="0.1s">
+                <div class="row ">
+                    <div class="col-xl-12">
+                        <label class="text-light" for="inputTemperature">Enter Temperature:</label>
+                        <input type="number" class="form-control bg-light border-0" id="inputTemperature"
+                            placeholder="Enter Temperature" style="height: 40px;">
+                    </div>
+                    <div class="col-12">
+                        <label class="text-light" for="fromUnit">From Unit:</label>
+                        <select class="form-select bg-light border-0" style="height: 40px;" id="fromUnit">
+                            <option selected>Select a Unit</option>
+                            <option value="celsius">Celsius</option>
+                            <option value="fahrenheit">Fahrenheit</option>
+                            <option value="kelvin">Kelvin</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="text-light" for="toUnit">To Unit:</label>
+                        <select class="form-select bg-light border-0" style="height: 40px;" id="toUnit">
+                            <option selected>Select a Unit</option>
+                            <option value="celsius">Celsius</option>
+                            <option value="fahrenheit">Fahrenheit</option>
+                            <option value="kelvin">Kelvin</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="text-light" for="weightResult">Converted Unit:</label>
+                        <textarea id="temperatureResult" class="form-control bg-light border-0" rows="3"
+                            placeholder="Converted Unit" value="" style="height: 30px;"></textarea>
+                    </div>
+                    <div class="col-12" style="padding:5px">
+                        <button class="btn btn-dark w-100 py-3" onclick="convertTemperature()">Convert It</button>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Service End -->
+    </div>
+   </div>
+
+   <!-- pdf converter -->
+   <div>
+    <div class="container-fluid pt-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container pt-5">
+            <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
+                <h5 class="fw-bold text-primary text-uppercase">Document Converter</h5>
+                <h1 class="mb-0">PDF Document to <br>Word Document</h1>
+            </div>
+        </div>
+    </div>
+    <!-- Team End -->
+    <div class="container-xl">
+        <div class="bg-light text-center py-5">
+            <p>Upload your file here to convert the PDF document to Word format.</p>
+            <form action="/convertPdfToWord" method="post" enctype="multipart/form-data">
+                <input class="" type="file" name="pdfFile" accept=".pdf" required>
+                <button class="btn btn-primary py-2 px-4" type="submit">Convert And Download</button>
+            </form>
+        </div>
+        <div class="container-fluid py-1 text-center wow fadeInUp" data-wow-delay="0.1s ">
+            <a href="word-to-pdf" class="btn btn-outline-dark py-3 px-5 mt-3 ms-5 wow zoomIn mx-auto"
+                data-wow-delay="0.9s">Need Word to PDF?</a>
+        </div>
+    </div>
+   </div>
+</div>
+</div>
 
 
 
 
 
-        <%- include('../partials/footer') %>
+    <!-- <%- include('../partials/pages/footerLogin') %> 
