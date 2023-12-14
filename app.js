@@ -55,9 +55,10 @@ const connection = mysql.createConnection({
 	host: "localhost",
 	user: "root",
 	password: "weakka12",
-	port: 3306, // palitan mo sa port ng workbench mo if nakarecieve ka ng error about CONNECT ECONNREFUSED
+	port: 3306,
 	database: "askalldb",
 });
+
 
 connection.connect((err) => {
 	if (err) {
@@ -91,6 +92,9 @@ const checkIfLogined = (res, path) => {
 app.get("/", (req, res) => {
 	checkIfLogined(res, "main-pages/index.ejs");
 });
+
+
+
 
 //ADMIN UPDATES CHENA CHENA
 
@@ -658,6 +662,7 @@ app.get("/todo-list", (req, res) => {
 								listTitle: "Today",
 								newListItems: rows,
 							});
+						
 						}
 					}
 				});
@@ -667,6 +672,118 @@ app.get("/todo-list", (req, res) => {
 		}
 	});
 });
+
+app.get("/all-feature", (req, res) => {
+	let user_ID;
+
+	connection.query("SELECT ID FROM sessionn", (error, results, fields) => {
+		if (error) {
+			console.error("Error fetching data:", error.message);
+			res.status(500).send("Error fetching data");
+		} else {
+			console.log("Fetched data:", results);
+
+			// Assuming there's only one result
+			user_ID = results.length > 0 ? results[0].ID : null;
+
+			if (user_ID) {
+				const sql = "SELECT * FROM todo_list WHERE user_ID = ?";
+
+				connection.query(sql, [user_ID], (err, rows) => {
+					if (err) {
+						console.error("Error retrieving user data:", err);
+						res.status(500).send("Error retrieving user data");
+					} else {
+						if (rows.length === 0) {
+							connection.query(
+								"INSERT INTO todo_list (user_ID, items) VALUES ?",
+								[defaultItems.map((item) => [user_ID, item.name])],
+								(insertErr) => {
+									if (insertErr) {
+										console.error("Error adding data:", insertErr);
+										res.status(500).send("Error adding data");
+									} else {
+										console.log("Data successfully added!");
+										res.redirect("/all-feature");
+									}
+								}
+							);
+						} else {
+							res.render("main-pages/allFeatures", {
+								listTitle: "Today",
+								newListItems: rows,
+							});
+						
+						}
+					}
+				});
+			} else {
+				res.status(401).send("Unauthorized");
+			}
+		}
+	});
+});
+
+app.post("/todo-list-delete-feature", (req, res) => {
+	const checkedItemID = req.body.checkbox;
+	const listName = req.body.listName;
+
+	console.log("Checked Item ID:", checkedItemID);
+	console.log("List Name:", listName);
+
+	// Assuming you have a database connection named 'connection'
+	const sql = "DELETE FROM todo_list WHERE todo_ID = ?";
+
+	connection.query(sql, [checkedItemID], (err, result) => {
+		if (err) {
+			console.error("Error deleting item:", err);
+			res.status(500).send("Internal Server Error");
+		} else {
+			console.log("Item deleted successfully!");
+			res.redirect("all-feature"); // Redirect back to the to-do list
+		}
+	});
+});
+app.post("/todo-list-add-feature", async (req, res) => {
+	const newItem = req.body.newItem;
+	const listName = req.body.listName; // Assuming you have a form field named 'list'
+
+	console.log(newItem);
+	console.log("List Name:", listName);
+
+	let user_ID;
+
+	connection.query("SELECT ID FROM sessionn", (error, results, fields) => {
+		if (error) {
+			console.error("Error fetching data:", error.message);
+			res.status(500).send("Internal Server Error");
+		} else {
+			console.log("Fetched data:", results);
+
+			user_ID = results[0].ID;
+
+			if (user_ID) {
+				const sql = "INSERT INTO todo_list (user_ID, items) VALUES (?, ?)";
+
+				connection.query(sql, [user_ID, newItem], (err, result) => {
+					if (err) {
+						console.error("Error adding item:", err);
+						res.status(500).send("Internal Server Error");
+					} else {
+						console.log("Item added successfully!");
+						res.redirect("/all-feature"); // Redirect back to the to-do list
+					}
+				});
+			} else {
+				res.status(401).send("Unauthorized");
+			}
+		}
+	});
+});
+
+
+
+
 
 app.post("/todo-list-add", async (req, res) => {
 	const newItem = req.body.newItem;
@@ -844,75 +961,154 @@ app.get("/pdf-to-word", (req, res) =>
 );
 
 app.post("/convertPdfToWord", (req, res) => {
-	var defaultClient = CloudmersiveConvertApiClient.ApiClient.instance;
+	let convertTo = req.body.converTo;
 
+<<<<<<< HEAD
 	// Configure API key authorization: Apikey
 	var Apikey = defaultClient.authentications["Apikey"];
 	Apikey.apiKey = documentApiKey;
+=======
+	if (convertTo == "Word to pdf"){
+		var defaultClient = CloudmersiveConvertApiClient.ApiClient.instance;
+>>>>>>> d2c63625a58ed16d3a3976276fbccd1d3b759886
 
-	var apiInstance = new CloudmersiveConvertApiClient.ConvertDocumentApi();
-
-	const directoryPath = "";
-	const fileName = "";
-	const filePath = `${directoryPath}\\${fileName}`;
-
-	fs.readFile(filePath, (err, data) => {
-		if (err) {
-			console.error(`Error reading file ${filePath}: ${err}`);
-		} else {
-			const inputFile = Buffer.from(data.buffer);
-
-			var callback = function (error, responseData, response) {
+		// Configure API key authorization: Apikey
+		var Apikey = defaultClient.authentications["Apikey"];
+		Apikey.apiKey = "3b6bfd19-9a46-44f6-91b6-a5a9b0e7b30c";
+	
+		var apiInstance = new CloudmersiveConvertApiClient.ConvertDocumentApi();
+	
+		const directoryPath = "";
+		const fileName = "";
+		const filePath = `${directoryPath}\\${fileName}`;
+	
+		fs.readFile(filePath, (err, data) => {
+			if (err) {
+				console.error(`Error reading file ${filePath}: ${err}`);
+			} else {
+				const inputFile = Buffer.from(data.buffer);
+	
+				var callback = function (error, responseData, response) {
+					if (error) {
+						console.error(error);
+					} else {
+						console.log(
+							"API called successfully. Returned data: " + responseData
+						);
+						// Handle the converted data as needed
+					}
+				};
+	
+				apiInstance.convertDocumentDocxToPdf(inputFile, callback);
+			}
+		});
+		// Check if a file was uploaded
+		if (!req.files || !req.files.pdfFile) {
+			return res.status(400).send("No Word file uploaded.");
+		}
+	
+		// Get the uploaded PDF file from the request
+		const pdfFile = req.files.pdfFile;
+	
+		// Read the contents of the PDF file
+		const inputFile = Buffer.from(pdfFile.data.buffer);
+	
+		// Call the Cloudmersive API to convert the PDF to Word
+		apiInstance.convertDocumentDocxToPdf(
+			inputFile,
+			(error, responseData, response) => {
 				if (error) {
 					console.error(error);
-				} else {
-					console.log(
-						"API called successfully. Returned data: " + responseData
-					);
-					// Handle the converted data as needed
+					return res.status(500).send("Error converting Word to Pdf.");
 				}
-			};
-
-			apiInstance.convertDocumentPdfToDocx(inputFile, callback);
-		}
-	});
-	// Check if a file was uploaded
-	if (!req.files || !req.files.pdfFile) {
-		return res.status(400).send("No PDF file uploaded.");
-	}
-
-	// Get the uploaded PDF file from the request
-	const pdfFile = req.files.pdfFile;
-
-	// Read the contents of the PDF file
-	const inputFile = Buffer.from(pdfFile.data.buffer);
-
-	// Call the Cloudmersive API to convert the PDF to Word
-	apiInstance.convertDocumentPdfToDocx(
-		inputFile,
-		(error, responseData, response) => {
-			if (error) {
-				console.error(error);
-				return res.status(500).send("Error converting PDF to Word.");
+	
+				// Handle the converted data as needed
+				const docxData = Buffer.from(responseData);
+	
+				// Set the appropriate headers for download
+				res.setHeader(
+					"Content-Disposition",
+					"attachment; filename=converted-document.pdf"
+				);
+				res.setHeader(
+					"Content-Type",
+					"application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+				);
+	
+				// Send the converted DOCX file as the response
+				res.status(200).send(docxData);
 			}
+		);
+	}else{
+			var defaultClient = CloudmersiveConvertApiClient.ApiClient.instance;
+		// Configure API key authorization: Apikey
+		var Apikey = defaultClient.authentications["Apikey"];
+		Apikey.apiKey = "3b6bfd19-9a46-44f6-91b6-a5a9b0e7b30c";
 
-			// Handle the converted data as needed
-			const docxData = Buffer.from(responseData);
+		var apiInstance = new CloudmersiveConvertApiClient.ConvertDocumentApi();
 
-			// Set the appropriate headers for download
-			res.setHeader(
-				"Content-Disposition",
-				"attachment; filename=converted-document.docx"
-			);
-			res.setHeader(
-				"Content-Type",
-				"application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-			);
+		const directoryPath = "";
+		const fileName = "";
+		const filePath = `${directoryPath}\\${fileName}`;
 
-			// Send the converted DOCX file as the response
-			res.status(200).send(docxData);
+		fs.readFile(filePath, (err, data) => {
+			if (err) {
+				console.error(`Error reading file ${filePath}: ${err}`);
+			} else {
+				const inputFile = Buffer.from(data.buffer);
+
+				var callback = function (error, responseData, response) {
+					if (error) {
+						console.error(error);
+					} else {
+						console.log(
+							"API called successfully. Returned data: " + responseData
+						);
+						// Handle the converted data as needed
+					}
+				};
+
+				apiInstance.convertDocumentPdfToDocx(inputFile, callback);
+			}
+		});
+		// Check if a file was uploaded
+		if (!req.files || !req.files.pdfFile) {
+			return res.status(400).send("No PDF file uploaded.");
 		}
-	);
+
+		// Get the uploaded PDF file from the request
+		const pdfFile = req.files.pdfFile;
+
+		// Read the contents of the PDF file
+		const inputFile = Buffer.from(pdfFile.data.buffer);
+
+		// Call the Cloudmersive API to convert the PDF to Word
+		apiInstance.convertDocumentPdfToDocx(
+			inputFile,
+			(error, responseData, response) => {
+				if (error) {
+					console.error(error);
+					return res.status(500).send("Error converting PDF to Word.");
+				}
+
+				// Handle the converted data as needed
+				const docxData = Buffer.from(responseData);
+
+				// Set the appropriate headers for download
+				res.setHeader(
+					"Content-Disposition",
+					"attachment; filename=converted-document.docx"
+				);
+				res.setHeader(
+					"Content-Type",
+					"application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+				);
+
+				// Send the converted DOCX file as the response
+				res.status(200).send(docxData);
+			}
+		);
+	}
 });
 
 //**unit-converter */
@@ -939,6 +1135,11 @@ app.get("/volume-converter", (req, res) =>
 app.get("/weight-converter", (req, res) =>
 	checkIfLogined(res, "unit-converter/weightConverter.ejs")
 );
+
+app.get("/all-feature", (req, res) =>
+	checkIfLogined(res, "main-pages/allFeatures.ejs")
+);
+
 
 //**ALL FEATURES END */
 
@@ -1096,6 +1297,13 @@ app.post("/rant", async (req, res) => {
 	console.log(response.choices[0]);
 	res.json(response.choices[0].message);
 });
+
+// ALL FEATURES ENDPOINTS
+// todolist endpoint
+
+
+
+
 
 //SERVER PORT
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
