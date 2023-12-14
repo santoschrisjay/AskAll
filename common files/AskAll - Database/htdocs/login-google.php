@@ -13,13 +13,12 @@ try {
 $check_session = $pdo->prepare("SELECT ID FROM sessionn"); //ito?
 $check_session->execute();
 $result_session = $check_session->fetch(PDO::FETCH_ASSOC);
-// if ($result_session['ID'] != 0) {
-//     echo "<script>window.location = 'http://localhost:3000/'</script>";
-//     exit();
-// }
+if ($result_session['ID'] != 0) {
+    echo "<script>window.location = 'http://localhost:3000/'</script>";
+    exit();
+}
 
 //  SENDING DATA TO DATABASE
-
 $jsonStr = file_get_contents('php://input'); 
 $jsonObj = json_decode($jsonStr); 
  
@@ -44,7 +43,7 @@ if(!empty($jsonObj->request_type) && $jsonObj->request_type == 'user_auth'){
         $Select_email->execute();
         $result = $Select_email->fetch(PDO::FETCH_ASSOC);
         
-        try{
+       
      if (!empty($result)) {
 
         $Select_id = $pdo->prepare("SELECT * FROM user WHERE email = '$email'");
@@ -75,16 +74,7 @@ else{
     ]; 
     echo json_encode($output); 
 }
-    }
-    catch (PDOException $e) {
-        $output = [ 
-            'status' => 2, 
-            'msg' => 'User does not exist', 
-        ]; 
-        echo json_encode($output); 
-        echo "Error: " . $e->getMessage();
-    }                               
-    
+                             
     }                              
 } 
 
