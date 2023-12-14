@@ -256,11 +256,11 @@ app.get("/logout", (req, res) => {
 });
 
 //**authentication */
-app.get("/login", (req, res) => res.redirect("http://localhost/")); // lagyan mo ng :8080 if hindi nag wwork
+app.get("/login", (req, res) => res.redirect("http://localhost:80/")); // lagyan mo ng :8080 if hindi nag wwork
 
 app.get(
 	"/register",
-	(req, res) => res.redirect("http://localhost/register.php") //lagyan mo ng :8080 if hindi nag wwork
+	(req, res) => res.redirect("http://localhost:8080/register.php") //lagyan mo ng :8080 if hindi nag wwork
 );
 app.get("/forgot-password-get-code", (req, res) =>
 	res.render("authentication/forgotPasswordGetCode.ejs")
