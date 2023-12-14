@@ -28,7 +28,7 @@ if ($result_session['ID'] != 0) {
   <meta content="Free HTML Templates" name="description">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="favicon.png">
+  <link href="img/favicon.ico" rel="icon">
 
   <!-- Google Web Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -92,7 +92,7 @@ if ($result_session['ID'] != 0) {
     <!-- Navbar & Carousel Start -->
     <div class="container-fluid position-relative p-0">
       <nav class="navbar navbar-expand-lg navbar-dark px-5 py-5 py-lg-0">
-        <a href="http://localhost:8080/" class="navbar-brand p-0">
+        <a href="/login" class="navbar-brand p-0">
           <h1 class="m-0 py-2"><i class="fa fa-user-tie me-2"></i>AskAll</h1>
         </a>
       </nav>
@@ -114,16 +114,26 @@ if ($result_session['ID'] != 0) {
                                     <div class="card-body p-5">
                                         <h1 class="section-title text-center position-relative pb-3 mb-2">No
                                             account? Sign up</h1>
-                                        <div class="d-sm-flex align-items-center py-3">
+                                        <div class="d-sm-flex align-items-center py-3" style="gap:30px;">
                                             <h3 class="h4 font-weight-semibold opacity-70 mb-3 mb-sm-2 mr-sm-3">Sign up
                                                 with:
                                             </h3>
-                                            <div>
-                                                <a class="btn btn-md btn-outline-dark rounded-circle me-2 mx-2 mb-1"
-                                                    href=""><i class="fab fa-facebook-f fw-normal fa-lg"></i></a>
-                                                <a class="btn btn-md btn-outline-dark rounded-circle me-2 mx-1 mb-1"
-                                                    href=""><i class="fab fa-google fw-normal fa-md"></i></a>
-                                            </div>
+                                            <div id="g_id_onload"
+    data-client_id="750421522470-o7d6uo6cr9cpd145qngrngfigjin7cvr.apps.googleusercontent.com"
+    data-context="signin"
+    data-ux_mode="popup"
+    data-callback="handleCredential"
+    data-auto_prompt="false">
+</div>
+
+<div class="g_id_signin"
+    data-type="standard"
+    data-shape="rectangular"
+    data-theme="outline"
+    data-text="signin_with"
+    data-size="large"
+    data-logo_alignment="left">
+</div>
                                         </div>
                                         <hr class="text-dark">
                                         <h3 class="h6 font-weight-semibold opacity-70 pt-4 pb-2">Or using form below
@@ -150,7 +160,7 @@ if ($result_session['ID'] != 0) {
                                                     <div class="form-group">
                                                         <label class="text-dark" for="reg-email">E-mail Address</label>
                                                         <input name="email" class="form-control" type="email" required=""
-                                                            id="reg-email"  pattern=".*@gmail.com$" title="Please Enter a valid Gmail address and ending with @gmail.com">
+                                                            id="reg-email">
                                                         <div class="invalid-feedback">Please enter valid email address!
                                                         </div>
                                                     </div>
@@ -159,7 +169,7 @@ if ($result_session['ID'] != 0) {
                                                     <div class="form-group">
                                                         <label class="text-dark" for="reg-phone">Phone Number</label>
                                                         <input name="phoneNumber" class="form-control" type="text" required=""
-                                                            id="reg-phone"  pattern="09\d{9}" title="Number should start with 09 and less than 12">
+                                                            id="reg-phone">
                                                         <div class="invalid-feedback">Please enter your phone number!
                                                         </div>
                                                     </div>
@@ -188,6 +198,7 @@ if ($result_session['ID'] != 0) {
                                                         Sign in</a>
                                                 </p>
                                             </div>
+                                            <span style="color:red;" id="email_error"></span>
                                             <hr class="text-dark">
                                             <div class="text-right pt-4">
                                                 <button name="signUp" class="btn btn-primary py-3 px-5 wow zoomIn"
@@ -271,8 +282,40 @@ if ($result_session['ID'] != 0) {
         </div>
       </div>
     </div>
+    <script>
+
+        // Credential response handler function
+function handleCredential(response){
+    // Post JWT token to server-side
+    fetch("register-google.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ request_type:'user_auth', credential: response.credential }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.status == 1){
+            console.log(data)
+            
+        let responsePayload = data.pdata;
+         window.location = './index.php';
+        }
+        else if (data.status==2){
+   
+        let error = document.querySelector('#email_error');
+         error.innerText  =data.msg
+        }
+    })
+    .catch(console.error);
+}
+    </script>
+
+
+
+
 
     <!-- JavaScript Libraries -->
+    <script src="https://accounts.google.com/gsi/client" async></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/wow/wow.min.js"></script>

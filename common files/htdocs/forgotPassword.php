@@ -1,27 +1,5 @@
-<<<<<<< HEAD:common files/htdocs/forgotPassword.php
 <?php 
     include './database.php';
-=======
-<?php
-session_start();
-$user = "root";
-$password = "hehez190";
-
-try {
-  $pdo = new PDO("mysql:host=localhost;dbname=askalldb", $user, $password);
-} catch (PDOException $e) {
-  echo $e;
-}
-
-//check localhost
-$check_session = $pdo->prepare("SELECT ID FROM sessionn"); //ito?
-$check_session->execute();
-$result_session = $check_session->fetch(PDO::FETCH_ASSOC);
-if ($result_session['ID'] != 0) {
-  echo "<script>window.location = 'http://localhost:3000/'</script>";
-  exit();
-}
->>>>>>> d2c63625a58ed16d3a3976276fbccd1d3b759886:common files/AskAll - Database/htdocs/registerVerification.php
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,8 +12,8 @@ if ($result_session['ID'] != 0) {
   <meta content="Free HTML Templates" name="description">
 
   <!-- Favicon -->
-	<link rel="icon" type="image/svg+xml" href="favicon.png">
-  
+  <link href="img/favicon.ico" rel="icon">
+
   <!-- Google Web Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

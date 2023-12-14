@@ -8,8 +8,8 @@ CREATE TABLE user(
     firstName VARCHAR(50) NOT NULL,
     lastName VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL,
-    phoneNumber VARCHAR(50) NOT NULL,
-    passwordd VARCHAR(250) NOT NULL,
+    phoneNumber VARCHAR(50) NULL,
+    passwordd VARCHAR(250) NULL,
     accountDateCreated VARCHAR(100),
     inArchive VARCHAR(15) DEFAULT 'false',
     notif VARCHAR(50) DEFAULT ""
@@ -25,7 +25,7 @@ CREATE TABLE archive(
     firstName VARCHAR(50) NOT NULL,
     lastName VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL,
-    phoneNumber VARCHAR(50) NOT NULL,
+    phoneNumber VARCHAR(50) NULL,
     accountDateCreated VARCHAR(100)
 );
 

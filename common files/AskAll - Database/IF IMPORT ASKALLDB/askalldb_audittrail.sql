@@ -32,7 +32,7 @@ CREATE TABLE `audittrail` (
   `login` timestamp NULL DEFAULT NULL,
   `logout` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,6 @@ CREATE TABLE `audittrail` (
 
 LOCK TABLES `audittrail` WRITE;
 /*!40000 ALTER TABLE `audittrail` DISABLE KEYS */;
-INSERT INTO `audittrail` VALUES (1,100,'Chris Jay','Santos','santoschrisjay19@gmail.com',NULL,'2023-12-13 06:57:32',NULL);
 /*!40000 ALTER TABLE `audittrail` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-12-13 14:59:28
+-- Dump completed on 2023-12-15  2:46:25

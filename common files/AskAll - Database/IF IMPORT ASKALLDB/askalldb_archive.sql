@@ -27,7 +27,7 @@ CREATE TABLE `archive` (
   `firstName` varchar(50) NOT NULL,
   `lastName` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `phoneNumber` varchar(50) NOT NULL,
+  `phoneNumber` varchar(50) DEFAULT NULL,
   `accountDateCreated` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -38,7 +38,6 @@ CREATE TABLE `archive` (
 
 LOCK TABLES `archive` WRITE;
 /*!40000 ALTER TABLE `archive` DISABLE KEYS */;
-INSERT INTO `archive` VALUES (100,'Chris Jay','Santos','santoschrisjay19@gmail.com','09473558186','2023-12-13');
 /*!40000 ALTER TABLE `archive` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-12-13 14:59:27
+-- Dump completed on 2023-12-15  2:46:25

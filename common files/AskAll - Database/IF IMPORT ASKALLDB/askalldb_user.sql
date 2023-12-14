@@ -27,13 +27,13 @@ CREATE TABLE `user` (
   `firstName` varchar(50) NOT NULL,
   `lastName` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `phoneNumber` varchar(50) NOT NULL,
-  `passwordd` varchar(250) NOT NULL,
+  `phoneNumber` varchar(50) DEFAULT NULL,
+  `passwordd` varchar(250) DEFAULT NULL,
   `accountDateCreated` varchar(100) DEFAULT NULL,
   `inArchive` varchar(15) DEFAULT 'false',
   `notif` varchar(50) DEFAULT '',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,6 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (100,'Chris Jay','Santos','santoschrisjay19@gmail.com','09473558186','202cb962ac59075b964b07152d234b70','2023-12-13','true','');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -55,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-12-13 14:59:28
+-- Dump completed on 2023-12-15  2:46:25

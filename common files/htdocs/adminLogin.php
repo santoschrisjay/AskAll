@@ -28,9 +28,7 @@ if ($result_session['ID'] != 0) {
   <meta content="Free HTML Templates" name="description">
 
   <!-- Favicon -->
-	<!-- Favicon -->
-	<link rel="icon" type="image/svg+xml" href="favicon.png">
-
+  <link href="img/favicon.ico" rel="icon">
 
   <!-- Google Web Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
