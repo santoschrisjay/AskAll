@@ -95,7 +95,7 @@ if ($result_session['ID'] != 0) {
     <!-- Navbar & Carousel Start -->
     <div class="container-fluid position-relative p-0">
       <nav class="navbar navbar-expand-lg navbar-dark px-5 py-5 py-lg-0">
-        <a href="/login" class="navbar-brand p-0">
+        <a href="http://localhost:8080/" class="navbar-brand p-0">
           <h1 class="m-0 py-2"><i class="fa fa-user-tie me-2"></i>AskAll</h1>
         </a>
       </nav>
@@ -276,7 +276,7 @@ if ($result_session['ID'] != 0) {
         <div class="row justify-content-end">
           <div class="col-lg-8 col-md-6">
             <div class="d-flex align-items-center justify-content-center" style="height: 75px;">
-              <p class="mb-0">&copy; <a class="text-white border-bottom" href="#">AskAll</a>. All Rights Reserved.
+              <p class="mb-0">&copy; <a class="text-white border-bottom" href="http://localhost:8080/adminLogin.php">AskAll</a>. All Rights Reserved.
     
                 Special Thanks To <a class="text-white border-bottom" href="#">References</a>
               </p>
