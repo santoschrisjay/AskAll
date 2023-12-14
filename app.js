@@ -963,14 +963,11 @@ app.get("/pdf-to-word", (req, res) =>
 app.post("/convertPdfToWord", (req, res) => {
 	let convertTo = req.body.converTo;
 
-<<<<<<< HEAD
 	// Configure API key authorization: Apikey
 	var Apikey = defaultClient.authentications["Apikey"];
 	Apikey.apiKey = documentApiKey;
-=======
 	if (convertTo == "Word to pdf"){
 		var defaultClient = CloudmersiveConvertApiClient.ApiClient.instance;
->>>>>>> d2c63625a58ed16d3a3976276fbccd1d3b759886
 
 		// Configure API key authorization: Apikey
 		var Apikey = defaultClient.authentications["Apikey"];
