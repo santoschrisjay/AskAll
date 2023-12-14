@@ -45,6 +45,7 @@ if (!empty($jsonObj->request_type) && $jsonObj->request_type == 'user_auth') {
 
 
         if (!empty($result)) {
+            if($result["inArchive"] == "false"){
 
             $Select_id = $pdo->prepare("SELECT * FROM user WHERE email = '$email'");
             $Select_id->execute();
@@ -66,6 +67,15 @@ if (!empty($jsonObj->request_type) && $jsonObj->request_type == 'user_auth') {
                 ];
                 echo json_encode($output);
             }
+        }
+        else{
+            $output = [
+                'status' => 2,
+                'msg' => 'User does not exist',
+            ];
+            echo json_encode($output);
+        }
+
         } else {
             $output = [
                 'status' => 2,

@@ -1,5 +1,5 @@
-<?php 
-    include './database.php';
+<?php
+include './database.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,6 +10,9 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta content="Free HTML Templates" name="keywords">
   <meta content="Free HTML Templates" name="description">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.png">
 
   <!-- Favicon -->
   <link href="img/favicon.ico" rel="icon">
@@ -119,61 +122,62 @@
                                                     data-wow-delay="0.9s" type="submit">Send Code</button>
                                             </div>
                                         </form>
-                                        <?php 
-                                            use PHPMailer\PHPMailer\PHPMailer;
-                                            use PHPMailer\PHPMailer\Exception;
+                                        <?php
+                                        use PHPMailer\PHPMailer\PHPMailer;
+                                        use PHPMailer\PHPMailer\Exception;
 
-                                            require './vendor/autoload.php';
+                                        require './vendor/autoload.php';
 
-                                            function generateOTP($length = 6) {
-                                                $characters = '0123456789';
-                                                $otp = '';
-                                                for ($i = 0; $i < $length; $i++) {
-                                                    $otp .= $characters[rand(0, strlen($characters) - 1)];
-                                                }
-                                                return $otp;
+                                        function generateOTP($length = 6)
+                                        {
+                                          $characters = '0123456789';
+                                          $otp = '';
+                                          for ($i = 0; $i < $length; $i++) {
+                                            $otp .= $characters[rand(0, strlen($characters) - 1)];
+                                          }
+                                          return $otp;
+                                        }
+                                        $otp = "";
+
+                                        $mail = new PHPMailer(true);
+                                        if (isset($_POST['sendCode'])) {
+                                          $email = $_POST['email'];
+
+                                          $check_email = $pdo->prepare("SELECT email FROM user WHERE email = '$email'");
+                                          $check_email->execute();
+                                          $result = $check_email->fetch(PDO::FETCH_ASSOC);
+                                          if (!empty($result)) {
+                                            $_SESSION['otp'] = generateOTP();
+                                            $_SESSION['email'] = $email;
+                                            try {
+                                              $mail->SMTPDebug = 0;
+                                              $mail->isSMTP();
+                                              $mail->Host = 'smtp.gmail.com';
+                                              $mail->SMTPAuth = true;
+                                              $mail->Username = 'askall.web@gmail.com';
+                                              $mail->Password = 'qasx ndsv wrht hdwu';
+                                              $mail->SMTPSecure = 'tls';
+                                              $mail->Port = 587;
+
+                                              $mail->setFrom('askall.web@gmail.com', 'ASK ALL');
+                                              $mail->addAddress($email);
+                                              $mail->addReplyTo('askall.web@gmail.com', 'ASK ALL');
+
+                                              $mail->isHTML(true);
+                                              $mail->Subject = 'Your OTP for Verification';
+                                              $mail->Body = "Your OTP is: " . $_SESSION['otp'];
+
+                                              $mail->send();
+
+                                              echo "<script>window.location = './ForgotPasswordVerification.php'</script>";
+                                              exit();
+                                            } catch (Exception $e) {
+                                              echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
                                             }
-                                            $otp = "";
-
-                                            $mail = new PHPMailer(true);
-                                            if(isset($_POST['sendCode'])){
-                                                $email = $_POST['email'];
-                                                
-                                                $check_email = $pdo->prepare("SELECT email FROM user WHERE email = '$email'");
-                                                $check_email->execute();
-                                                $result = $check_email->fetch(PDO::FETCH_ASSOC);
-                                                if(!empty($result)){
-                                                    $_SESSION['otp'] = generateOTP();
-                                                    $_SESSION['email'] = $email;
-                                                    try {
-                                                        $mail->SMTPDebug = 0;
-                                                        $mail->isSMTP();
-                                                        $mail->Host = 'smtp.gmail.com';
-                                                        $mail->SMTPAuth = true; 
-                                                        $mail->Username = 'askall.web@gmail.com'; 
-                                                        $mail->Password = 'qasx ndsv wrht hdwu'; 
-                                                        $mail->SMTPSecure = 'tls'; 
-                                                        $mail->Port = 587;
-                                                    
-                                                        $mail->setFrom('askall.web@gmail.com', 'ASK ALL');
-                                                        $mail->addAddress($email); 
-                                                        $mail->addReplyTo('askall.web@gmail.com', 'ASK ALL');
-                                                    
-                                                        $mail->isHTML(true);
-                                                        $mail->Subject = 'Your OTP for Verification';
-                                                        $mail->Body = "Your OTP is: ".$_SESSION['otp']; 
-                                                    
-                                                        $mail->send();
-
-                                                        echo "<script>window.location = './ForgotPasswordVerification.php'</script>";
-                                                        exit();
-                                                    } catch (Exception $e) {
-                                                        echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
-                                                    }
-                                                }else{
-                                                    echo "<h6>Account doesn't exist. Please check your email and try again</h6>";
-                                                }
-                                            }
+                                          } else {
+                                            echo "<h6>Account doesn't exist. Please check your email and try again</h6>";
+                                          }
+                                        }
                                         ?>
                                     </div>
                                 </div>

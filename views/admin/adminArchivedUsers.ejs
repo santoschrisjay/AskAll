@@ -96,24 +96,12 @@
                 <tbody id="adminTable" style="cursor: pointer;">
                     <% adminUsers.forEach(admin=> { %>
                         <tr class="table-row" data-admin-id="<%= admin.ID %>">
-                            <td>
-                                <%= admin.ID %>
-                            </td>
-                            <td>
-                                <%= admin.firstName %>
-                            </td>
-                            <td>
-                                <%= admin.lastName %>
-                            </td>
-                            <td>
-                                <%= admin.email %>
-                            </td>
-                            <td>
-                                <%= admin.phoneNumber %>
-                            </td>
-                            <td>
-                                <%= admin.accountDateCreated %>
-                            </td>
+                            <td><%= admin.ID %></td>
+                            <td><%= admin.firstName %></td>
+                            <td><%= admin.lastName %></td>
+                            <td><%= admin.email %></td>
+                            <td><%= admin.phoneNumber %></td>
+                            <td><%= admin.accountDateCreated %></td>
                         </tr>
                         <% }); %>
 
